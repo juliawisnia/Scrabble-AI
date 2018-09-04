@@ -31,3 +31,9 @@ Part (b):
 
 Part (c): 
 It will open up your preferred editor so that you can add a commit message.
+
+PROBLEM 6
+Part 1
+3. Once the user makes a call to deallocate chars, the entire buffer is cleared.
+However, they still may have pointers to chars that were stored after the deallocate
+call, and when they try to reference it, it will be referencing a null character.
