@@ -36,7 +36,7 @@ char* flexCharManager::alloc_chars(int n) {
 		for (int i=0; i<n; i++) {
 			array[i]=true; //these elements are filled
 		}
-		 
+
 		return a->physical_location;
 	}
 
@@ -66,6 +66,7 @@ char* flexCharManager::alloc_chars(int n) {
 			for (int i=index; i<index+n; i++) {
 				array[i]=true;
 			} 
+			std::cout<<"Index: "<<index<<std::endl;
 			return a->physical_location;
 		}
 	}
@@ -104,7 +105,7 @@ void flexCharManager::free_chars(char* p) {
 
 		for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	} 
+	}
 }
 
 void flexCharManager::resize(Mem_Block** &used_memory, int active_requests, int &used_mem_size) {
