@@ -31,7 +31,6 @@ char* simpleCharManager::alloc_chars(int n) {
 			if (start&&complete) {
 				start=false;
 				complete=false;
-				
 				return free_place;
 			}
 		}
