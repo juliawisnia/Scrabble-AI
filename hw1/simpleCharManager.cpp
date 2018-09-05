@@ -6,7 +6,6 @@ simpleCharManager::simpleCharManager() {
 	for (int i=0; i<BUF_SIZE; i++) {
 		buffer[i]='\0';
 	}
-
 	free_place=buffer;
 }
 
