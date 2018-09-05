@@ -79,7 +79,7 @@ void flexCharManager::free_chars(char* p) {
 	for (int i=0; i<active_requests; i++) {
 		if (p==used_memory[i]->physical_location) {
 			space=used_memory[i]->size;
-			index=(used_memory[i]->physical_location-&buffer[0])/sizeof(char);
+			index=(int)(used_memory[i]->physical_location-&buffer[0])/sizeof(char);
 			delete used_memory[i];
 			used_memory[i]='\0';
 			c=i;
