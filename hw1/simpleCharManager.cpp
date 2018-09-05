@@ -41,8 +41,5 @@ char* simpleCharManager::alloc_chars(int n) {
 
 void simpleCharManager::free_chars(char* p) {
 	char* beg=buffer; //make a pointer to the beginning of buffer
-	int index=(int)(p-beg); //subtracting the pointers gives you index p
-		for (int i=0; i<30; i++) {
-		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	} 
+	int index=(int)(p-beg); //subtracting the pointers gives you index p 
 }
