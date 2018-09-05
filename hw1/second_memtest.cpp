@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
 
 	simplest_mem_manager.free_chars(buf);
 
-	char* d=simplest_mem_manager.alloc_chars(3);
-	d[0]='t', d[1]='o', d[2]='p';
+	char* d=simplest_mem_manager.alloc_chars(4);
+	d[0]='t', d[1]='o', d[2]='p', d[3]=' ';
 
 	simplest_mem_manager.free_chars(b);
 	char* e=simplest_mem_manager.alloc_chars(8);
@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
 	f[0]='h', f[1]='a', f[2]='t';
 
 	char* g=simplest_mem_manager.alloc_chars(1);
-
+	g[0]='i';
+	simplest_mem_manager.free_chars(g);
 	
-
 	return 0;
 }

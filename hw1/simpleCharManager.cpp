@@ -31,9 +31,7 @@ char* simpleCharManager::alloc_chars(int n) {
 			if (start&&complete) {
 				start=false;
 				complete=false;
-					for (int i=0; i<30; i++) {
-		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	} 
+
 				return free_place;
 			}
 		}
@@ -50,12 +48,5 @@ void simpleCharManager::free_chars(char* p) {
 	for (int i=index; i<BUF_SIZE; i++) {
 		buffer[i]='\0';
 	}
-			for (int i=0; i<30; i++) {
-		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	} 
-}
 
-/* insert into for loop to check if buffer is filling
-	for (int i=0; i<30; i++) {
-		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	} */
+}
