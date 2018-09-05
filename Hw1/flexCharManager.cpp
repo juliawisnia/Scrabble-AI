@@ -23,7 +23,6 @@ flexCharManager::~flexCharManager(){
 }
 
 char* flexCharManager::alloc_chars(int n) {
-	bool start=false;
 	bool complete=false;
 	int index=0;
 
@@ -37,32 +36,27 @@ char* flexCharManager::alloc_chars(int n) {
 		for (int i=0; i<n; i++) {
 			array[i]=true; //these elements are filled
 		}
-			for (int i=0; i<30; i++) {
+						for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	}
+	} 
 		return a->physical_location;
 	}
+
 	else {
 		for (int i=0; i<BUF_SIZE; i++) {
 			if (!array[i]) {
-				for (int j=i; j<i+n; j++) {
-					start=true;
-					index=i;
-					if (index+n>=BUF_SIZE-1) {
-						break;
-					}
-					if (array[j]) {
-						start=false;
+				for (int j=0; j<n; j++) {
+					if (buffer[i+j]) {
 						break;
 					}
 				}
+				index=i;
 				complete=true;
 				break;
 			}
 		}
 
-		if (start&&complete) {
-			start=false;
+		if (complete) {
 			complete=false;
 			Mem_Block* a=new Mem_Block(n, &buffer[index]);
 
@@ -76,7 +70,7 @@ char* flexCharManager::alloc_chars(int n) {
 			}
 				for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	}
+	} 
 			return a->physical_location;
 		}
 	}
@@ -84,12 +78,19 @@ char* flexCharManager::alloc_chars(int n) {
 }
 
 void flexCharManager::free_chars(char* p) {
+					for (int i=0; i<30; i++) {
+		std::cout<<i<<"  "<<buffer[i]<<std::endl;
+	} 
 	int index=0;
 	int space=0;
+	int c=0;
 	for (int i=0; i<active_requests; i++) {
 		if (p==used_memory[i]->physical_location) {
 			space=used_memory[i]->size;
 			index=(used_memory[i]->physical_location-&buffer[0])/sizeof(char);
+			delete used_memory[i];
+			used_memory[i]=NULL;
+			c=i;
 			break;
 		}
 	}
@@ -99,18 +100,16 @@ void flexCharManager::free_chars(char* p) {
 		array[i]=false;
 	}
 
-		for (int i=0; i<30; i++) {
-		std::cout<<i<<"  "<<buffer[i]<<std::endl;
-	}
-
-	delete used_memory[index];
-	used_memory[index]=NULL;
-	for (int i=index; i<active_requests; i++) {
+	for (int i=c; i<active_requests-c-1; i++) {
 		used_memory[i]=used_memory[i+1];
 	}
 
 	active_requests--;
+	resize(used_memory, active_requests, used_mem_size);
 
+		for (int i=0; i<30; i++) {
+		std::cout<<i<<"  "<<buffer[i]<<std::endl;
+	} 
 }
 
 void flexCharManager::resize(Mem_Block** &used_memory, int active_requests, int &used_mem_size) {

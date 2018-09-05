@@ -20,8 +20,8 @@ class flexCharManager: public simpleCharManager
                 ~flexCharManager();
              
                 char* alloc_chars(int n);
-                void free_chars(char* p);        
-
+                void free_chars(char* p);       
+                
 	protected:
 /*Dynamically maintain an array of pointers to Mem_Blocks sorted by physical address which they manage in order to keep
 track of active requests */
