@@ -4,7 +4,8 @@
 - **USC ID**: 2096592657
 - **Email**: wisnia@usc.edu
 
-You should grade everything in the hw1 folder (lowercase h).
+You should grade everything in the hw1 folder (lowercase h) 
+EXCEPT the test.cpp files, which I just used to test my code.
 For simpleCharManager, my implementation looped through the 
 buffer looking for null characters, and when it hit one it
 tested if there were enough spaces to hold all of n, if so,
