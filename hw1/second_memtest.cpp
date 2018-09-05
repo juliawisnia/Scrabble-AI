@@ -26,10 +26,6 @@ int main(int argc, char *argv[])
 	e[0]='s', e[1]='o', e[2]='m', e[3]='b', e[4]='r', e[5]='e', e[6]='r', e[7]='o';
 	char* f=simplest_mem_manager.alloc_chars(3);
 	f[0]='h', f[1]='a', f[2]='t';
-
-	char* g=simplest_mem_manager.alloc_chars(1);
-	g[0]='i';
-	simplest_mem_manager.free_chars(g);
 	
 	return 0;
 }

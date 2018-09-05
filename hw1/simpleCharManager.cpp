@@ -45,8 +45,4 @@ void simpleCharManager::free_chars(char* p) {
 		for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
 	} 
-	for (int i=index; i<BUF_SIZE; i++) {
-		buffer[i]='\0';
-	}
-
 }
