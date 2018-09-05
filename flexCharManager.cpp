@@ -19,7 +19,6 @@ flexCharManager::~flexCharManager(){
 	for (int i=0; i<active_requests; i++) {
 		delete used_memory[i];
 	}
-
 	delete[] used_memory;
 }
 
@@ -43,7 +42,6 @@ char* flexCharManager::alloc_chars(int n) {
 	}
 		return a->physical_location;
 	}
-
 	else {
 		for (int i=0; i<BUF_SIZE; i++) {
 			if (!array[i]) {
@@ -79,11 +77,9 @@ char* flexCharManager::alloc_chars(int n) {
 				for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
 	}
-
 			return a->physical_location;
 		}
-	
-}
+	}
 	return NULL;
 }
 
@@ -94,14 +90,9 @@ void flexCharManager::free_chars(char* p) {
 		if (p==used_memory[i]->physical_location) {
 			space=used_memory[i]->size;
 			index=(used_memory[i]->physical_location-&buffer[0])/sizeof(char);
-
-			delete used_memory[index];
-			used_memory[index]=NULL;
 			break;
 		}
 	}
-
-	active_requests--;
 
 	for (int i=index; i<index+space; i++) {
 		buffer[i]='\0';
@@ -111,6 +102,14 @@ void flexCharManager::free_chars(char* p) {
 		for (int i=0; i<30; i++) {
 		std::cout<<i<<"  "<<buffer[i]<<std::endl;
 	}
+
+	delete used_memory[index];
+	used_memory[index]=NULL;
+	for (int i=index; i<active_requests; i++) {
+		used_memory[i]=used_memory[i+1];
+	}
+
+	active_requests--;
 
 }
 
