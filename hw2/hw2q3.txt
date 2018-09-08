@@ -1,0 +1,25 @@
+1. The best data type would be a MAP with int keys for the zip codes, and 
+another MAP within that of values. This would allow someone to access, for 
+example, in the zip code 90089 (key to the first map), how many women (string 
+key to the second map) voted for the Democratic party. However, the specificity
+of the map can get deeper and deeper the more maps are stored within. For 
+example, if you added another map to the values within the MAP of values, you 
+could access how many women voted for the Democratic or Republican party, and 
+so on.
+
+2. The best data type for this would be a SET of strings. This would easily allow
+the programmer to add more students names to the set, and since order doesn't 
+matter, it would be quick. It also would be easy to find out which students had 
+solved the problem with the bool contains function.
+
+3. The best data type would be a LIST of strings sorted by their pokedex index. 
+Because the list does not have to contain the pokedex index, as long as the list 
+remains sorted, which is made possibly by the insert(position, value) 
+functionality of a list, it would be easy to look up a Pokemon by its index.
+
+4. The best data type would be a MAP with string keys, and this string would 
+include the movie title, and year it was released formatted as one string. It 
+could also have a value type of string so that it could return written reviews, 
+as well as the percentages and scorings the movie recieved.Once again, the 
+specificity could be deeper by adding more MAPS to the values, which maybe could 
+specify the type of review you wanted to bring up.
