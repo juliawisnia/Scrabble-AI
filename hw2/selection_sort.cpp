@@ -20,5 +20,32 @@ Item* findMin(Item * head) {
 }
 
 Item* LLSelectionSort(Item * head) {
-	
+	if (!head) return nullptr;
+
+	Item* smallest=findMin(head);
+	head=prepend(head, smallest);
+
+	Item* search=head->next;
+	Item* item=nullptr;
+
+	while(search!=nullptr) {
+		item=findMin(search);
+		search=prepend(search, item);
+		search=search->next;
+	}
+
+	return head;
+}
+
+Item* prepend(Item* head, Item* smallest) {
+	Item* temp=smallest;
+
+	temp->prev->next=head;
+	temp->next->prev=head;
+
+	head=smallest;
+	head->next->prev=smallest;
+	smallest->prev=nullptr;
+
+	return head;
 }
