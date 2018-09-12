@@ -37,4 +37,6 @@ Item* findMin(Item * head);
 // Returns nullptr iff head is nullptr.
 Item* LLSelectionSort(Item * head);
 
+void recurse(Item* curr);
+
 #endif
