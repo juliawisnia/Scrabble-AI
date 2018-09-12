@@ -2,50 +2,103 @@
 #include <iostream>
 
 Item* findMin(Item * head) {
-	if (!head) return nullptr;
+	if (!head) return nullptr; //no elements
 
-	Item* search=head->next;
+	Item* search=head;
 	Item* min_item=nullptr;
-	int min=10000;
+	int min=search->getValue();
 
-	while (search!=nullptr) {
+	if (!search->next) return head; //only one element
+
+	while (search->next) {
+		search=search->next;
 		if (search->getValue()<min) {
 			min=search->getValue();
 			min_item=search;
 		}
-		search=search->next;
 	}
-
 	return min_item;
 }
 
 Item* LLSelectionSort(Item * head) {
+	//if no items, return null
 	if (!head) return nullptr;
 
+	if (!(head->next)) return head; //only one element
+
 	Item* smallest=findMin(head);
-	head=prepend(head, smallest);
+	std::cout<<"FIRST ITEM: "<<smallest->getValue()<<std::endl<<std::endl;
+	if (smallest->next==nullptr) {
+		smallest->prev->next=nullptr;
+	}
 
-	Item* search=head->next;
-	Item* item=nullptr;
+	else {
+		smallest->prev->next=smallest->next;
+	}
 
-	while(search!=nullptr) {
-		item=findMin(search);
-		search=prepend(search, item);
-		search=search->next;
+	smallest->prev=nullptr;
+	smallest->next=head->next;
+	head->next->prev=smallest;
+	head=smallest;
+
+	Item* curr=head;
+
+	int cnt=1;
+
+	while (curr->next!=nullptr) {
+		Item* min=findMin(curr->next);
+		//std::cout<<cnt<<" "<<min->getValue()<<std::endl;
+		if (min==curr && !curr->next) break;
+
+		if (min->next==nullptr) {
+			min->prev->next=nullptr;
+
+			min->prev=curr;
+			min->next=curr->next;
+			curr->next->prev=min;
+			curr=min;
+			curr=curr->next;
+		}
+
+		else {
+			min->prev->next=min->next;
+			min->next=min->next->prev;
+
+			min->prev=curr;
+			min->next=curr->next;
+			curr->next->prev=min;
+			curr=min;
+			curr=curr->next;
+		}
+		cnt++;
 	}
 
 	return head;
 }
 
-Item* prepend(Item* head, Item* smallest) {
-	Item* temp=smallest;
+Item* prepend(Item* curr, Item* smallest) {
 
-	temp->prev->next=head;
-	temp->next->prev=head;
+	if (smallest->next) {
+		//update the 2 surrounding nodes pointers as to remove smallest
+		smallest->prev->next=smallest->next;
+		smallest->next->prev=smallest->prev;
 
-	head=smallest;
-	head->next->prev=smallest;
-	smallest->prev=nullptr;
+		smallest->next=curr->next;
+		smallest->prev=curr;
+		curr->next=smallest;
+		curr->next->prev=smallest;
+		curr=smallest;
+	}
 
-	return head;
+	/*else {
+		//if smallest is the last item
+		smallest->prev->next=nullptr;
+
+		smallest->next=curr;
+		curr->prev->next=smallest;
+		smallest->prev=curr->prev;
+		curr=smallest;
+	}*/
+
+	return curr;
 }
