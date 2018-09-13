@@ -35,5 +35,4 @@ struct GameData
 // Will always be called with a valid GameData with an it player and at least 1 non-it player
 void simulateDDGRound(GameData * gameData, std::ostream & output);
 
-
 #endif
