@@ -11,16 +11,12 @@ CircularListInt::Item * CircularListInt::findItem(size_t index) const {
 }
 
 CircularListInt::CircularListInt() {
-	/*Item* traverse=head->next;
-	while (head!=traverse) {
-		delete *&traverse;
-		traverse=traverse->next;
-	}
-
-	delete head;*/
 }
 
 CircularListInt::~CircularListInt() {
+	while (this->head) {
+		remove(count);
+	}
 	delete this->head;
 }
 
@@ -119,10 +115,12 @@ void CircularListInt::remove(size_t index) {
 		traverse=traverse->next;
 	}
 
-	if (index==0) this->head=this->head->next;
+	if (index==0) {
+		this->head=this->head->next;
+	}
 
 	traverse->next->prev=traverse->prev;
 	traverse->prev->next=traverse->next;
 
-	delete traverse;
+	delete *&traverse;
 }
