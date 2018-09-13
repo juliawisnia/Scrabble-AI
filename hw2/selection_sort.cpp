@@ -3,20 +3,21 @@
 
 Item* findMin(Item * head) {
 	if (!head) return nullptr; //no elements
+	if (!head->next) return head; //only one element
 
 	Item* search=head;
-	Item* min_item=nullptr;
-	int min=search->getValue();
+	Item* min_item=head;
 
-	if (!search->next) return head; //only one element
+	int min=head->getValue();
 
 	while (search->next) {
 		search=search->next;
-		if (search->getValue()<min) {
+		if ((search->getValue())<=min) {
 			min=search->getValue();
 			min_item=search;
 		}
 	}
+
 	return min_item;
 }
 
@@ -42,7 +43,10 @@ void recurse(Item* curr) {
 	}
 
 	//if min is at curr, advance and recurse after that
-	if (min==curr && curr->next) recurse (curr->next);
+	if (min==curr && curr->next) {
+		recurse (curr->next);
+		return;
+	}
 
 	//min is not the last element
 	if (min->next) {
