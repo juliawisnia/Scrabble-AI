@@ -5,11 +5,13 @@
 
 void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	size_t n=gameData->playerList.size();
-	size_t m=rand()%(4*(n-1)+1); // choose rand index
+	size_t m=rand()%(4*(n-1)+1); // choose goose index
 
+	//print all the ducks
 	for (size_t i=0; i<m; i++) {
 		output<<gameData->playerList.get(i)<<" is a Duck."<<std::endl;
 	}
+	//player m is the goose
 	output<<gameData->playerList.get(m)<<" is a Goose!"<<std::endl;
 
 	size_t gooseNum=rand()%50;
@@ -22,7 +24,8 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	}
 
 	if (itNum>gooseNum) {
-		output<<gameData->itPlayerID<<" took "<<gameData->playerList.get(m)<<"'s spot!"<<std::endl;
+		output<<gameData->itPlayerID<<" took "<<gameData->playerList.get(m)
+			<<"'s spot!"<<std::endl;
 		gameData->playerList.set(m, gameData->itPlayerID);
 		gameData->itPlayerID=gameData->playerList.get(m);
 	}
@@ -34,15 +37,18 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 			output<<"Winner is "<<gameData->playerList.get(m)<<"!"<<std::endl;
 			gameData->itPlayerID=0;
 		}
-		//more players left!
+		//more players left
 		else {
 			n=gameData->playerList.size();
-			size_t newIt=rand()%(n+1);
+			size_t newIt=rand()%n;
 
 			while (newIt==m) {
-				newIt=rand()%(n+1);
+				newIt=rand()%n;
 			}
-			output<<gameData->playerList.get(newIt)<<" was chosen as the new it."<<std::endl;
+
+			gameData->itPlayerID=gameData->playerList.get(newIt);
+			output<<gameData->itPlayerID<<" was chosen as the new it."
+				<<std::endl;
 			gameData->playerList.remove(newIt);
 		}
 	}
@@ -68,7 +74,7 @@ int main(int argc, char *argv[]) {
 	ifile>>players;
 	ifile>>itID;
 
-	GameData* list;
+	GameData* list=new GameData();
 	list->itPlayerID=itID;
 	//create a linked list of values for players (let first it be player 0)
 	for (size_t i=0; i<players-1; i++) {
@@ -79,13 +85,15 @@ int main(int argc, char *argv[]) {
 	ifile.close();
 
 	srand(seed);
-	//output.open(argv[2]);
-	std::filebuf fb;
-	std::ostream output(&fb);
+	
+	std::ofstream output;
+	output.open(argv[2]);
 
 	while (list->itPlayerID!=0) {
 		simulateDDGRound(list, output);
 	}
+
+	delete list;
 
 	return 0;
 }
