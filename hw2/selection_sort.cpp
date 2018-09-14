@@ -21,20 +21,6 @@ Item* findMin(Item * head) {
 	return min_item;
 }
 
-Item* LLSelectionSort(Item * head) {
-	if (!head) return nullptr;
-
-	if (!head->next) return head;
-
-	Item* curr=head;
-	Item* min=findMin(head);
-	if (min==head) curr=head->next;
-
-	recurse(curr);
-
-	return min;
-}
-
 void recurse(Item* curr) {
 	Item* min=findMin(curr);
 
@@ -73,4 +59,18 @@ void recurse(Item* curr) {
 		min->next=curr;
 		recurse (curr); //don't advance curr
 	}
+}
+
+Item* LLSelectionSort(Item * head) {
+	if (!head) return nullptr;
+
+	if (!head->next) return head;
+
+	Item* curr=head;
+	Item* min=findMin(head);
+	if (min==head) curr=head->next;
+
+	recurse(curr);
+
+	return min;
 }
