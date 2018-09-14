@@ -8,6 +8,7 @@ Item* findMin(Item * head) {
 	Item* search=head;
 	Item* min_item=head;
 
+	//get value of first element for comparison
 	int min=head->getValue();
 
 	while (search->next) {

@@ -5,7 +5,7 @@
 
 void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	size_t n=gameData->playerList.size();
-	size_t m=rand()%(4*n-1); // choose goose index
+	size_t m=rand()%(4*n); // choose goose index
 
 	//print all the ducks
 	for (size_t i=0; i<m; i++) {
@@ -17,12 +17,13 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	size_t gooseNum=rand()%50;
 	size_t itNum=rand()%50;
 
-	//repick in case of tie
+	//repick in case of tie until no longer a tie
 	while (gooseNum==itNum) {
 		gooseNum=rand()%50;
 		itNum=rand()%50;
 	}
 
+	//it picks a bigger number
 	if (itNum>gooseNum) {
 		output<<gameData->itPlayerID<<" took "<<gameData->playerList.get(m)
 			<<"'s spot!\n";
@@ -30,6 +31,7 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 		gameData->itPlayerID=gameData->playerList.get(m);
 	}
 
+	//goose picks a bigger number
 	else {
 		output<<gameData->itPlayerID<<" is out!\n";
 		//if goose is the only player left
@@ -55,7 +57,7 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 
 int main(int argc, char *argv[]) {
 	std::ifstream ifile;
-	if (argc<3) {
+	if (argc!=3) {
 		return -1;
 	}
 
@@ -88,6 +90,7 @@ int main(int argc, char *argv[]) {
 	std::ofstream output;
 	output.open(argv[2]);
 
+	//only true when someone wins
 	while (list->itPlayerID!=0) {
 		simulateDDGRound(list, output);
 	}

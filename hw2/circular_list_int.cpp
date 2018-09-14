@@ -63,6 +63,7 @@ void CircularListInt::push_back(int value) {
 		return;
 	}
 
+	//update pointers on last and new elements
 	add->prev=this->head->prev;
 	add->next=this->head;
 
