@@ -27,7 +27,9 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	if (itNum>gooseNum) {
 		output<<gameData->itPlayerID<<" took "<<gameData->playerList.get(m)
 			<<"'s spot!\n";
+		//goose now becomes it, set goose ID to old itPlayerID
 		gameData->playerList.set(m, gameData->itPlayerID);
+		//set itPlayerID to goose ID
 		gameData->itPlayerID=gameData->playerList.get(m);
 	}
 
@@ -44,22 +46,25 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 			n=gameData->playerList.size();
 			size_t newIt=rand()%n;
 
+			//get random numbers until it is not the goose
 			while (newIt==m) {
 				newIt=rand()%n;
 			}
-
+			//set itPlayerID to the new it's ID
 			gameData->itPlayerID=gameData->playerList.get(newIt);
 			output<<gameData->itPlayerID<<" was chosen as the new it.\n";
+			//remove the item from the linked list
 			gameData->playerList.remove(newIt);
 		}
 	}
 }
 
 int main(int argc, char *argv[]) {
-	std::ifstream ifile;
+	//not correct amount of arguments
 	if (argc!=3) {
 		return -1;
 	}
+	std::ifstream ifile;
 
 	unsigned int seed;
 	size_t players;
@@ -67,6 +72,7 @@ int main(int argc, char *argv[]) {
 	size_t id;
 
 	ifile.open(argv[1]);
+	//cannot open
 	if (ifile.fail()) {
 		return -1;
 	}
@@ -85,8 +91,10 @@ int main(int argc, char *argv[]) {
 
 	ifile.close();
 
+	//sent seed for rand()
 	srand(seed);
 	
+	//create output, open to start writing to it
 	std::ofstream output;
 	output.open(argv[2]);
 
@@ -95,6 +103,7 @@ int main(int argc, char *argv[]) {
 		simulateDDGRound(list, output);
 	}
 
+	//deallocate heap memory
 	delete list;
 
 	return 0;

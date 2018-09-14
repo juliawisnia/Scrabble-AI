@@ -54,6 +54,7 @@ on the heap. From here, all the player IDs are put into the new
 list. Then, while no one has won, simulateDDGRound is called.
 This function utilizes the functions of my circular_list, and
 continually updates and removes players from the linked list.
-It checks for the edge cases when the same random numbers are
-chosen, there are no players, and the goose is picked again as
-it. All steps are written to the ofstream output.
+Most variables are of type size_t so they can utilize these 
+functions. It checks for the edge cases when the same random 
+numbers are chosen, there are no players, and the goose is picked
+again as it. All steps are written to the ofstream output.

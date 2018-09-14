@@ -14,7 +14,8 @@ CircularListInt::CircularListInt() {
 }
 
 CircularListInt::~CircularListInt() {
-	while (this->head) {
+	//while the list is not empty
+	while (!empty()) {
 		remove(count);
 	}
 	delete this->head;
@@ -25,12 +26,14 @@ int CircularListInt::get(size_t index) const {
 
 	size_t len=size();
 
+	//enables "wrapping" of index
 	if (index>=len) {
 		index=index%len;
 	}
-
+	//item is at head
 	if (index==0) return this->head->value;
 
+	//traverse until you reach the index
 	Item* val=this->head;
 	for (size_t i=0; i<index; i++) {
 		val=val->next;
@@ -56,6 +59,7 @@ void CircularListInt::push_back(int value) {
 
 	(this->count)++; //add to size after checking
 
+	//if list is empty
 	if (len==0) {
 		head=add;
 		add->prev=add;
@@ -77,15 +81,18 @@ void CircularListInt::set(size_t index, int value) {
 	size_t len=size();
 	Item* traverse=this->head;
 
+	//enable "wrapping"
 	if (index>=len) {
 		index=index%len;
 	}
 
+	//element is at head
 	if (index==0) {
 		this->head->value=value;
 		return;
 	}
 
+	//traverse until you reach the element
 	for (size_t i=0; i<index; i++) {
 		traverse=traverse->next;
 	}
@@ -100,28 +107,32 @@ void CircularListInt::remove(size_t index) {
 	size_t len=size();
 	(this->count)--; //decrement size after checking
 
+	//delete element memory
 	if (len==1) {
 		delete this->head;
 		this->head=nullptr;
 		return;
 	}
 
+	//enable "wrapping"
 	if (index>=len) {
 		index=index%len;
 	}
 
 	Item* traverse=this->head;
-
+	//traverse list until you reach the index
 	for (size_t i=0; i<index; i++) {
 		traverse=traverse->next;
 	}
 
+	//element is at head
 	if (index==0) {
 		this->head=this->head->next;
 	}
-
+	//update pointers of surrounding
 	traverse->next->prev=traverse->prev;
 	traverse->prev->next=traverse->next;
 
+	//delete memory of item
 	delete *&traverse;
 }
