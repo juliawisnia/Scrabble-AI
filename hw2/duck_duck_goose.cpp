@@ -5,14 +5,14 @@
 
 void simulateDDGRound(GameData * gameData, std::ostream & output) {
 	size_t n=gameData->playerList.size();
-	size_t m=rand()%(4*(n-1)+1); // choose goose index
+	size_t m=rand()%(4*n-1); // choose goose index
 
 	//print all the ducks
 	for (size_t i=0; i<m; i++) {
-		output<<gameData->playerList.get(i)<<" is a Duck."<<std::endl;
+		output<<gameData->playerList.get(i)<<" is a Duck.\n";
 	}
 	//player m is the goose
-	output<<gameData->playerList.get(m)<<" is a Goose!"<<std::endl;
+	output<<gameData->playerList.get(m)<<" is a Goose!\n";
 
 	size_t gooseNum=rand()%50;
 	size_t itNum=rand()%50;
@@ -25,16 +25,16 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 
 	if (itNum>gooseNum) {
 		output<<gameData->itPlayerID<<" took "<<gameData->playerList.get(m)
-			<<"'s spot!"<<std::endl;
+			<<"'s spot!\n";
 		gameData->playerList.set(m, gameData->itPlayerID);
 		gameData->itPlayerID=gameData->playerList.get(m);
 	}
 
 	else {
-		output<<gameData->itPlayerID<<" is out!"<<std::endl;
+		output<<gameData->itPlayerID<<" is out!\n";
 		//if goose is the only player left
 		if (gameData->playerList.size()==1) {
-			output<<"Winner is "<<gameData->playerList.get(m)<<"!"<<std::endl;
+			output<<"Winner is "<<gameData->playerList.get(m)<<"!\n";
 			gameData->itPlayerID=0;
 		}
 		//more players left
@@ -47,8 +47,7 @@ void simulateDDGRound(GameData * gameData, std::ostream & output) {
 			}
 
 			gameData->itPlayerID=gameData->playerList.get(newIt);
-			output<<gameData->itPlayerID<<" was chosen as the new it."
-				<<std::endl;
+			output<<gameData->itPlayerID<<" was chosen as the new it.\n";
 			gameData->playerList.remove(newIt);
 		}
 	}
