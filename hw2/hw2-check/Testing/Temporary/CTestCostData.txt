@@ -1,0 +1,31 @@
+SelSortBasic.OneElementFindMin 0 0
+SelSortBasic.ThreeElementFindMin 0 0
+SelSortBasic.TenElementFindMin 0 0
+SelSortBasic.ThreeElementSort 0 0
+SelSortBasic.TenElementSort 0 0
+ListBasic.ConstructionDestruction 0 0
+ListBasic.OneItemAdd 0 0
+ListBasic.ThreeItemAdd 0 0
+ListBasic.Empty 0 0
+ListBasic.OneItemRemove 0 0
+ListBasic.ThreeItemRemove 0 0
+ListBasic.Set 0 0
+ListBasic.CircularIndicies 0 0
+DDGRoundBasic.TwoPlayers 0 0
+DDGBasic.FivePlayers 0 0
+---
+SelSortBasic.OneElementFindMin
+SelSortBasic.ThreeElementFindMin
+SelSortBasic.TenElementFindMin
+SelSortBasic.ThreeElementSort
+SelSortBasic.TenElementSort
+ListBasic.ConstructionDestruction
+ListBasic.OneItemAdd
+ListBasic.ThreeItemAdd
+ListBasic.Empty
+ListBasic.OneItemRemove
+ListBasic.ThreeItemRemove
+ListBasic.Set
+ListBasic.CircularIndicies
+DDGRoundBasic.TwoPlayers
+DDGBasic.FivePlayers

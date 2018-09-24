@@ -1,0 +1,36 @@
+PROBLEM 2
+(a):
+enqueue(1) stack1: 1 is on the top
+			stack2: empty
+
+enqueue(2): stack 1: contains 1, 2, top is 2
+			stack2: empty
+
+dequeue(): stack 1: empty
+			stack2: contains 2, 1, top is 1
+
+enqueue(3): stack 1: 3 is on top
+			stack2: contains 2, 1, top is 1
+
+enqueue(4): stack1: contains 3, 4, top is 4
+			stack2: contains 2, 1, top is 1
+
+dequeue(): stack 1: contains 3, 4, top is 4
+			stack2: 2 is on the top
+
+enqueue(5): stack1: contains 3, 4, 5, top is 5
+			stack2: 2 is on the top
+
+enqueue(6): stack1: contains 3, 4, 5, 6, top is 6
+			stack2: 2 is on the top
+(b): enqueue(x) takes Θ(1) time, because you are
+		adding to the front of the list
+		dequeue(x) takes Θ(n) time, because you have to
+		pop n items, then push n items, which would be 2n,
+		so it becomes Θ(n).
+(c): enqueue(x) still takes Θ(1) time, but dequeue(x)
+		takes Θ(n^2) time, because to pop n elements when
+		pop() takes Θ(n) would be n^2 time, then to push
+		would also be n^2 time, and n^2+n^2 becomes Θ(n^2).
+
+PROBLEM 3

@@ -1,0 +1,18 @@
+1. (a) The README.md file is tracked and UNMODIFIED after performing these operations, because git knows about the file since it was just cloned from the repo, but we haven't made any edits to it yet.
+
+(b) README.md is now tracked and MODIFIED, because it has been edited, and 
+fun_problem.txt is not tracked and UNMODIFIED, because it was created in our local directory, and git has no way to know about the file yet.
+
+(c) Both of these files are now STAGED, because git knows about both of them.
+
+(d) Both files are now UNSTAGED/MODIFIED, because even though they were previously committed, they have been changed.
+
+(e) README.md and fun_problem.txt are both STAGED now, however, the contents
+of fun_problem.txt are what they were after the last commit to git because
+git --checkout <file> un-dos the changes since the last commit, so the file 
+is still empty.
+
+(f) README.md is now STAGED and UNSTAGED/MODIFIED at the same time, because
+git add stages a file exactly as it was when you ran the command, even if
+you edit it after the add. In order to move the edited file into git now,
+we would have to do another git add for the same file.

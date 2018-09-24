@@ -1,0 +1,15 @@
+1:SelSortBasic.OneElementFindMin
+2:SelSortBasic.ThreeElementFindMin
+3:SelSortBasic.TenElementFindMin
+4:SelSortBasic.ThreeElementSort
+5:SelSortBasic.TenElementSort
+6:ListBasic.ConstructionDestruction
+7:ListBasic.OneItemAdd
+8:ListBasic.ThreeItemAdd
+9:ListBasic.Empty
+10:ListBasic.OneItemRemove
+11:ListBasic.ThreeItemRemove
+12:ListBasic.Set
+13:ListBasic.CircularIndicies
+14:DDGRoundBasic.TwoPlayers
+15:DDGBasic.FivePlayers
