@@ -22,6 +22,40 @@ bool CheckBalancedParentheses(std::string input) {
     if(cnt==0) return true;
     
     else return false;
+    // for (int i=0; i<len; i++) {
+    // 	if (input[i]=='('||input[i]==')') {
+    // 		cnt++;
+    // 	}
+    // }
+
+    // if (cnt%2!=0) return false;
+
+    // for (int i=0; i<len; i++) {
+    // 	if (input[i]=='(') {
+    // 		stk.push(input[i]);
+    // 	}
+    // 	//if any other types of parens
+    // 	if (input[i]=='['||input[i]==']'||input[i]=='{'||input[i]=='}') {
+    // 		return false;
+    // 	}
+    // }
+
+    // for (int j=0; j<len; j++) {
+    // 	//should not have operators +/* without parentheses
+    // 	if (stk.empty() && (input[j]=='+'||input[j]=='*')) {
+    // 		return false;
+    // 	}
+
+    // 	else if (input[j]==')') {
+    // 		stk.pop();
+    // 	}
+    // }
+
+    // if (!stk.empty()) {
+    // 	return false;
+    // }
+
+    // return true;
 }
 
 int closedParen(StackInt &stk, int &total) {
@@ -52,6 +86,7 @@ int closedParen(StackInt &stk, int &total) {
 		while(stk.top()==SHIFTRIGHT || stk.top()==SHIFTLEFT) {
 			//if there's a shift operator with nothing in front
 			if (!start) {
+				//std::cout<<"Line 77"<<std::endl;
 				return -3;
 			}
 
@@ -78,8 +113,10 @@ int closedParen(StackInt &stk, int &total) {
 			stk.pop();
 		}
 	}
+	//std::cout<<calculate.top()<<std::endl;
 	//if there are no operators inside the parentheses
 	if (flag==false) {
+		//std::cout<<"Line 106"<<std::endl;
 		return -3;
 	}
 	stk.pop();
@@ -168,7 +205,6 @@ int noParentheses(StackInt &stk, int &total) {
 void compute(std::string input) {
 	StackInt stk;
 	int total=0;
-	bool paren=false;
 
 	const int OPEN_PAREN=-2;
 	const int PLUS=-4;
@@ -195,28 +231,15 @@ void compute(std::string input) {
 
 	for (int i=0; i<len; i++) {
 		if (input[i]=='(') {
-			paren=true;
 			if (!stk.empty() && stk.top()>-2) {
 				std::cout<<"Malformed"<<std::endl;
 				return;
 			}
 			else stk.push(OPEN_PAREN);
 		}
-		else if (input[i]=='+') {
-			if (!paren) {
-				std::cout<<"Malformed"<<std::endl;
-				return;
-			}
-			else stk.push(PLUS);
-		}
-		else if (input[i]=='*') {
-			if (!paren) {
-				std::cout<<"Malformed"<<std::endl;
-				return;
-			}
-			else stk.push(MULTIPLY);
-		}
-		else if (input[i]=='<') stk.push(SHIFTLEFT); 
+		else if (input[i]=='+') stk.push(PLUS);
+		else if (input[i]=='*') stk.push(MULTIPLY);
+		else if (input[i]=='<') stk.push(SHIFTLEFT);
 		else if (input[i]=='>') stk.push(SHIFTRIGHT);
 		else if (input[i]==' ') continue;
 		else if (input[i]=='	') continue;
@@ -228,10 +251,6 @@ void compute(std::string input) {
 			}
 		}
 		else {
-			if (input[i-1]==')') {
-				std::cout<<"Malformed"<<std::endl;
-				return;
-			}
 			int num=input[i]-'0'; //convert to int
 			if (num==0||num==1||num==2||num==3||num==4||num==5||num==6
 				||num==7||num==8||num==9) {

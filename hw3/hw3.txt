@@ -32,3 +32,44 @@ enqueue(6): stack1: contains 3, 4, 5, 6, top is 6
 		takes theta(n^2) time, because to pop n elements when
 		pop() takes theta(n) would be n^2 time, then to push
 		would also be n^2 time, and n^2+n^2 becomes theta(n^2).
+
+PROBLEM 3
+(a) First, we look at the inner 'for' loop
+	// for (int j = 1; j < n; j *= 2) //
+	Each time this loop runs, the problem is being halved,
+	or getting 2 times smaller, so this loop executes in 
+	log2n (log base 2 n) time, or theta(log2n). 
+
+	Next, we move to the 'if' statement
+	// if (A[i] == 0) //
+	Because there are no constraints on A, we can assume that
+	the worst case runtime of this is when the if statement
+	triggers everytime, so we now move onto the outer 'for' loop
+
+	// for (int i = 0; i < n; i ++) //
+	This will run in theta(n) time, because that is how many
+	times the statement will execute.
+
+	Now, we have to sum the two for loops run times. The summation
+	is adding log2n 'n' times to get the full runtime, which is
+	nlog2n, which we can simplify to the final runtime, 
+	theta(nlogn).
+
+(b) First, we look at the inner 'for' loop
+	// for (int k = 1; k < n; k *= 2) //
+	Just as in the last problem, each time this loop runs, the
+	problem is being halved, or getting 2 times smaller, so this
+	loop executes in log2n time, or theta(log2n).
+
+	Next, we look at the 'if' statement
+	// if (j % i == 0) //
+	To solve this part, we must look at the nested 'for' loops.
+	We see that j starts off equal to i each time, and runs to
+	n just like the outer 'for' loop. We can start off by looking
+	at a case by case level. Let's say n=10. This if statement
+	will trigger:
+		9 times for i=1
+		4 times for i=2
+		3 times for i=3
+		2 times for i=4
+		1 time for i>=5 && i<=9
