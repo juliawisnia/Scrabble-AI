@@ -32,5 +32,3 @@ enqueue(6): stack1: contains 3, 4, 5, 6, top is 6
 		takes theta(n^2) time, because to pop n elements when
 		pop() takes theta(n) would be n^2 time, then to push
 		would also be n^2 time, and n^2+n^2 becomes theta(n^2).
-
-PROBLEM 3
