@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+badCases.txt
+goodCases.txt
+letters.txt
+test1.txt
