@@ -1,3 +1,9 @@
+# CS 104 Student Repository
+
+- **Name**: Julia Wisnia
+- **USC ID**: 2096592657
+- **Email**: wisnia@usc.edu
+
 PROBLEM 2
 (a):
 enqueue(1) stack1: 1 is on the top
