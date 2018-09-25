@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "stackint.h"
 
 bool CheckBalancedParentheses(std::string input) {
@@ -165,7 +166,22 @@ int noParentheses(StackInt &stk, int &total) {
 	return 1;
 }
 
-void compute(std::string input) {
+std::string removeSpaces(std::string str) { 
+    std::string temp; 
+
+    int len=str.size();
+    for (int i=0; i<len; i++) {
+    	if (!isspace(str[i])) {
+    		temp=temp+str[i];
+    	}
+
+    	else continue;
+    }
+
+    return temp; 
+} 
+
+void compute(std::string output) {
 	StackInt stk;
 	int total=0;
 	bool paren=false;
@@ -176,26 +192,21 @@ void compute(std::string input) {
 	const int SHIFTLEFT=-6;
 	const int SHIFTRIGHT=-7;
 
+	std::string input=removeSpaces(output);
+
 	if (!CheckBalancedParentheses(input)) {
 		std::cout<<"Malformed"<<std::endl;
 		return;
 	}
 
 	int len=input.size();
-
 	//empty line
 	if (len==0) return;
-
-	bool notSpace=false;
-	for (int i=0; i<len; i++) {
-		if (!isspace(input[i])) notSpace=true;
-	}
-	//line only contains spaces
-	if (!notSpace) return;
 
 	for (int i=0; i<len; i++) {
 		if (input[i]=='(') {
 			paren=true;
+			//if there's a number with no operator in front
 			if (!stk.empty() && stk.top()>-2) {
 				std::cout<<"Malformed"<<std::endl;
 				return;
@@ -203,6 +214,7 @@ void compute(std::string input) {
 			else stk.push(OPEN_PAREN);
 		}
 		else if (input[i]=='+') {
+			//operator without parentheses
 			if (!paren) {
 				std::cout<<"Malformed"<<std::endl;
 				return;
@@ -210,6 +222,7 @@ void compute(std::string input) {
 			else stk.push(PLUS);
 		}
 		else if (input[i]=='*') {
+			//operator without parentheses
 			if (!paren) {
 				std::cout<<"Malformed"<<std::endl;
 				return;
@@ -218,16 +231,21 @@ void compute(std::string input) {
 		}
 		else if (input[i]=='<') stk.push(SHIFTLEFT); 
 		else if (input[i]=='>') stk.push(SHIFTRIGHT);
-		else if (input[i]==' ') continue;
-		else if (input[i]=='	') continue;
 		else if (input[i]==')') {
 			int j=closedParen(stk, total);
+			//problem returned from closedParen
 			if (j<0) {
 				std::cout<<"Malformed"<<std::endl;
 				return;
 			}
 		}
 		else {
+			//if shifts after int
+			if (input[i+1]=='<' || input[i+1]=='>') {
+				std::cout<<"Malformed"<<std::endl;
+				return;
+			}
+			//if there's a number after the parentheses w/o operator
 			if (input[i-1]==')') {
 				std::cout<<"Malformed"<<std::endl;
 				return;
