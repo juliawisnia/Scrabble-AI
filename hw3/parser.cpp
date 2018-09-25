@@ -154,7 +154,7 @@ int noParentheses(StackInt &stk, int &total) {
 	calculate.push(val);
 
 	//should not have operators w/o parentheses
-	if (stk.top()==MULTIPLY||stk.top()==PLUS) return -3;
+	if (stk.top()==MULTIPLY || stk.top()==PLUS) return -3;
 
 	stk.pop();
 
