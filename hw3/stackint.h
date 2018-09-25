@@ -28,20 +28,6 @@ class StackInt {
   void pop();
 
  private:
-  //checks balanced parens
-  bool CheckBalancedParentheses(std::string input);
-
-  //called whenever a closed paren is hit
-  int closedParen(StackInt &stk, int &total);
-
-  //called if a string has no parens, does the math
-  int noParentheses(StackInt &stk, int &total);
-
-  //removes spaces from all string lines
-  std::string removeSpaces(std::string str);
-  
-  //pushes everything onto main stack, tests edge cases
-  void compute(std::string line);
   /** 
    * Single data member of the Stack.
    * We use composition to implement this Stack 
