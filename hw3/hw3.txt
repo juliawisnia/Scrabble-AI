@@ -73,3 +73,43 @@ PROBLEM 3
 		3 times for i=3
 		2 times for i=4
 		1 time for i>=5 && i<=9
+	We see that it is triggering (n-i)/i times as it gets larger
+	and larger, so we can generalize this to n/i. Now, we do the
+	summation of n/i from i=0 to n to account for the j 'for' loop,
+	and from here we get a run time of nlogn for this. So, for
+	the j and k for loops, we now have a run time of nlog^2n.
+
+	Next, we look at the final outer 'for' loop, which simply runs
+	from 0 to n, meaning in n time. When we sum this with the inner
+	loops, we get that the entire runtime is theta(n^2*log^2n).
+
+(c) First, we look at the inner-most for loop
+	// for (int j = 0; j < size; j++) //
+	From the above 'if' statment, we see that size=i, so j is running
+	in theta(i) time. 
+
+	Now, we look at the 'if' statement. We see that it only triggers
+	when i=size, which occurs n/10 times, because size is being
+	incremented by 10 each for loop. 
+
+	So, we finally look at the outer 'for' loop, and from the 'if' 
+	statement, know that this will have linear run time everytime the
+	if statment does not trigger, so will only run in theta(i) time
+	n/10 times. So, we can do the summation from i=0 to n of i,
+	which becomes n^2. So, the final runtime is theta(n^2).
+
+(d) First, we look at the inner-most for loop
+	// for (int j = 0; j < size; j++) //
+	From the above 'if' statment, we see that size=i, so j is running
+	in theta(i) time. 
+
+	Now, we look at the 'if' statement. We see that it only triggers
+	when i=size, and size is being doubled everytime. This means that
+	the problem is being doubled each time, which means that it will
+	run logn times.
+
+	So, we finally look at the outer 'for' loop, and from the 'if' 
+	statement, know that this will have linear run time everytime the
+	if statment does not trigger, so will only run in theta(i) time
+	logn times. So, we can do the summation from i=0 to n of i,
+	which becomes nlogn. So, the final runtime is theta(nlogn).
