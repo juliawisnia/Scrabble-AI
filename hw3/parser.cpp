@@ -3,7 +3,27 @@
 #include <sstream>
 #include "stackint.h"
 
-bool CheckBalancedParentheses(std::string input) {
+int main(int argc, char* argv[]) {
+	//wrong number of arguments
+	if (argc!=2) return -1;
+
+	std::ifstream ifile;
+	ifile.open(argv[1]);
+
+	//cannot open file
+	if (ifile.fail()) return -1;
+
+	std::string line;
+
+	//check for end of file flag
+	while (!ifile.eof()) {
+		getline(ifile, line);
+		compute(line);
+	}
+
+	return 0;
+}
+/*bool CheckBalancedParentheses(std::string input) {
 	StackInt stk;
     int len=input.size();
     int cnt=0;
@@ -23,9 +43,9 @@ bool CheckBalancedParentheses(std::string input) {
     if(cnt==0) return true;
     
     else return false;
-}
+}*/
 
-int closedParen(StackInt &stk, int &total) {
+/*int closedParen(StackInt &stk, int &total) {
 	const int OPEN_PAREN=-2;
 	const int PLUS=-4;
 	const int MULTIPLY=-5;
@@ -114,9 +134,9 @@ int closedParen(StackInt &stk, int &total) {
 
 	stk.push(total);
 	return 1;
-}
+}*/
 
-int noParentheses(StackInt &stk, int &total) {
+/*int noParentheses(StackInt &stk, int &total) {
 	//const int OPEN_PAREN=-2;
 	const int PLUS=-4;
 	const int MULTIPLY=-5;
@@ -164,9 +184,9 @@ int noParentheses(StackInt &stk, int &total) {
 
 	stk.push(total);
 	return 1;
-}
+}*/
 
-std::string removeSpaces(std::string str) { 
+/*std::string removeSpaces(std::string str) { 
     std::string temp; 
 
     int len=str.size();
@@ -273,25 +293,4 @@ void compute(std::string output) {
 	}
 
 	std::cout<<total<<std::endl;
-}
-
-int main(int argc, char* argv[]) {
-	//wrong number of arguments
-	if (argc!=2) return -1;
-
-	std::ifstream ifile;
-	ifile.open(argv[1]);
-
-	//cannot open file
-	if (ifile.fail()) return -1;
-
-	std::string line;
-
-	//check for end of file flag
-	while (!ifile.eof()) {
-		getline(ifile, line);
-		compute(line);
-	}
-
-	return 0;
-}
+}*/
