@@ -5,8 +5,7 @@
 - **Email**: wisnia@usc.edu
 
 PARSER
-My parser has 5 helper functions to calculate expressions, declared as private
-functions in stackint.cpp.
+My parser has 5 helper functions to calculate expressions.
 
 compute()
 This function is responsible for the main stack containing the expressions.
