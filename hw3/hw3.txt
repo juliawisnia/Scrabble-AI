@@ -23,14 +23,14 @@ enqueue(5): stack1: contains 3, 4, 5, top is 5
 
 enqueue(6): stack1: contains 3, 4, 5, 6, top is 6
 			stack2: 2 is on the top
-(b): enqueue(x) takes Θ(1) time, because you are
+(b): enqueue(x) takes theta(1) time, because you are
 		adding to the front of the list
-		dequeue(x) takes Θ(n) time, because you have to
+		dequeue(x) takes theta(n) time, because you have to
 		pop n items, then push n items, which would be 2n,
-		so it becomes Θ(n).
-(c): enqueue(x) still takes Θ(1) time, but dequeue(x)
-		takes Θ(n^2) time, because to pop n elements when
-		pop() takes Θ(n) would be n^2 time, then to push
-		would also be n^2 time, and n^2+n^2 becomes Θ(n^2).
+		so it becomes theta(n).
+(c): enqueue(x) still takes theta(1) time, but dequeue(x)
+		takes theta(n^2) time, because to pop n elements when
+		pop() takes theta(n) would be n^2 time, then to push
+		would also be n^2 time, and n^2+n^2 becomes theta(n^2).
 
 PROBLEM 3
