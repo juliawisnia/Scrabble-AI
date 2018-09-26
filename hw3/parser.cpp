@@ -168,13 +168,13 @@ int noParentheses(StackInt &stk, int &total) {
 
 std::string removeSpaces(std::string str) { 
     std::string temp; 
-
     int len=str.size();
+
     for (int i=0; i<len; i++) {
     	if (!isspace(str[i])) {
     		temp=temp+str[i];
     	}
-
+    	
     	else continue;
     }
 
