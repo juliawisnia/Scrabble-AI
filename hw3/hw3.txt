@@ -87,7 +87,7 @@ PROBLEM 3
 
 	Next, we look at the final outer 'for' loop, which simply runs
 	from 0 to n, meaning in n time. When we sum this with the inner
-	loops, we get that the entire runtime is theta(n^2*log^2n).
+	loops, we get that the entire runtime is theta(n^2*(log^2)n).
 
 (c) First, we look at the inner-most for loop
 	// for (int j = 0; j < size; j++) //
