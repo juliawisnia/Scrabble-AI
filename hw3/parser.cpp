@@ -232,6 +232,8 @@ void compute(std::string output) {
 		else if (input[i]=='<') stk.push(SHIFTLEFT); 
 		else if (input[i]=='>') stk.push(SHIFTRIGHT);
 		else if (input[i]==')') {
+			//cannot have anything but operators after closedParen, check
+			//for ints when you push ints
 			if (input[i+1]=='<' || input[i+1]=='>') {
 				std::cout<<"Malformed"<<std::endl;
 				return;
