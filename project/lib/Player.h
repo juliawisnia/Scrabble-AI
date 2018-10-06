@@ -68,7 +68,9 @@ public:
 	void addTiles (std::vector<Tile*> const & tilesToAdd);
 
 	//Add more public/protected/private functions/variables here.
-
+private:
+	std::set<Tile*> Hand;
+	
 };
 
 

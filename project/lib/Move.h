@@ -63,12 +63,13 @@ public:
 	   decide (and document) what exactly it throws*/
 	virtual void execute(Board & board, Bag & bag, Dictionary & dictionary) = 0;
 
-	virtual ~Move();
+	virtual ~Move() {};
 
 	//Add more public/protected/private functions/variables here.
 
 protected:
-
+	
+	
 	Player * _player;
 
 	// constructor -- only accessible to subclasses
@@ -117,12 +118,16 @@ public:
 		return true;
 	}
 
+	// checks that they're exchanging a valid number of tiles
+	void isValidMove (Move & move, Bag & bag);
+
 	/* Executes this move, whichever type it is.
 	   This may throw exceptions; students: it's up to you to
 	   decide (and document) what exactly it throws*/
 	void execute(Board & board, Bag & bag, Dictionary & dictionary);
 
 	//Add more public/protected/private functions/variables here.
+private:
 
 };
 
@@ -146,6 +151,8 @@ public:
 		return true;
 	}
 
+	void isValidMove (Board & board, Dictionary & dictionary);
+
 	/* Returns the vector of tiles associated with a PLACE/EXCHANGE move.
 	   Return value could be arbitrary for PASS moves. */
 	std::vector<Tile*> const & tileVector () const;
@@ -156,7 +163,12 @@ public:
 	void execute(Board & board, Bag & bag, Dictionary & dictionary);
 
 	//Add more public/protected/private functions/variables here.
-
+private:
+	size_t startRow;
+	size_t startColumn;
+	bool horizontal;
+	std::string word;
+	Player* player;
 };
 
 

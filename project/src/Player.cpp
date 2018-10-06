@@ -4,6 +4,7 @@
 #include "Tile.h"
 
 Player::Player (std::string const & name, size_t maxTiles) {
+	
 }
 
 Player::~Player() {

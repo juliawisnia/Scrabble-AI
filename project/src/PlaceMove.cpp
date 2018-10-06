@@ -20,12 +20,12 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	
 }
 
-bool PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p) {
+void PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p) {
 	size_t cols = board.getColumns();
 	size_t rows = board.getRows();
 
 	// player has necessary tiles
-	while (!player->hasTiles()) {
+	while (!p->hasTiles()) {
 		std::cout << "Error: you don't have the necessary tiles." << std::endl;
 		std::cout << "Enter new move: " << std::endl;
 
@@ -34,6 +34,39 @@ bool PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 
 		if (dir == '-') horizontal = true;
 		else horizontal = false;
+	}
+
+	// make sure that the first move is valid
+	if (isFirstMove()) {
+		std::pair<size_t, size_t> middle = board.startPos();
+
+		// check that the move will take middle tile
+		while ((horizontal && (middle[0] < startRow || middle[0] > startRow + word.size())) ||
+				(!horizontal && (middle[1] < startColumn || middle[1] > startColumn + word.size()))) {
+
+			std::cout << "Error: must place tile on first square for starting turn" << std::endl;
+			std::cout << "Enter new move: " << std::endl;
+
+			char dir;
+			std::cin >> dir >> startRow >> startColumn >> word;
+
+			if (dir == '-') horizontal = true;
+			else horizontal = false;
+		}
+		
+		// check that user is putting down more than one tile
+		while (word.size() < 2) {
+			std::cout << "Error: must use more than one letter on your first turn." << std::endl;
+			std::cout << "Enter new move: " << std::endl;
+
+			char dir;
+			std::cin >> dir >> startRow >> startColumn >> word;
+
+			if (dir == '-') horizontal = true;
+			else horizontal = false;
+		}
+
+		return;
 	}
 
 	bool inbounds = false;
@@ -58,48 +91,6 @@ bool PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 			else horizontal = false;
 		}
 
-	}
-
-	// make sure that the first move is valid
-	// yo this is wrong do the parameter again
-	while (isFirstMove()) {
-		bool startpos = true;
-		bool letters = true;
-		std::pair<size_t, size_t> middle = board.startPos();
-
-		// check that the move will take middle tile
-		if (horizontal && (middle[0] < startRow || middle[0] > startRow + word.size())) startpos = false;
-
-		else if (!horizontal && (middle[1] < startColumn || middle[1] > startColumn + word.size())) startpos=false;
-		
-		// check that user is putting down more than one tile
-		if (word.size() < 2) letters = false;
-
-		if (!startpos && !letters) {
-			std::cout << "Error: must start on middle square & use more than one letter on first turn." << std::endl;
-			std::cout << "Enter new starting point and word: "
-
-			std::cin >> startRow >> startColumn >> word;
-			continue;
-		}
-
-		else if (startpos && !letters) {
-			std::cout << "Error: must use more than one letter on first turn." << std::endl;
-			std::cout << "Enter new word: " << std::endl;
-
-			std::cin >> word;
-			continue;
-		}
-		
-		else if (!startpos && letters) {
-			std::cout << "Error: must start on middle square on first turn." << std::endl;
-			std::cout << "Enter new starting point: " << std::endl;
-
-			std::cin >> startRow >> startColumn;
-			continue;
-		}
-
-		else return true;
 	}
 
 	bool adjacent = false;
@@ -182,5 +173,5 @@ bool PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 		overlap = false;	
 	}
 
-	return true;
+	return;
 }

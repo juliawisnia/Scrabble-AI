@@ -67,10 +67,16 @@ public:
 	/* Returns the number of columns of the board.*/
 	size_t getColumns() const;
 
+	bool isFirstMove() const;
+
+	std::pair<size_t, size_t> startPos();
+
 private:
 	std::vector<std::vector<Square>> scrabbleBoard;
 	size_t rows;
 	size_t columns;
+	size_t midx;
+	size_t midy;
 };
 
 
