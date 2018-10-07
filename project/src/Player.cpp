@@ -3,8 +3,9 @@
 #include <vector>
 #include "Tile.h"
 
-Player::Player (std::string const & name, size_t maxTiles) {
-	
+Player::Player (std::string const & playerName, size_t maxTiles) {
+	name = playerName
+	score = 0;
 }
 
 Player::~Player() {
@@ -29,6 +30,8 @@ bool Player::hasTiles(std::string const & move, bool resolveBlanks) const {
 		else return false;
 
 	}
+
+	return true;
 }
 
 std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlanks) {

@@ -12,11 +12,12 @@ Dictionary::Dictionary (std::string dictionary_file_name) {
 		std::cout << "Error: Invalid dictionary" << std::endl;
 	}
 
-	std::string word;
+	std::stringstream ss;
+	ss << ifile;
 
 	while (!ifile.eof()) {
-
-		getline(ifile, word);
+		std::string word;
+		ss >> word;
 
 		for (int i=0; i<word.size(); i++) {
 			std::toupper(word[i]);
@@ -29,7 +30,11 @@ Dictionary::Dictionary (std::string dictionary_file_name) {
 Dictionary::~Dictionary () {
 }
 
-bool Dictionary::isLegalWord (std::string const & word) const {
+bool Dictionary::isLegalWord (std::string & word) const {
+	for (size_t i = 0; i < word.size(); i++) {
+		std::toupper(word[i]);
+	}
+
 	std::set<string>::iterator it;
 	it = dictionary.find(word);
 

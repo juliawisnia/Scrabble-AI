@@ -69,7 +69,7 @@ public:
 
 	bool isFirstMove() const;
 
-	std::pair<size_t, size_t> startPos();
+	std::pair<size_t, size_t> startPos() const;
 
 private:
 	std::vector<std::vector<Square>> scrabbleBoard;

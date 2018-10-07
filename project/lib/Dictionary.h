@@ -26,7 +26,7 @@ public:
 
 	/* Checks whether the given word is in the dictionary, and returns true if so.
 	   Case should not matter. Must run in O(logn) for the number of words in the dictionary. */
-	bool isLegalWord (std::string const & word) const;
+	bool isLegalWord (std::string & word) const;
 
 	//Add more public and private functions/variables here.
 private:

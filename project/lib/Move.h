@@ -20,6 +20,7 @@
 #include "Player.h"
 #include "Bag.h"
 #include "Dictionary.h"
+#include "Board.h"
 
 // forward declaration to prevent circular includes
 class Board;
@@ -68,8 +69,8 @@ public:
 	//Add more public/protected/private functions/variables here.
 
 protected:
-	
-	
+
+
 	Player * _player;
 
 	// constructor -- only accessible to subclasses
@@ -128,6 +129,7 @@ public:
 
 	//Add more public/protected/private functions/variables here.
 private:
+	std::string exchangeTiles;
 
 };
 
@@ -152,6 +154,10 @@ public:
 	}
 
 	void isValidMove (Board & board, Dictionary & dictionary);
+
+	void allWordsValid(Board & board, Dictionary & dictionary);
+
+	void enterNewMove();
 
 	/* Returns the vector of tiles associated with a PLACE/EXCHANGE move.
 	   Return value could be arbitrary for PASS moves. */

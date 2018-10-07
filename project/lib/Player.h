@@ -26,7 +26,7 @@ public:
 	/* Constructor giving the player the given name, and setting their points to 0.
 	   Does not give the player any tiles.
 	*/
-	Player (std::string const & name, size_t maxTiles);
+	Player (std::string const & playerName, size_t maxTiles);
 
 	/* Destructor for a player. Deletes all the tiles the player still has. */
 	~Player ();
@@ -69,6 +69,8 @@ public:
 
 	//Add more public/protected/private functions/variables here.
 private:
+	string name;
+	size_t score;
 	std::set<Tile*> Hand;
 	
 };

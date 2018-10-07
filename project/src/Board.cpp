@@ -23,8 +23,11 @@ Board::Board (std::string board_file_name) {
 
 	ifile >> rows >> columns >> x >> y;
 
-	for (size_t i=1; i<=rows; i++) {
-		for (size_t j=1; j<=cols; j++) {
+	midx = x;
+	midy = y;
+
+	for (size_t i=1; i<=cols; i++) {
+		for (size_t j=1; j<=rows; j++) {
 
 			char mult;
 			iifle >> mult;
@@ -58,7 +61,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 }
 
 Square * Board::getSquare (size_t x, size_t y) const {
-	return board[x][y];
+	return board[y][x];
 }
 
 size_t Board::getRows() const {
@@ -67,4 +70,15 @@ size_t Board::getRows() const {
 
 size_t Board::getColumns() const {
 	return columns;
+}
+
+bool Board::isFirstMove() const {
+	if (scrabbleBoard[midy][midx].isOccupied()) return false;
+
+	else return true;
+}
+
+std::pair<size_t, size_t> Board::startPos() const {
+	std::pair<size_t, size_t> middle;
+	middle(midy, midx);
 }
