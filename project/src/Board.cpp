@@ -27,6 +27,8 @@ Board::Board (std::string board_file_name) {
 	midx = x;
 	midy = y;
 
+	scrabbleBoard.resize(columns, std::vector<Square*>(rows));
+
 	for (size_t i=1; i<=columns; i++) {
 		for (size_t j=1; j<=rows; j++) {
 
@@ -41,9 +43,9 @@ Board::Board (std::string board_file_name) {
 			else if (mult == 'd') WMult = 2;
 			else if (mult == '3') LMult = 3;
 
-			if (i == x && j == y) scrabbleBoard[i][j] = new Square(LMult, WMult, true);
+			if (i == x && j == y) *(scrabbleBoard[i-1][j-1]) = Square(LMult, WMult, true);
 
-			else scrabbleBoard[i][j] = new Square(LMult, WMult, false);
+			else *(scrabbleBoard[i-1][j-1]) = Square(LMult, WMult, false);
 		}
 	}
 }
