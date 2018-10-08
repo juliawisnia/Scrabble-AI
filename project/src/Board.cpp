@@ -43,9 +43,16 @@ Board::Board (std::string board_file_name) {
 			else if (mult == 'd') WMult = 2;
 			else if (mult == '3') LMult = 3;
 
-			if (i == x && j == y) *(scrabbleBoard[i-1][j-1]) = Square(LMult, WMult, true);
-
-			else *(scrabbleBoard[i-1][j-1]) = Square(LMult, WMult, false);
+			if (i == x && j == y) {
+				Square square(LMult, WMult, true);
+				Square* add = &square;
+				scrabbleBoard[i-1][j-1] = add;
+			}
+			else {
+				Square square(LMult, WMult, false);
+				Square* add = &square;
+				scrabbleBoard[i-1][j-1] = add;
+			}
 		}
 	}
 }
