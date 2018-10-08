@@ -49,6 +49,9 @@ Board::Board (std::string board_file_name) {
 }
 
 Board::~Board () {
+	while (!scrabbleBoard.empty()) {
+		delete scrabbleBoard.back().back();
+	}
 }
 
 /*std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(const PlaceMove m) const {
