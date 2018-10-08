@@ -29,7 +29,7 @@ class Move
 {
 
 public:
-
+	Move() {}
 
 	/* Parses the given move m, and constructs the corresponding move subclass.
 	   m is assumed to be in the format described on the assignment sheet for a move command.
@@ -99,7 +99,8 @@ public:
 	void execute(Board & board, Bag & bag, Dictionary & dictionary);
 
 	//Add more public/protected/private functions/variables here.
-
+private:
+	Player * p;
 };
 
 // represents an exchange move, were a player replaces certain tiles
@@ -120,16 +121,19 @@ public:
 	}
 
 	// checks that they're exchanging a valid number of tiles
-	void isValidMove (Move & move, Bag & bag);
+	void isValidMove (Bag & bag);
 
 	/* Executes this move, whichever type it is.
 	   This may throw exceptions; students: it's up to you to
 	   decide (and document) what exactly it throws*/
 	void execute(Board & board, Bag & bag, Dictionary & dictionary);
 
+	std::string getString() const;
+
 	//Add more public/protected/private functions/variables here.
 private:
 	std::string exchangeTiles;
+	Player * player;
 
 };
 
@@ -153,10 +157,20 @@ public:
 		return true;
 	}
 
+	size_t getRow() const;
+	size_t getColumn() const;
+	bool getOrientation() const;
+	std::string getString() const;
+	Player * getPlayer() const;
+	std::vector<std::string> getValidWords() const;
+
+	// checks if the move string is valid, queries user until it is
 	void isValidMove (Board & board, Dictionary & dictionary);
 
-	void allWordsValid(Board & board, Dictionary & dictionary);
+	// checks that all the words the user has inputed are words
+	bool allWordsValid(Board & board, Dictionary & dictionary);
 
+	// prints to cout a query to the user to enter a new move, because they have made a mistake
 	void enterNewMove();
 
 	/* Returns the vector of tiles associated with a PLACE/EXCHANGE move.
@@ -170,6 +184,7 @@ public:
 
 	//Add more public/protected/private functions/variables here.
 private:
+	std::vector<std::string> allValidWords;
 	size_t startRow;
 	size_t startColumn;
 	bool horizontal;

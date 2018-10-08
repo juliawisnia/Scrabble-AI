@@ -21,7 +21,8 @@
 
 class Player
 {
-
+friend class PlaceMove;
+friend class ExchangeMove;
 public:
 	/* Constructor giving the player the given name, and setting their points to 0.
 	   Does not give the player any tiles.
@@ -47,6 +48,8 @@ public:
 	   succeed.
 	 */
 
+	size_t getScore() const;
+
 	bool hasTiles(std::string const & move, bool resolveBlanks) const;
 
 
@@ -66,11 +69,17 @@ public:
 
 	// Adds all the tiles in the vector to the player's hand.
 	void addTiles (std::vector<Tile*> const & tilesToAdd);
+	
+	// Prints to cout the tiles in player's hand
+	void showHand() const;
+
+	std::string getName() const;
+
 
 	//Add more public/protected/private functions/variables here.
 private:
-	string name;
 	size_t score;
+	std::string name;
 	std::set<Tile*> Hand;
 	
 };

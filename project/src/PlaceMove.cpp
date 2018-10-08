@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 #include "Move.h"
 
 PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileString, Player * p) {
@@ -9,31 +10,85 @@ PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileStrin
 	player = p;
 }
 
-std::vector<Tile*> const & PlaceMove::tileVector () const {
+Player * PlaceMove::getPlayer() const {
+	return player;
+}
 
+size_t PlaceMove::getRow() const {
+	return startRow;
+}
+
+size_t PlaceMove::getColumn() const {
+	return startColumn;
+}
+
+bool PlaceMove::getOrientation() const {
+	return horizontal;
+}
+
+std::string PlaceMove::getString() const {
+	return word;
+}
+
+std::vector<Tile*> const & PlaceMove::tileVector () const {
+	std::vector<Tile*> tiles = this->player->takeTiles(word, isWord());
+	return tiles;
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
+	isValidMove(board, dictionary);
+	std::vector<std::pair<std::string, unsigned int>> result = board.getPlaceMoveResults(*this);
+	board.executePlaceMove(*this);
+
+	std::vector<std::pair<std::string, unsigned int>>::iterator it;
 	
+	size_t moveScore = 0;
+
+	std::cout << "You have made the following words: ";
+	for (it = result.begin(); it != result.end(); ++it) {
+		std::cout << it->first << " ";
+		moveScore += it->second;
+	}
+
+	size_t score = player->getScore() + moveScore;
+	player->score = score;
+
+	std::cout << "You earned " << moveScore << "points on this turn." << std::endl;
+	std::cout << "Your total score is now: " << player->score << std::endl;
+
+	std::vector<Tile*> newTiles = bag.drawTiles(getString().size());
+	std::vector<Tile*>::iterator tileIt;
+
+	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++it) {
+		player->Hand.insert(*tileIt);
+	}
+
+	std::cout << "You now have these tiles: ";
+	player->showHand();
+
+	std::cout << "Press enter to continue" << std::endl;
+	std::cin.ignore();
 }
 
-void PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p) {
+void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	size_t cols = board.getColumns();
 	size_t rows = board.getRows();
 
 	// player has necessary tiles
-	while (!p->hasTiles()) {
+	while (!player->hasTiles(word, true)) {
 		std::cout << "Error: you don't have the necessary tiles." << std::endl;
 		enterNewMove();
 	}
 
 	// make sure that the first move is valid
-	if (isFirstMove()) {
+	if (board.isFirstMove()) {
 		std::pair<size_t, size_t> middle = board.startPos();
+		size_t xPos = std::get<0>(middle);
+		size_t yPos = std::get<1>(middle);
 
 		// check that the move will take middle tile
-		while ((horizontal && (middle[0] < startColumn || middle[0] > startColumn + word.size())) ||
-				(!horizontal && (middle[1] < startRow || middle[1] > startRow + word.size()))) {
+		while ((horizontal && (xPos < startColumn || xPos > startColumn + word.size())) ||
+				(!horizontal && (yPos < startRow || yPos > startRow + word.size()))) {
 
 			std::cout << "Error: must place tile on first square for starting turn" << std::endl;
 			enterNewMove();
@@ -102,7 +157,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 		if (horizontal) {
 			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
 				// if there is an overlap
-				if (board.getSquare(i][startRow].isOccupied() || board.getSquare(i][startRow].isOccupied()) {
+				if (board.getSquare(i, startRow).isOccupied() || board.getSquare(i, startRow).isOccupied()) {
 
 					std::cout << "Error: cannot overlap another word." << std::endl;
 					enterNewMove();
@@ -114,7 +169,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 
 		else {
 			for (size_t j = startColumn; j < startColumn + word.size(); j++) {
-				if (board.getSquare(startColumn][j].isOccupied() || board.getSquare(startColumn][j].isOccupied()) {
+				if (board.getSquare(startColumn, j).isOccupied() || board.getSquare(startColumn, j).isOccupied()) {
 
 					std::cout << "Error: cannot overlap another word." << std::endl;
 					enterNewMove();
@@ -126,134 +181,22 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary, Player * p)
 		overlap = false;	
 	}
 
-	allWordsValid (board, dictionary);
-
+	while(!allWordsValid (board, dictionary)) {}
 
 	return;
 }
 
-void PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
+bool PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
+	std::vector<std::pair<std::string, unsigned int>> wordAndScore = board.getPlaceMoveResults(*this);
 	std::vector<std::string> allWords;
 
-	if (horizontal) {
-		std::string horizontalWord = "";
-
-		size_t horizontalLen = 1;
-		currCol = startColumn + 1;
-
-		while (board.getSquare(currCol][startRow].isOccupied()) {
-			horizontalLen++;
-			currCol++;
-		}
-
-		currCol = startColumn - 1;
-
-		while (board.getSquare(currCol][startRow].isOccupied()) {
-			horizontalLen++;
-			currCol--;
-		} 
-		// make sure to start on occupied square
-		currCol += 1;
-
-		if (horizontalLen > 1) {
-			for (size_t j = currCol; j < currCol + horizontalLen; j++) {
-				horizontalWord += board.getSquare(j][startRow].getLetter();
-			}
-
-			allWords.push_back(horizontalWord);
-		}
-
-		// concatanate all the vertical words
-		for (size_t i = startColumn; i < startColumn + word.size(); i++) {
-			std::string currWord = "";
-
-			size_t len = 1;
-			currRow = startRow + 1;
-
-			while (board.getSquare(i][currRow].isOccupied()) {
-				len++;
-				currRow++;
-			}
-
-			size_t currRow = startRow - 1;
-
-			while (board.getSquare(i][currRow].isOccupied()) {
-				len++;
-				currRow--;
-			}
-
-			// make sure to start on an occupied square
-			currRow += 1;
-
-			if (len > 1) {
-				for (size_t j = currRow; j < currRow + len; j++) {
-					currWord += board.getSquare(i][j].getLetter();
-				}
-
-				allWords.push_back(currWord);
-			}
-		}
-
-	}
-
-	// concatanate all the horizontal words
-	else {
-		std::string verticalWord = "";
-
-		size_t verticalLen = 1;
-		currRow = startRow + 1;
-
-		while (board.getSquare(startCol][currRow].isOccupied()) {
-			verticalLen++;
-			currRow++;
-		}
-
-		currRow = startRow - 1;
-
-		while (board.getSquare(startCol][currRow].isOccupied()) {
-			verticalLen++;
-			currRow--;
-		} 
-		// make sure to start on occupied square
-		currRow += 1;
-
-		if (verticalLen > 1) {
-			for (size_t j = currRow; j < currRow + verticalLen; j++) {
-				verticalWord += board.getSquare(startCol][j].getLetter();
-			}
-
-			allWords.push_back(verticalWord);
-		}
-
-		for (size_t i = startRow i < startRow + word.size(); i++) {
-			std::string currWord = "";
-
-			size_t len = 1;
-			currCol = startColumn + 1;
-			while (board.getSquare(currCol][i].isOccupied()) {
-				len++;
-				currCol++;
-			}
-
-			size_t currCol = startColumn - 1;
-			while (board.getSquare(currCol][i].isOccupied()) {
-				len++;
-				currCol--;
-			}
-
-			if (len > 1) {
-				for (size_t j = 0; j < len; j++) {
-					currWord += board.getSquare(currCol][j].getLetter();
-					currRow++;
-				}
-
-				allWords.push_back(currWord);
-			}
-		}
+	std::vector<std::pair<std::string, unsigned int>>::iterator scoreIt;
+	for (scoreIt = wordAndScore.begin(); scoreIt != wordAndScore.end(); ++scoreIt) {
+		allWords.push_back(scoreIt->first);
 	}
 
 	bool legalWords = true;
-	std::vector<string>::iterator it;
+	std::vector<std::string>::iterator it;
 
 	for (it = allWords.begin(); it != allWords.end(); ++it) {
 		if (!dictionary.isLegalWord(*it)) {
@@ -262,7 +205,23 @@ void PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
 		}
 	}
 
-	if (!legalWords) enterNewMove();
+	if (!legalWords) {
+		enterNewMove();
+		return false;
+	}
+
+	else {
+		std::vector<std::string>::iterator it;
+		size_t cnt = 0;
+		for (it = allWords.begin(); it != allWords.end(); ++it) {
+			allValidWords[cnt] = *it;
+		}
+		return true;
+	}
+}
+
+std::vector<std::string> PlaceMove::getValidWords() const {
+	return allValidWords;
 }
 
 void PlaceMove::enterNewMove() {
@@ -270,7 +229,7 @@ void PlaceMove::enterNewMove() {
 
 	char dir;
 	std::cin >> dir >> startRow >> startColumn >> word;
-firs
+
 	if (dir == '-') horizontal = true;
 	else horizontal = false;
 }

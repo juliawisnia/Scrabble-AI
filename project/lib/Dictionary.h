@@ -30,7 +30,7 @@ public:
 
 	//Add more public and private functions/variables here.
 private:
-	std::set<string> dictionary;
+	std::set<std::string> dictionary;
 };
 
 

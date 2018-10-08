@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 Dictionary::Dictionary (std::string dictionary_file_name) {
 	std::ifstream ifile;
@@ -12,11 +13,10 @@ Dictionary::Dictionary (std::string dictionary_file_name) {
 		std::cout << "Error: Invalid dictionary" << std::endl;
 	}
 
-	std::stringstream ss;
-	ss << ifile;
-
-	while (!ifile.eof()) {
+	std::string line;
+	while (getline(ifile, line)) {
 		std::string word;
+		std::stringstream ss(line);
 		ss >> word;
 
 		for (int i=0; i<word.size(); i++) {
@@ -35,7 +35,7 @@ bool Dictionary::isLegalWord (std::string & word) const {
 		std::toupper(word[i]);
 	}
 
-	std::set<string>::iterator it;
+	std::set<std::string>::iterator it;
 	it = dictionary.find(word);
 
 	if (it == dictionary.end()) return false;

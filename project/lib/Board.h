@@ -46,7 +46,7 @@ public:
 	   This function does not check that the words formed are actually in the dictionary.
 	   The words returned from this function must be checked against the dictionary to
 	   determine if the move is legal.	*/
-	std::vector<std::pair<std::string, unsigned int>> getPlaceMoveResults(const PlaceMove &m) const;
+	std::vector<std::pair<std::string, unsigned int>> getPlaceMoveResults(const PlaceMove m) const;
 
 	/* Executes the given move by taking tiles and placing them on the board.
 	   This function does not check for correctness of the move, so could
@@ -59,7 +59,7 @@ public:
 	/* Returns a pointer to the Square object representing the
        (y,x) position of the board. Indexing starts at 1 here.
 	   This is needed only to display the board. */
-	Square * getSquare (size_t x, size_t y) const;
+	Square getSquare (size_t x, size_t y) const;
 
 	/* Returns the number of rows of the board.*/
 	size_t getRows() const;
@@ -69,10 +69,13 @@ public:
 
 	bool isFirstMove() const;
 
+	std::vector<std::string> noDuplicates(const PlaceMove &m);
+
 	std::pair<size_t, size_t> startPos() const;
 
 private:
 	std::vector<std::vector<Square>> scrabbleBoard;
+	std::set<std::string> wordsPlayed;
 	size_t rows;
 	size_t columns;
 	size_t midx;

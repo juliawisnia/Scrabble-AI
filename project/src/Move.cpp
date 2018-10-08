@@ -1,23 +1,27 @@
 #include <vector>
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 #include "Move.h"
 
-static Move * Move::parseMove(std::string moveString, Player &p) {
-	std::stringstream ss = moveString;
+Move * Move::parseMove(std::string moveString, Player &p) {
+	std::stringstream ss(moveString);
 	std::string moveType;
 
 	ss >> moveType;
 
-	if (moveType == 'PASS') {
-		PassMove pass(p);
+	if (moveType == "PASS") {
+		PassMove &pass(*p);
+		return pass;
 	}
 
-	else if (moveType == 'EXCHANGE') {
+	else if (moveType == "EXCHANGE") {
 		std::string tileString;
-
 		ss >> tileString;
 
-		ExchangeMove exchange(tileString, p);
+		ExchangeMove &exchange(tileString, *p);
+		return exchange;
 
 	}
 
@@ -34,5 +38,6 @@ static Move * Move::parseMove(std::string moveString, Player &p) {
 		else horizontal = false;
 
 		PlaceMove place(row, column, horizontal, word, p);
+		return place;
 	}
 }
