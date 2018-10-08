@@ -50,10 +50,15 @@ int main (int argc, char *argv[]) {
         players.push_back(Player(name, maxTiles));
     }
 
-    size_t passes = 0;
-
     // game loop
+    size_t passes = 0;
+    bool endPass = false;
+    bool playerOutTiles = false;
+    ConsolePrinter console;
+    Player* finish;
+
     while (passes != numPlayers && bag.tilesRemaining() > 0) {
+        passes = 0;
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
             std::string moveString;
@@ -66,8 +71,107 @@ int main (int argc, char *argv[]) {
 
             if (moveType == "PLACE") {
                 char dir;
-                
+                bool horizontal;
+                size_t row;
+                size_t column;
+                std::string tileString;
+
+                ss >> dir >> row >> column >> tileString;
+                if (dir == '-') horizontal = true;
+                else horizontal = false;
+
+                PlaceMove place(row, column, horizontal, tileString, &(*it));
+
+                place.execute(scrabbleBoard, bag, dictionary);
+                console.printBoard(scrabbleBoard);
+            }
+
+            else if (moveType == "EXCHANGE") {
+                std::string tileString;
+                ss >> tileString;
+
+                ExchangeMove exchange(tileString, &(*it));
+                exchange.execute(scrabbleBoard, bag, dictionary);
+                console.printBoard(scrabbleBoard);
+            }
+
+            else {
+                passes++;
+                PassMove pass(&(*it));
+                pass.execute(scrabbleBoard, bag, dictionary);
+                console.printBoard(scrabbleBoard);
             }
         }
+        if (it->getHandTiles().size() == 0) {
+            playerOutTiles = true;
+            finish = &(*it);
+            break;
+        }
+
+        if (passes >= numPlayers) {
+            endPass = true;
+            break;
+        }
     } 
+
+    unsigned int sumTilesRemaining;
+    std::vector<Player>::iterator it;
+    for (it = players.begin(); it != players.end(); ++it) {
+        std::set<Tile*> remaining = it->getHandTiles();
+        std::set<Tile*>::iterator scoreIt;
+        for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
+            sumTilesRemaining += (*scoreIt)->getPoints();
+        }
+    }
+
+    if (playerOutTiles) {
+        unsigned int finishScore;
+        std::set<std::pair<std::string, unsigned int>> finalScores;
+
+        std::vector<Player>::iterator it;
+        for (it = players.begin(); it != players.end(); ++it) {
+            unsigned int finalScore = it->getScore();
+            std::set<Tile*> remaining = it->getHandTiles();
+            std::set<Tile*>::iterator scoreIt;
+
+            for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
+                sumTilesRemaining += (*scoreIt)->getPoints();
+            }
+
+            finishScore += sumTilesRemaining;
+            finalScore -= sumTilesRemaining;
+            std::pair add(it->getName(), finalScore);
+            if (&(*it) != finish) finalScores.insert(add);
+            else finishScore -= sumTilesRemaining;
+        }
+
+        std::pair addFinal(finish->getName(), finishScore);
+        finalScores.insert(addFinal);
+
+        std::set<std::pair<std::string, unsigned int>>::iterator it2;
+        std::cout << "Winner: ";
+        for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
+            std::cout << it2->first << " with " << it2->second << "points." << std::endl;
+        }
+    }
+
+    if (endPass) {
+        std::vector<Player>::iterator it;
+        std::set<std::pair<std::string, unsigned int>> results;
+        for (it = players.begin(); it != players.end(); ++it) {
+            std::pair add (it->getName(), it->getScore());
+            results.insert(add);
+        }
+
+        std::set<std::pair<std::string, unsigned int>> finalScores;
+        std::set<std::pair<std::string, unsigned int>>::iterator it2;
+        std::cout << "Winner: ";
+        for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
+            std::cout << it2->first << " with " << it2->second << "points." << std::endl;
+        }
+
+    }
+
+    else std::cout << "More cases to take care of" <<std::endl;
+    return 0;
 }

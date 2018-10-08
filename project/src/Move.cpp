@@ -6,7 +6,7 @@
 #include "Move.h"
 
 Move * Move::parseMove(std::string moveString, Player &p) {
-	std::stringstream ss(moveString);
+/*	std::stringstream ss(moveString);
 	std::string moveType;
 
 	ss >> moveType;
@@ -39,5 +39,5 @@ Move * Move::parseMove(std::string moveString, Player &p) {
 
 		PlaceMove place(row, column, horizontal, word, p);
 		return place;
-	}
+	}*/
 }
