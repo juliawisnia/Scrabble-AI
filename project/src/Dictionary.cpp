@@ -19,11 +19,13 @@ Dictionary::Dictionary (std::string dictionary_file_name) {
 		std::stringstream ss(line);
 		ss >> word;
 
-		for (int i=0; i<word.size(); i++) {
-			std::toupper(word[i]);
-		}
+		std::string copyWord = "";
 
-		dictionary.insert(word);
+		for (size_t i=0; i<word.size(); i++) {
+			copyWord += std::toupper(word[i]);
+		}
+		
+		dictionary.insert(copyWord);
 	}
 }
 

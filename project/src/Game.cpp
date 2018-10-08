@@ -5,7 +5,7 @@
 #include "Game.h"
 
 int main (int argc, char *argv[]) {
-    if (argc < 3) return -1;
+    if (argc < 2) return -1;
 
     // read configuration file
     size_t maxTiles;
@@ -140,7 +140,8 @@ int main (int argc, char *argv[]) {
 
             finishScore += sumTilesRemaining;
             finalScore -= sumTilesRemaining;
-            std::pair add(it->getName(), finalScore);
+            std::string name = it->getName();
+            std::pair add(name, finalScore);
             if (&(*it) != finish) finalScores.insert(add);
             else finishScore -= sumTilesRemaining;
         }

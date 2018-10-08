@@ -2,6 +2,8 @@
 // CS104 HW4 board and hand printer implementation
 // ----------------------------------------
 
+// STUDENTS: you must use this file as-is without modifications
+
 #include "ConsolePrinter.h"
 #include "rang.h"
 
@@ -212,7 +214,7 @@ void ConsolePrinter::printBoard(Board const &board)
 				else if(currentSquare->isOccupied() && line == squareInnerHeight - 1)
 				{
 					//print score in bottom right corner
-					std::cout << space * (squareInnerWidth - 1) << FG_COLOR_SCORE << currentSquare->getScore();
+					std::cout << space * (squareInnerWidth - 2) << FG_COLOR_SCORE << std::setw(2) << currentSquare->getScore();
 				}
 				else
 				{
@@ -243,7 +245,7 @@ void ConsolePrinter::printBoard(Board const &board)
 	std::cout << bottomRightCorner << rang::style::reset << std::endl;
 }
 
-void ConsolePrinter::printHand(Player const &player)
+/*void ConsolePrinter::printHand(Player const &player)
 {
 	const std::set<Tile *> tiles = player.getHandTiles();
 
@@ -354,4 +356,4 @@ void ConsolePrinter::printHand(Player const &player)
 	}
 
 
-}
+}*/

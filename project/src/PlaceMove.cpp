@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "Move.h"
+#include "Board.h"
 
 PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileString, Player * p) {
 	startRow = y;
@@ -31,8 +32,7 @@ std::string PlaceMove::getString() const {
 }
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
-	std::vector<Tile*> tiles = this->player->takeTiles(word, isWord());
-	return tiles;
+	return player->takeTiles(word, isWord());
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
@@ -50,8 +50,8 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 		moveScore += it->second;
 	}
 
-	size_t score = player->getScore() + moveScore;
-	player->score = score;
+	if (getString().size() == player->getMaxTiles()) player->score += 50;
+	player->score += moveScore;
 
 	std::cout << "You earned " << moveScore << "points on this turn." << std::endl;
 	std::cout << "Your total score is now: " << player->score << std::endl;

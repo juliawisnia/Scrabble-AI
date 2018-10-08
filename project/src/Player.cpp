@@ -10,6 +10,7 @@
 Player::Player (std::string const & playerName, size_t maxTiles) {
 	name = playerName;
 	score = 0;
+	maxHand = maxTiles;
 }
 
 Player::~Player() {
@@ -19,6 +20,10 @@ Player::~Player() {
 
 std::set<Tile*> Player::getHandTiles() const {
 	return Hand;
+}
+
+size_t Player::getMaxTiles() const {
+	return maxHand;
 }
 
 // NOTE: move expected to be only string of letters
