@@ -184,6 +184,7 @@ public:
 	//Add more public/protected/private functions/variables here.
 private:
 	std::vector<std::string> allValidWords;
+	std::vector<Tile*> take;
 	size_t startRow;
 	size_t startColumn;
 	bool horizontal;

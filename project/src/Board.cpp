@@ -75,6 +75,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 		std::string mainWord = "";
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, m.isWord());
+		m.getPlayer()->eraseTilesFromHand(word);
 
 		// concatanate all the vertical words
 		size_t i = startColumn;
@@ -168,6 +169,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 		std::string mainWord = "";
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, m.isWord());
+		m.getPlayer()->eraseTilesFromHand(word);
 
 		// concatanate all the horizontal words
 		size_t i = startRow;
