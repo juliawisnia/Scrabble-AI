@@ -6,6 +6,10 @@
 
 int main (int argc, char *argv[]) {
     if (argc < 2) return -1;
+    std::ifstream ifile;
+
+    ifile.open(argv[1]);
+    if (ifile.fail()) return -1;
 
     // read configuration file
     size_t maxTiles = 0;
@@ -13,11 +17,9 @@ int main (int argc, char *argv[]) {
     std::string dictionaryConfig;
     std::string boardConfig;
     size_t seed = 0;
-    
-    std::stringstream ss(argv[1]);
     std::string line;
 
-    while (getline(ss, line)) {
+    while (getline(ifile, line)) {
         std::stringstream read(line);
         std::string type;
         read >> type;
@@ -28,6 +30,7 @@ int main (int argc, char *argv[]) {
         else if (type == "BOARD:") read >> boardConfig;
         else if (type == "SEED:") read >> seed;
     }
+
     std::cout << dictionaryConfig << std::endl;
     Dictionary dictionary(dictionaryConfig);
     Board scrabbleBoard(boardConfig);
@@ -61,6 +64,9 @@ int main (int argc, char *argv[]) {
         passes = 0;
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
+            console.printBoard(scrabbleBoard);
+            console.printHand(*it);
+
             std::string moveString;
             std::cout << it->getName() << " enter a move: ";
             std::cin >> moveString;

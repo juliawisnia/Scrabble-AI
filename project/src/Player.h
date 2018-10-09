@@ -84,6 +84,7 @@ private:
 	std::string name;
 	std::set<Tile*> Hand;
 	size_t maxHand;
+	size_t moveCount = 0;
 	
 };
 

@@ -11,6 +11,7 @@ Player::Player (std::string const & playerName, size_t maxTiles) {
 	name = playerName;
 	score = 0;
 	maxHand = maxTiles;
+	
 }
 
 Player::~Player() {
