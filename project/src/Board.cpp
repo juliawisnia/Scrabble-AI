@@ -322,7 +322,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 }
 
 Square * Board::getSquare (size_t x, size_t y) const {
-	return scrabbleBoard[y-1][x-1];
+	return scrabbleBoard[x-1][y-1];
 }
 
 size_t Board::getRows() const {
@@ -334,7 +334,7 @@ size_t Board::getColumns() const {
 }
 
 bool Board::isFirstMove() const {
-	if (scrabbleBoard[midy-1][midx-1]->isOccupied()) return false;
+	if (scrabbleBoard[midx-1][midy-1]->isOccupied()) return false;
 
 	else return true;
 }
