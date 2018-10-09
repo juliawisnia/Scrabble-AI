@@ -68,7 +68,7 @@ int main (int argc, char *argv[]) {
             console.printHand(*it);
 
             std::string moveString;
-            std::cout << it->getName() << " enter a move: ";
+            std::cout << (*it).getName() << " enter a move: ";
             std::cin >> moveString;
 
             std::stringstream ss(moveString);
@@ -108,7 +108,7 @@ int main (int argc, char *argv[]) {
                 console.printBoard(scrabbleBoard);
             }
         }
-        if (it->getHandTiles().size() == 0) {
+        if ((*it).getHandTiles().size() == 0) {
             playerOutTiles = true;
             finish = &(*it);
             break;
@@ -123,7 +123,7 @@ int main (int argc, char *argv[]) {
     unsigned int sumTilesRemaining = 0;
     std::vector<Player>::iterator it;
     for (it = players.begin(); it != players.end(); ++it) {
-        std::set<Tile*> remaining = it->getHandTiles();
+        std::set<Tile*> remaining = (*it).getHandTiles();
         std::set<Tile*>::iterator scoreIt;
         for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
             sumTilesRemaining += (*scoreIt)->getPoints();
@@ -131,13 +131,14 @@ int main (int argc, char *argv[]) {
     }
 
     if (playerOutTiles) {
-        unsigned int finishScore = 0;
+        std::cout << "Player out of tiles" << std::endl;
+      /*  unsigned int finishScore = 0;
         std::set<std::pair<std::string, unsigned int>> finalScores;
 
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
-            unsigned int finalScore = it->getScore();
-            std::set<Tile*> remaining = it->getHandTiles();
+            unsigned int finalScore = (*it).getScore();
+            std::set<Tile*> remaining = (*it).getHandTiles();
             std::set<Tile*>::iterator scoreIt;
 
             for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
@@ -146,7 +147,7 @@ int main (int argc, char *argv[]) {
 
             finishScore += sumTilesRemaining;
             finalScore -= sumTilesRemaining;
-            std::string name = it->getName();
+            std::string name = (*it).getName();
             std::pair <std::string, unsigned int> add;
             add.first = name;
             add.second = finalScore;
@@ -163,11 +164,11 @@ int main (int argc, char *argv[]) {
         std::cout << "Winner: ";
         for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
             std::cout << it2->first << " with " << it2->second << "points." << std::endl;
-        }
+        }*/
     }
 
     if (endPass) {
-        std::vector<Player>::iterator it;
+      /*  std::vector<Player>::iterator it;
         std::set<std::pair<std::string, unsigned int>> results;
         for (it = players.begin(); it != players.end(); ++it) {
             std::pair<std::string, unsigned int> add;
@@ -181,7 +182,8 @@ int main (int argc, char *argv[]) {
         std::cout << "Winner: ";
         for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
             std::cout << it2->first << " with " << it2->second << "points." << std::endl;
-        }
+        }*/
+        std::cout << "Passes" << std::endl;
 
     }
 
