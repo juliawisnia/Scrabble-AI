@@ -13,7 +13,4 @@ PassMove::PassMove(Player * player) {
 
 void PassMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
     std::cout << "You have these tiles: ";
-    p->showHand();
-	std::cout << "Press enter to continue" << std::endl;
-    std::cin.ignore();
 }

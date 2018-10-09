@@ -44,14 +44,16 @@ bool Player::hasTiles(std::string const & move, bool resolveBlanks) const {
 	}
 
 	std::stringstream ss(move);
+	std::string type;
 	std::string tileString;
 
+	ss >> type;
 	ss >> tileString;
 
 	std::set<Tile*> copy = Hand;
 
 	for (size_t i = 0; i < tileString.size(); i++) {
-		if (tileString[i] != '?') std::toupper(tileString[i]);
+		//if (tileString[i] != '?') std::toupper(tileString[i]);
 		std::set<Tile*>::iterator it;
 		for (it = copy.begin(); it != copy.end(); ++it) {
 			// if it's a PLACEMOVE and you encounter a blank, don't look for next letter in copy

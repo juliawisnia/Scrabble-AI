@@ -4,7 +4,9 @@
 #include "Move.h"
 
 ExchangeMove::ExchangeMove(std::string tileString, Player * p) {
-	exchangeTiles = tileString;
+	for (size_t i = 0; i < tileString.size(); i++) {
+		exchangeTiles += std::toupper(tileString[i]);
+	}
 	player = p;
 }
 
@@ -22,11 +24,6 @@ void ExchangeMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++tileIt) {
 		player->Hand.insert(*tileIt);
 	}
-
-	std::cout << "You now have these tiles: ";
-	player->showHand();
-	std::cout << "Press enter to continue." << std::endl;
-	std::cin.ignore();
 
 }
 

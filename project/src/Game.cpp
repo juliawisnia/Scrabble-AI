@@ -54,28 +54,29 @@ int main (int argc, char *argv[]) {
     }
 
     // game loop
-    size_t passes = 0;
-    bool endPass = false;
-    bool playerOutTiles = false;
+    //size_t passes = 0;
+    //bool endPass = false;
+    //bool playerOutTiles = false;
     ConsolePrinter console;
-    Player* finish;
+    //Player* finish;
 
-    while (passes != numPlayers && bag.tilesRemaining() > 0) {
-        passes = 0;
+   // while (passes != numPlayers && bag.tilesRemaining() > 0) {
+        //passes = 0;
+        for (size_t i = 0; i < 10; i++) {
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
-            console.printBoard(scrabbleBoard);
+           // console.printBoard(scrabbleBoard);
             console.printHand(*it);
 
-            std::string moveString;
             std::cout << (*it).getName() << " enter a move: ";
-            std::cin >> moveString;
-
-            std::stringstream ss(moveString);
+            std::string move;
+            std::cin >> move;
+            
             std::string moveType;
-            ss >> moveType;
-
-            if (moveType == "PLACE") {
+            for (size_t i = 0; i < move.size(); i++) {
+		        moveType += std::toupper(move[i]);
+	        }
+     /*       if (moveType == "PLACE") {
                 char dir;
                 bool horizontal;
                 size_t row;
@@ -90,25 +91,31 @@ int main (int argc, char *argv[]) {
 
                 place.execute(scrabbleBoard, bag, dictionary);
                 console.printBoard(scrabbleBoard);
-            }
+            }*/
 
-            else if (moveType == "EXCHANGE") {
+            if (moveType == "EXCHANGE") {
                 std::string tileString;
-                ss >> tileString;
-
+                std::cin >> tileString;
                 ExchangeMove exchange(tileString, &(*it));
                 exchange.execute(scrabbleBoard, bag, dictionary);
-                console.printBoard(scrabbleBoard);
+                std::cout << "You now have these tiles: " <<std::endl; 
+                console.printHand(*it);
+                std::cout << "Press enter to continue" << std::endl;
+                std::cin.get();
             }
-
-            else {
+        }
+  } 
+      /*      else {
                 passes++;
                 PassMove pass(&(*it));
                 pass.execute(scrabbleBoard, bag, dictionary);
-                console.printBoard(scrabbleBoard);
+                std::cout << "You now have these tiles: " <<std::endl; 
+                console.printHand(*it);
+                std::cout << "Press enter to continue" << std::endl;
+                std::cin.get();
             }
-        }
-        if ((*it).getHandTiles().size() == 0) {
+        }*/
+ /*       if ((*it).getHandTiles().size() == 0) {
             playerOutTiles = true;
             finish = &(*it);
             break;
@@ -117,9 +124,8 @@ int main (int argc, char *argv[]) {
         if (passes >= numPlayers) {
             endPass = true;
             break;
-        }
-    } 
-
+        }*/
+/*
     unsigned int sumTilesRemaining = 0;
     std::vector<Player>::iterator it;
     for (it = players.begin(); it != players.end(); ++it) {
@@ -131,7 +137,7 @@ int main (int argc, char *argv[]) {
     }
 
     if (playerOutTiles) {
-        std::cout << "Player out of tiles" << std::endl;
+        std::cout << "Player out of tiles" << std::endl;*/
       /*  unsigned int finishScore = 0;
         std::set<std::pair<std::string, unsigned int>> finalScores;
 
@@ -165,9 +171,9 @@ int main (int argc, char *argv[]) {
         for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
             std::cout << it2->first << " with " << it2->second << "points." << std::endl;
         }*/
-    }
+  /*  }
 
-    if (endPass) {
+    if (endPass) {*/
       /*  std::vector<Player>::iterator it;
         std::set<std::pair<std::string, unsigned int>> results;
         for (it = players.begin(); it != players.end(); ++it) {
@@ -183,10 +189,10 @@ int main (int argc, char *argv[]) {
         for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
             std::cout << it2->first << " with " << it2->second << "points." << std::endl;
         }*/
-        std::cout << "Passes" << std::endl;
+     /*   std::cout << "Passes" << std::endl;
 
     }
 
-    else std::cout << "More cases to take care of" <<std::endl;
+    else std::cout << "More cases to take care of" <<std::endl;*/
     return 0;
 }

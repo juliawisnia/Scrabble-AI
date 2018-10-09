@@ -32,7 +32,9 @@ std::string PlaceMove::getString() const {
 }
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
-	return player->takeTiles(word, isWord());
+	bool flag = true;
+	std::vector<Tile*> add = player->takeTiles(word, flag);
+	return add;
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
@@ -62,12 +64,6 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++tileIt) {
 		player->Hand.insert(*tileIt);
 	}
-
-	std::cout << "You now have these tiles: ";
-	player->showHand();
-
-	std::cout << "Press enter to continue" << std::endl;
-	std::cin.ignore();
 }
 
 void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
