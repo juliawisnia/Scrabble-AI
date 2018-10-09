@@ -33,8 +33,6 @@ std::string PlaceMove::getString() const {
 }
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
-	//bool flag = true;
-	//take = player->takeTiles(word, flag);
 	return take;
 
 }
@@ -55,13 +53,15 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	}
 	std::cout << std::endl;
 
-	if (getString().size() == player->getMaxTiles()) player->score += 50;
+	if (word.size() == player->getMaxTiles()) player->score += 50;
 	player->score += moveScore;
 
 	std::cout << "You earned " << moveScore << " points on this turn." << std::endl;
 	std::cout << "Your total score is now: " << player->score << std::endl;
 
-	std::vector<Tile*> newTiles = bag.drawTiles(getString().size());
+	player->eraseTilesFromHand(word);
+
+	std::vector<Tile*> newTiles = bag.drawTiles(word.size());
 	std::vector<Tile*>::iterator tileIt;
 
 	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++tileIt) {

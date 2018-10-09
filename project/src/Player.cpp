@@ -89,7 +89,6 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 				// if it's a PLACEMOVE and you encounter a blank, don't look for next letter in Hand
 				if (resolveBlanks && tileString [i] == '?') i += 1;
 				take.push_back((*it));
-				//Hand.erase(it);
 				break;
 			}
 		}
@@ -100,9 +99,14 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 
 void Player::eraseTilesFromHand(std::string const & move) {
 	std::vector<Tile*> erase = takeTiles(move, true);
-	std::set<Tile*>::iterator it;
-	for (it = Hand.begin(); it != Hand.end(); ++it) {
+	std::vector<Tile*>::iterator outerIt;
 
+	for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
+		std::set<Tile*>::iterator it;
+		for (it = Hand.begin(); it != Hand.end(); ++it) {
+			if ((*outerIt) == (*it))
+			Hand.erase(it);
+		}
 	}
 }
 
@@ -114,14 +118,6 @@ void Player::addTiles (std::vector<Tile*> const & tilesToAdd) {
 
 size_t Player::getScore() const {
 	return score;
-}
-
-void Player::showHand() const {
-	std::set<Tile*>::iterator it;
-	for (it = Hand.begin(); it != Hand.end(); ++it) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
 }
 
 std::string Player::getName() const {

@@ -72,9 +72,6 @@ public:
 	// Adds all the tiles in the vector to the player's hand.
 	void addTiles (std::vector<Tile*> const & tilesToAdd);
 	
-	// Prints to cout the tiles in player's hand
-	void showHand() const;
-
 	void eraseTilesFromHand(std::string const & move);
 
 	std::string getName() const;
