@@ -8,11 +8,11 @@ int main (int argc, char *argv[]) {
     if (argc < 2) return -1;
 
     // read configuration file
-    size_t maxTiles;
+    size_t maxTiles = 0;
     std::string bagConfig;
     std::string dictionaryConfig;
     std::string boardConfig;
-    size_t seed;
+    size_t seed = 0;
     
     std::stringstream ss(argv[1]);
     std::string line;
@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
     while (getline(ss, line)) {
         std::stringstream read(line);
         std::string type;
-        ss >> type;
+        read >> type;
 
         if (type == "HANDSIZE:") read >> maxTiles;
         else if (type == "TILES:") read >> bagConfig;
@@ -114,7 +114,7 @@ int main (int argc, char *argv[]) {
         }
     } 
 
-    unsigned int sumTilesRemaining;
+    unsigned int sumTilesRemaining = 0;
     std::vector<Player>::iterator it;
     for (it = players.begin(); it != players.end(); ++it) {
         std::set<Tile*> remaining = it->getHandTiles();
