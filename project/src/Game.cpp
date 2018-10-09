@@ -95,7 +95,7 @@ int main (int argc, char *argv[]) {
                 std::cout << "You now have these tiles: " <<std::endl; 
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
-               // std::cin.clear();
+                std::cin.clear();
                 std::cin.ignore();
             }
 
