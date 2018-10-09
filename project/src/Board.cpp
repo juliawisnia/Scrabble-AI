@@ -299,7 +299,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 			if (getSquare(row, col)->isOccupied()) {
 				row++;
 				continue;
-			}
+			} 
 			// if you are at a blank space on the board
 			else {
 				if (place[cnt]->getLetter()=='?') {
