@@ -6,12 +6,19 @@
 #include "Tile.h"
 #include "Player.h"
 #include "Move.h"
+#include "Bag.h"
 
-Player::Player (std::string const & playerName, size_t maxTiles) {
+Player::Player (std::string const & playerName, size_t maxTiles, Bag & bag) {
 	name = playerName;
 	score = 0;
 	maxHand = maxTiles;
-	
+
+	std::vector<Tile*> newTiles = bag.drawTiles(maxTiles);
+	std::vector<Tile*>::iterator it;
+
+	for (it = newTiles.begin(); it != newTiles.end(); ++it) {
+		Hand.insert(*it);
+	}
 }
 
 Player::~Player() {

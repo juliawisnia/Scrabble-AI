@@ -50,7 +50,7 @@ int main (int argc, char *argv[]) {
         std::string name;
         std::cout << "Enter player " << i << "'s name: ";
         std::cin >> name;
-        players.push_back(Player(name, maxTiles));
+        players.push_back(Player(name, maxTiles, bag));
     }
 
     // game loop

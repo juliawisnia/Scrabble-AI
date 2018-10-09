@@ -17,17 +17,19 @@
 #include <vector>
 
 #include "Tile.h"
+#include "Bag.h"
 
 
 class Player
 {
 friend class PlaceMove;
 friend class ExchangeMove;
+friend class PassMove;
 public:
 	/* Constructor giving the player the given name, and setting their points to 0.
 	   Does not give the player any tiles.
 	*/
-	Player (std::string const & playerName, size_t maxTiles);
+	Player (std::string const & playerName, size_t maxTiles, Bag & bag);
 
 	/* Destructor for a player. Deletes all the tiles the player still has. */
 	~Player ();
@@ -77,14 +79,13 @@ public:
 
 	size_t getMaxTiles() const;
 
-
 	//Add more public/protected/private functions/variables here.
 private:
 	size_t score;
 	std::string name;
 	std::set<Tile*> Hand;
 	size_t maxHand;
-	size_t moveCount = 0;
+	bool firstMove;
 	
 };
 

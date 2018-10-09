@@ -59,7 +59,7 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	std::vector<Tile*> newTiles = bag.drawTiles(getString().size());
 	std::vector<Tile*>::iterator tileIt;
 
-	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++it) {
+	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++tileIt) {
 		player->Hand.insert(*tileIt);
 	}
 
