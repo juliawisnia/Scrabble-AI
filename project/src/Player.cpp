@@ -36,24 +36,20 @@ size_t Player::getMaxTiles() const {
 
 // NOTE: move expected to be only string of letters
 bool Player::hasTiles(std::string const & move, bool resolveBlanks) const {
-	// if resolveBlanks is true, PLACEMOVE, false EXCHANGE
-
 	// make everything uppercase, just in case
 	for (size_t i = 0; i < move.size(); i++) {
 		if (move[i] != '?') std::toupper(move[i]);
 	}
 
 	std::stringstream ss(move);
-	std::string type;
 	std::string tileString;
 
-	ss >> type;
 	ss >> tileString;
 
 	std::set<Tile*> copy = Hand;
 
 	for (size_t i = 0; i < tileString.size(); i++) {
-		//if (tileString[i] != '?') std::toupper(tileString[i]);
+		if (tileString[i] != '?') std::toupper(tileString[i]);
 		std::set<Tile*>::iterator it;
 		for (it = copy.begin(); it != copy.end(); ++it) {
 			// if it's a PLACEMOVE and you encounter a blank, don't look for next letter in copy

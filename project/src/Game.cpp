@@ -65,25 +65,26 @@ int main (int argc, char *argv[]) {
         for (size_t i = 0; i < 10; i++) {
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
-           // console.printBoard(scrabbleBoard);
+            console.printBoard(scrabbleBoard);
             console.printHand(*it);
 
             std::cout << (*it).getName() << " enter a move: ";
             std::string move;
             std::cin >> move;
-            
-            std::string moveType;
+
+            std::string moveType = "";
             for (size_t i = 0; i < move.size(); i++) {
-		        moveType += std::toupper(move[i]);
-	        }
-     /*       if (moveType == "PLACE") {
+                moveType += std::toupper(move[i]);
+            }
+
+            if (moveType == "PLACE") {
                 char dir;
                 bool horizontal;
                 size_t row;
                 size_t column;
                 std::string tileString;
 
-                ss >> dir >> row >> column >> tileString;
+                std::cin >> dir >> row >> column >> tileString;
                 if (dir == '-') horizontal = true;
                 else horizontal = false;
 
@@ -91,7 +92,7 @@ int main (int argc, char *argv[]) {
 
                 place.execute(scrabbleBoard, bag, dictionary);
                 console.printBoard(scrabbleBoard);
-            }*/
+            }
 
             if (moveType == "EXCHANGE") {
                 std::string tileString;
@@ -101,20 +102,23 @@ int main (int argc, char *argv[]) {
                 std::cout << "You now have these tiles: " <<std::endl; 
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
-                std::cin.get();
+                std::cin.ignore();
             }
-        }
-  } 
-      /*      else {
-                passes++;
+
+            else  {
+               // passes++;
                 PassMove pass(&(*it));
                 pass.execute(scrabbleBoard, bag, dictionary);
                 std::cout << "You now have these tiles: " <<std::endl; 
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
-                std::cin.get();
+                std::cin.ignore();
             }
-        }*/
+        }
+    }
+    return 0;
+}
+
  /*       if ((*it).getHandTiles().size() == 0) {
             playerOutTiles = true;
             finish = &(*it);
@@ -194,5 +198,3 @@ int main (int argc, char *argv[]) {
     }
 
     else std::cout << "More cases to take care of" <<std::endl;*/
-    return 0;
-}

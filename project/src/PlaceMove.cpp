@@ -51,11 +51,12 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 		std::cout << it->first << " ";
 		moveScore += it->second;
 	}
+	std::cout << std::endl;
 
 	if (getString().size() == player->getMaxTiles()) player->score += 50;
 	player->score += moveScore;
 
-	std::cout << "You earned " << moveScore << "points on this turn." << std::endl;
+	std::cout << "You earned " << moveScore << " points on this turn." << std::endl;
 	std::cout << "Your total score is now: " << player->score << std::endl;
 
 	std::vector<Tile*> newTiles = bag.drawTiles(getString().size());
@@ -122,21 +123,21 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	while (!adjacent) {
 		if (horizontal) {
 			// if it's coming before or after a word
-			if (startColumn - 1 > 0 && board.getSquare(startColumn - 1, startRow)->isOccupied()) adjacent = true;
-			if (startColumn + word.size() + 1 <= cols && board.getSquare(startColumn + word.size() + 1,startRow)->isOccupied()) adjacent = true;
+			if (startColumn - 1 > 0 && board.getSquare(startRow, startColumn - 1)->isOccupied()) adjacent = true;
+			if (startColumn + word.size() + 1 <= cols && board.getSquare(startRow, startColumn + word.size() + 1)->isOccupied()) adjacent = true;
 
 			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
-				if (board.getSquare(i, startRow + 1)->isOccupied() || board.getSquare(i, startRow - 1)->isOccupied()) adjacent = true;
+				if (board.getSquare(startRow + 1, i)->isOccupied() || board.getSquare(startRow - 1, i)->isOccupied()) adjacent = true;
 			}
 		}
 
 		else {
 			// if it's coming before or after a word
-			if (startRow - 1 > 0 && board.getSquare(startColumn, startRow - 1)->isOccupied()) adjacent = true;
-			if (startRow + 1 + word.size() <= rows && board.getSquare(startColumn, startRow + 1 + word.size())->isOccupied()) adjacent = true;
+			if (startRow - 1 > 0 && board.getSquare(startRow - 1, startColumn)->isOccupied()) adjacent = true;
+			if (startRow + 1 + word.size() <= rows && board.getSquare(startRow + 1 + word.size(), startColumn)->isOccupied()) adjacent = true;
 
 			for (size_t j = startColumn; j < startColumn + word.size(); j++) {
-				if (board.getSquare(startColumn + 1, j)->isOccupied() || board.getSquare(startColumn - 1, j)->isOccupied()) adjacent = true;
+				if (board.getSquare(j, startColumn + 1)->isOccupied() || board.getSquare(j, startColumn - 1)->isOccupied()) adjacent = true;
 			}
 
 		}
@@ -153,7 +154,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 		if (horizontal) {
 			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
 				// if there is an overlap
-				if (board.getSquare(i, startRow)->isOccupied() || board.getSquare(i, startRow)->isOccupied()) {
+				if (board.getSquare(startRow, i)->isOccupied() || board.getSquare(startRow, i)->isOccupied()) {
 
 					std::cout << "Error: cannot overlap another word." << std::endl;
 					enterNewMove();
@@ -165,7 +166,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 
 		else {
 			for (size_t j = startColumn; j < startColumn + word.size(); j++) {
-				if (board.getSquare(startColumn, j)->isOccupied() || board.getSquare(startColumn, j)->isOccupied()) {
+				if (board.getSquare(j, startColumn)->isOccupied() || board.getSquare(j, startColumn)->isOccupied()) {
 
 					std::cout << "Error: cannot overlap another word." << std::endl;
 					enterNewMove();

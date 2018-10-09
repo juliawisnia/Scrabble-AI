@@ -27,10 +27,10 @@ Board::Board (std::string board_file_name) {
 	midx = x;
 	midy = y;
 
-	scrabbleBoard.resize(columns, std::vector<Square*>(rows));
+	scrabbleBoard.resize(rows, std::vector<Square*>(columns));
 	
-	for (size_t i=1; i<=columns; i++) {
-		for (size_t j=1; j<=rows; j++) {
+	for (size_t i=1; i<=rows; i++) {
+		for (size_t j=1; j<=columns; j++) {
 			
 			char mult;
 			ifile >> mult;
@@ -54,8 +54,8 @@ Board::Board (std::string board_file_name) {
 }
 
 Board::~Board () {
-	for (size_t i = 1; i <= columns; i++) {
-		for (size_t j = 1; j <= rows; j++) {
+	for (size_t i = 1; i <= rows; i++) {
+		for (size_t j = 1; j <= columns; j++) {
 			delete scrabbleBoard[i-1][j-1];
 		}
 	}
@@ -87,7 +87,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			if (currRow < 1) currRow = 1;
 
 			// if there's already a square, you don't get points for the words formed above that
-			if (getSquare(i, startRow)->isOccupied()) {
+			if (getSquare(startRow, i)->isOccupied()) {
 				i++;
 				if (i > columns) break;
 				continue;
@@ -96,7 +96,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			// you are going to put down one of your tiles
 			cnt++;	
 			std::string currWord = "";
-			while (getSquare(i, currRow)->isOccupied()) {
+			while (getSquare(currRow, i)->isOccupied()) {
 				currRow--;
 				if (currRow < 1) break;
 			}
@@ -104,17 +104,17 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			currRow += 1;
 
 			if (currRow != startRow) {
-				while (getSquare(i, currRow)->isOccupied() || (currRow == startRow)) {
+				while (getSquare(currRow, i)->isOccupied() || (currRow == startRow)) {
 					size_t j = 0;
-					if (getSquare(i, currRow)->isOccupied() && (currRow == startRow || currRow != startRow)) {
-						currWord += getSquare(i, currRow)->getLetter();
-						score += getSquare(i, currRow)->getScore();
+					if (getSquare(currRow, i)->isOccupied() && (currRow == startRow || currRow != startRow)) {
+						currWord += getSquare(currRow, i)->getLetter();
+						score += getSquare(currRow, i)->getScore();
 					}
 
 					// if currRow == startRow && it is not occupied
 					else {
-						unsigned int lMult = getSquare(i, currRow)->getLMult();
-						wMults *= getSquare(i, currRow)->getWMult();
+						unsigned int lMult = getSquare(currRow, i)->getLMult();
+						wMults *= getSquare(currRow, i)->getWMult();
 						score += lMult*(hand[j]->getPoints());
 						currWord += word[j];
 						j++; 
@@ -136,14 +136,14 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 		unsigned int mainScore = 0;
 		size_t currCol = startColumn;
 		while (k < word.size()) {
-			if (getSquare(currCol, startRow)->isOccupied()) {
-				mainWord += getSquare(currCol, startRow)->getLetter();
-				mainScore += getSquare(currCol, startRow)->getScore();
+			if (getSquare(startRow, currCol)->isOccupied()) {
+				mainWord += getSquare(startRow, currCol)->getLetter();
+				mainScore += getSquare(startRow, currCol)->getScore();
 			}
 
 			else {
-				unsigned int lMult = getSquare(currCol, startRow)->getLMult();
-				wMult *= getSquare(currCol, startRow)->getWMult();
+				unsigned int lMult = getSquare(startRow, currCol)->getLMult();
+				wMult *= getSquare(startRow, currCol)->getWMult();
 				mainScore += lMult*(hand[k]->getPoints());
 				mainWord += word[k];
 				k++;
@@ -180,7 +180,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			if (currCol < 1) currCol = 1;
 
 			// if already occupied, don't get points for words formed horizontally from it
-			if (getSquare(startColumn, i)->isOccupied()) {
+			if (getSquare(i, startColumn)->isOccupied()) {
 				i++;
 				if (i > rows) break;
 				continue;
@@ -189,7 +189,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			cnt++;
 
 			std::string currWord = "";
-			while (getSquare(currCol, i)->isOccupied()) {
+			while (getSquare(i, currCol)->isOccupied()) {
 				currCol--;
 				if (currCol < 1) break;
 			}
@@ -197,17 +197,17 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			currCol += 1;
 
 			if (currCol != startColumn) {
-				while (getSquare(currCol, i)->isOccupied() || (currCol == startColumn)) {
+				while (getSquare(i, currCol)->isOccupied() || (currCol == startColumn)) {
 					size_t j = 0;
-					if (getSquare(currCol, i)->isOccupied() && (currCol == startColumn || currCol != startColumn)) {
-						currWord += getSquare(currCol, i)->getLetter();
-						score += getSquare(currCol, i)->getScore();
+					if (getSquare(i, currCol)->isOccupied() && (currCol == startColumn || currCol != startColumn)) {
+						currWord += getSquare(i, currCol)->getLetter();
+						score += getSquare(i, currCol)->getScore();
 					}
 
 					// if currRow == startRow && it is not occupied
 					else {
-						unsigned int lMult = getSquare(currCol, i)->getLMult();
-						wMults *= getSquare(currCol, i)->getWMult();
+						unsigned int lMult = getSquare(i, currCol)->getLMult();
+						wMults *= getSquare(i, currCol)->getWMult();
 						score += lMult*(hand[j]->getPoints());
 						currWord += word[j];
 						j++; 
@@ -229,14 +229,14 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 		unsigned int mainScore = 0;
 		size_t currRow = startRow;
 		while (k < word.size()) {
-			if (getSquare(startColumn, currRow)->isOccupied()) {
-				mainWord += getSquare(startColumn, currRow)->getLetter();
-				mainScore += getSquare(startColumn, currRow)->getScore();
+			if (getSquare(currRow, startColumn)->isOccupied()) {
+				mainWord += getSquare(currRow, startColumn)->getLetter();
+				mainScore += getSquare(currRow, startColumn)->getScore();
 			}
 
 			else {
-				unsigned int lMult = getSquare(startColumn, currRow)->getLMult();
-				wMult *= getSquare(startColumn, currRow)->getWMult();
+				unsigned int lMult = getSquare(currRow, startColumn)->getLMult();
+				wMult *= getSquare(currRow, startColumn)->getWMult();
 				mainScore += lMult*(hand[k]->getPoints());
 				mainWord += word[k];
 				k++;
@@ -267,7 +267,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 	if (horizontal) {
 		while (cnt < letters) {
 			// if you're at a square with a letter on it
-			if (getSquare(col, row)->isOccupied()) {
+			if (getSquare(row, col)->isOccupied()) {
 				col++;
 				continue;
 			}
@@ -275,13 +275,13 @@ void Board::executePlaceMove (const PlaceMove & m) {
 			else {
 				if (place[cnt]->getLetter()=='?') {
 					place[cnt]->useAs(place[cnt + 1]->getLetter());
-					getSquare(col, row)->placeTile(place[cnt]);
+					getSquare(row, col)->placeTile(place[cnt]);
 					cnt+=2;
 					continue;
 					// go directly to next iteration, do not complete what is below
 				}
 
-				getSquare(col, row)->placeTile(place[cnt]);
+				getSquare(row, col)->placeTile(place[cnt]);
 				cnt++;
 				col++;
 			}
@@ -293,7 +293,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 	else {
 		while (cnt < letters) {
 			// if you're at a square with a letter on it
-			if (getSquare(col, row)->isOccupied()) {
+			if (getSquare(row, col)->isOccupied()) {
 				row++;
 				continue;
 			}
@@ -301,13 +301,13 @@ void Board::executePlaceMove (const PlaceMove & m) {
 			else {
 				if (place[cnt]->getLetter()=='?') {
 					place[cnt]->useAs(place[cnt + 1]->getLetter());
-					getSquare(col, row)->placeTile(place[cnt]);
+					getSquare(row, col)->placeTile(place[cnt]);
 					cnt+=2;
 					continue;
 					// go directly to next iteration, do not complete what is below
 				}
 				
-				getSquare(col, row)->placeTile(place[cnt]);
+				getSquare(row, col)->placeTile(place[cnt]);
 				cnt++;
 				row++;
 			}
@@ -337,7 +337,7 @@ bool Board::isFirstMove() const {
 }
 
 std::pair<size_t, size_t> Board::startPos() const {
-	std::pair<size_t, size_t> middle (midx, midx);
+	std::pair<size_t, size_t> middle (midx, midy);
 	return middle;
 }
 
