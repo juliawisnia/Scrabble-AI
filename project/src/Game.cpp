@@ -28,7 +28,7 @@ int main (int argc, char *argv[]) {
         else if (type == "BOARD:") read >> boardConfig;
         else if (type == "SEED:") read >> seed;
     }
-
+    std::cout << dictionaryConfig << std::endl;
     Dictionary dictionary(dictionaryConfig);
     Board scrabbleBoard(boardConfig);
     Bag bag(bagConfig, seed);
