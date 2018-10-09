@@ -28,10 +28,10 @@ Board::Board (std::string board_file_name) {
 	midy = y;
 
 	scrabbleBoard.resize(columns, std::vector<Square*>(rows));
-
+	
 	for (size_t i=1; i<=columns; i++) {
 		for (size_t j=1; j<=rows; j++) {
-
+			
 			char mult;
 			ifile >> mult;
 
@@ -44,26 +44,24 @@ Board::Board (std::string board_file_name) {
 			else if (mult == '3') LMult = 3;
 
 			if (i == x && j == y) {
-				Square square(LMult, WMult, true);
-				Square* add = &square;
-				scrabbleBoard[i-1][j-1] = add;
+				scrabbleBoard[i-1][j-1] = new Square(LMult, WMult, true);
 			}
 			else {
-				Square square(LMult, WMult, false);
-				Square* add = &square;
-				scrabbleBoard[i-1][j-1] = add;
+				scrabbleBoard[i-1][j-1] = new Square(LMult, WMult, false);
 			}
 		}
 	}
 }
 
 Board::~Board () {
-	while (!scrabbleBoard.empty()) {
-		delete scrabbleBoard.back().back();
+	for (size_t i = 1; i <= columns; i++) {
+		for (size_t j = 1; j <= rows; j++) {
+			delete scrabbleBoard[i-1][j-1];
+		}
 	}
 }
 
-/*std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(const PlaceMove m) const {
+std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(const PlaceMove m) const {
 	std::vector<std::pair<std::string, unsigned int>> allWords;
 	size_t rows = getRows();
 	size_t columns = getColumns();
@@ -318,10 +316,10 @@ void Board::executePlaceMove (const PlaceMove & m) {
 		return;
 	}
 
-}*/
+}
 
 Square * Board::getSquare (size_t x, size_t y) const {
-	return scrabbleBoard[y][x];
+	return scrabbleBoard[y-1][x-1];
 }
 
 size_t Board::getRows() const {
@@ -333,13 +331,13 @@ size_t Board::getColumns() const {
 }
 
 bool Board::isFirstMove() const {
-	if (scrabbleBoard[midy][midx]->isOccupied()) return false;
+	if (scrabbleBoard[midy-1][midx-1]->isOccupied()) return false;
 
 	else return true;
 }
 
 std::pair<size_t, size_t> Board::startPos() const {
-	std::pair<size_t, size_t> middle (midy, midx);
+	std::pair<size_t, size_t> middle (midx, midx);
 	return middle;
 }
 

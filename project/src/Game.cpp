@@ -125,7 +125,7 @@ int main (int argc, char *argv[]) {
     }
 
     if (playerOutTiles) {
-        unsigned int finishScore;
+        unsigned int finishScore = 0;
         std::set<std::pair<std::string, unsigned int>> finalScores;
 
         std::vector<Player>::iterator it;
@@ -141,12 +141,16 @@ int main (int argc, char *argv[]) {
             finishScore += sumTilesRemaining;
             finalScore -= sumTilesRemaining;
             std::string name = it->getName();
-            std::pair add(name, finalScore);
+            std::pair <std::string, unsigned int> add;
+            add.first = name;
+            add.second = finalScore;
             if (&(*it) != finish) finalScores.insert(add);
             else finishScore -= sumTilesRemaining;
         }
 
-        std::pair addFinal(finish->getName(), finishScore);
+        std::pair <std::string, unsigned int> addFinal;
+        addFinal.first = finish->getName();
+        addFinal.second = finishScore;
         finalScores.insert(addFinal);
 
         std::set<std::pair<std::string, unsigned int>>::iterator it2;
@@ -160,7 +164,9 @@ int main (int argc, char *argv[]) {
         std::vector<Player>::iterator it;
         std::set<std::pair<std::string, unsigned int>> results;
         for (it = players.begin(); it != players.end(); ++it) {
-            std::pair add (it->getName(), it->getScore());
+            std::pair<std::string, unsigned int> add;
+            add.first = it->getName();
+            add.second = it->getScore();
             results.insert(add);
         }
 
