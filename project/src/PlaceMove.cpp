@@ -9,6 +9,7 @@ PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileStrin
 	startColumn = x;
 	word = tileString;
 	player = p;
+	take = player->takeTiles(tileString, true);
 }
 
 Player * PlaceMove::getPlayer() const {
@@ -32,9 +33,9 @@ std::string PlaceMove::getString() const {
 }
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
-	bool flag = true;
-	const std::vector<Tile*> & temp = player->takeTiles(word, flag);
-	return temp;
+	//bool flag = true;
+	//take = player->takeTiles(word, flag);
+	return take;
 
 }
 

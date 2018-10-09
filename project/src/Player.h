@@ -75,6 +75,8 @@ public:
 	// Prints to cout the tiles in player's hand
 	void showHand() const;
 
+	void eraseTilesFromHand(std::string const & move);
+
 	std::string getName() const;
 
 	size_t getMaxTiles() const;

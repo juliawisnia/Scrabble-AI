@@ -89,13 +89,21 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 				// if it's a PLACEMOVE and you encounter a blank, don't look for next letter in Hand
 				if (resolveBlanks && tileString [i] == '?') i += 1;
 				take.push_back((*it));
-				Hand.erase(it);
+				//Hand.erase(it);
 				break;
 			}
 		}
 	}
 
 	return take;
+}
+
+void Player::eraseTilesFromHand(std::string const & move) {
+	std::vector<Tile*> erase = takeTiles(move, true);
+	std::set<Tile*>::iterator it;
+	for (it = Hand.begin(); it != Hand.end(); ++it) {
+
+	}
 }
 
 void Player::addTiles (std::vector<Tile*> const & tilesToAdd) {
