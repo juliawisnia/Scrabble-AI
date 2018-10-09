@@ -92,6 +92,11 @@ int main (int argc, char *argv[]) {
 
                 place.execute(scrabbleBoard, bag, dictionary);
                 console.printBoard(scrabbleBoard);
+                std::cout << "You now have these tiles: " <<std::endl; 
+                console.printHand(*it);
+                std::cout << "Press enter to continue" << std::endl;
+               // std::cin.clear();
+                std::cin.ignore();
             }
 
             if (moveType == "EXCHANGE") {
@@ -102,6 +107,7 @@ int main (int argc, char *argv[]) {
                 std::cout << "You now have these tiles: " <<std::endl; 
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
+               // std::cin.clear();
                 std::cin.ignore();
             }
 
@@ -112,6 +118,7 @@ int main (int argc, char *argv[]) {
                 std::cout << "You now have these tiles: " <<std::endl; 
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
+              //  std::cin.clear();
                 std::cin.ignore();
             }
         }

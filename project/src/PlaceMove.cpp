@@ -33,8 +33,8 @@ std::string PlaceMove::getString() const {
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
 	bool flag = true;
-	std::vector<Tile*> add = player->takeTiles(word, flag);
-	return add;
+	return player->takeTiles(word, flag);
+
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
@@ -72,7 +72,8 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	size_t rows = board.getRows();
 
 	// player has necessary tiles
-	while (!player->hasTiles(word, true)) {
+	bool flag = true;
+	while (!(player->hasTiles(word, flag))) {
 		std::cout << "Error: you don't have the necessary tiles." << std::endl;
 		enterNewMove();
 	}
@@ -104,11 +105,11 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	// check that it's in bounds
 	while (!inbounds) {
 		if (horizontal) {
-			if (startColumn > 0 && startColumn + word.size() - 1 <= cols && startRow > 0 && startRow <= rows) inbounds = true;
+			if (startColumn > 0 && (startColumn + word.size() - 1 <= cols) && startRow > 0 && startRow <= rows) inbounds = true;
 		}
 		
 		else {
-			if (startRow > 0 && startRow + word.size() - 1 <= rows && startColumn > 0 && startColumn <= cols) inbounds = true;
+			if (startRow > 0 && (startRow + word.size() - 1 <= rows) && startColumn > 0 && startColumn <= cols) inbounds = true;
 		}
 
 		if (!inbounds) {
@@ -225,6 +226,7 @@ void PlaceMove::enterNewMove() {
 	std::cout << "Enter new move: " << std::endl;
 
 	char dir;
+	std::cin.clear();
 	std::cin >> dir >> startRow >> startColumn >> word;
 
 	if (dir == '-') horizontal = true;

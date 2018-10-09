@@ -257,13 +257,14 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 void Board::executePlaceMove (const PlaceMove & m) {
 	std::vector<Tile*> place = m.tileVector();
+	std::vector<Tile*>::iterator it;
+
 	size_t row = m.getRow();
 	size_t col = m.getColumn();
 	bool horizontal = m.getOrientation();
 
 	size_t cnt = 0;
 	size_t letters = place.size();
-
 	if (horizontal) {
 		while (cnt < letters) {
 			// if you're at a square with a letter on it
