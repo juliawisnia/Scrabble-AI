@@ -107,6 +107,8 @@ int main (int argc, char *argv[]) {
                 console.printHand(*it);
                 std::cout << "Press enter to continue" << std::endl;
                 std::cin.clear();
+                std::string enter;
+                std::cin >> enter;
                 std::cin.ignore();
                 continue;
             }

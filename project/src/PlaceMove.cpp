@@ -9,6 +9,7 @@ PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileStrin
 	startColumn = x;
 	word = tileString;
 	player = p;
+	this->horizontal = horizontal;
 	take = player->takeTiles(tileString, true);
 }
 
