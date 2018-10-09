@@ -23,7 +23,7 @@ Player::Player (std::string const & playerName, size_t maxTiles, Bag & bag) {
 
 Player::~Player() {
 	std::set<Tile*>::iterator it;
-	for (it = Hand.begin(); it != Hand.end(); ++it) delete *it;
+	//for (it = Hand.begin(); it != Hand.end(); ++it) delete (*it);
 }
 
 std::set<Tile*> Player::getHandTiles() const {
