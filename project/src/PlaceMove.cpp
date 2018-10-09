@@ -33,7 +33,8 @@ std::string PlaceMove::getString() const {
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
 	bool flag = true;
-	return player->takeTiles(word, flag);
+	const std::vector<Tile*> & temp = player->takeTiles(word, flag);
+	return temp;
 
 }
 
