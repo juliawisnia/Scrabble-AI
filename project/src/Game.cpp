@@ -78,13 +78,14 @@ int main (int argc, char *argv[]) {
             }
 
             if (moveType == "PLACE") {
-                char dir;
-                bool horizontal;
-                size_t row;
-                size_t column;
-                std::string tileString;
+                char dir = 0;
+                bool horizontal = false;
+                size_t row = 0;
+                size_t column = 0;
+                std::string tileString = "";
 
                 std::cin >> dir >> row >> column >> tileString;
+                // flipped bc changing
                 if (dir == '-') horizontal = false;
                 else horizontal = true;
 
