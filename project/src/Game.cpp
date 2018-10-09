@@ -85,8 +85,8 @@ int main (int argc, char *argv[]) {
                 std::string tileString;
 
                 std::cin >> dir >> row >> column >> tileString;
-                if (dir == '-') horizontal = true;
-                else horizontal = false;
+                if (dir == '-') horizontal = false;
+                else horizontal = true;
 
                 PlaceMove place(row, column, horizontal, tileString, &(*it));
 
