@@ -5,8 +5,8 @@
 #include "Board.h"
 
 PlaceMove::PlaceMove (size_t x, size_t y, bool horizontal, std::string tileString, Player * p) {
-	startRow = y;
-	startColumn = x;
+	startRow = x;
+	startColumn = y;
 	word = tileString;
 	player = p;
 	this->horizontal = horizontal;
