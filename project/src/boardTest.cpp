@@ -21,7 +21,5 @@ int main(int argc, char *argv[]) {
     ConsolePrinter console;
     console.printBoard(board);
 
-    
-
     return 0;
 }

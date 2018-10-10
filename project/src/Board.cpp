@@ -95,7 +95,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			}
 			
 			// you are going to put down one of your tiles
-			cnt++;	
+			cnt++;
 			std::string currWord = "";
 			while (getSquare(currRow, i)->isOccupied()) {
 				currRow--;
@@ -107,13 +107,13 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			if (currRow != startRow) {
 				while (getSquare(currRow, i)->isOccupied() || (currRow == startRow)) {
 					size_t j = 0;
-					if (getSquare(currRow, i)->isOccupied() && (currRow == startRow || currRow != startRow)) {
+					if (getSquare(currRow, i)->isOccupied()) {
 						currWord += getSquare(currRow, i)->getLetter();
 						score += getSquare(currRow, i)->getScore();
 					}
 
 					// if currRow == startRow && it is not occupied
-					else {
+					else if (currRow == startRow) {
 						unsigned int lMult = getSquare(currRow, i)->getLMult();
 						wMults *= getSquare(currRow, i)->getWMult();
 						score += lMult*(hand[j]->getPoints());
