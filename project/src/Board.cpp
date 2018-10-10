@@ -182,7 +182,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			if (currCol < 1) currCol = 1;
 
 			// if already occupied, don't get points for words formed horizontally from it
-			if (getSquare(i, startColumn)->isOccupied()) {
+			while (getSquare(i, startColumn)->isOccupied()) {
 				i++;
 				if (i > rows) break;
 				continue;
@@ -197,8 +197,8 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			// start at occupied square
 			currCol += 1;
 
-			std::string currWord = "";
 			if (currCol != startColumn) {
+				std::string currWord = "";
 				while (getSquare(i, currCol)->isOccupied() || (currCol == startColumn)) {
 					size_t j = 0;
 					if (getSquare(i, currCol)->isOccupied() && (currCol == startColumn || currCol != startColumn)) {
