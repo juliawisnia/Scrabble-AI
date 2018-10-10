@@ -44,10 +44,10 @@ Board::Board (std::string board_file_name) {
 			else if (mult == '3') LMult = 3;
 
 			if (i == x && j == y) {
-				scrabbleBoard[i-1][j-1] = new Square(LMult, WMult, true);
+				scrabbleBoard[j-1][i-1] = new Square(LMult, WMult, true);
 			}
 			else {
-				scrabbleBoard[i-1][j-1] = new Square(LMult, WMult, false);
+				scrabbleBoard[j-1][i-1] = new Square(LMult, WMult, false);
 			}
 		}
 	}
@@ -56,7 +56,7 @@ Board::Board (std::string board_file_name) {
 Board::~Board () {
 	for (size_t i = 1; i <= rows; i++) {
 		for (size_t j = 1; j <= columns; j++) {
-			delete scrabbleBoard[i-1][j-1];
+			delete scrabbleBoard[j-1][i-1];
 		}
 	}
 }
@@ -322,7 +322,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 }
 
 Square * Board::getSquare (size_t x, size_t y) const {
-	return scrabbleBoard[y-1][x-1];
+	return scrabbleBoard[x-1][y-1];
 }
 
 size_t Board::getRows() const {
@@ -334,7 +334,7 @@ size_t Board::getColumns() const {
 }
 
 bool Board::isFirstMove() const {
-	if (scrabbleBoard[midy-1][midx-1]->isOccupied()) return false;
+	if (scrabbleBoard[midx-1][midy-1]->isOccupied()) return false;
 
 	else return true;
 }
