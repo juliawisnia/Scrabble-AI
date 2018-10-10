@@ -18,17 +18,20 @@ Move * Move::parseMove(std::string moveString, Player &p) {
         if (dir == '-') horizontal = false;
         else horizontal = true;
 
-        PlaceMove place(row, column, horizontal, tileString, &p);
+        PlaceMove* place = new PlaceMove(row, column, horizontal, tileString, &p);
+        return place;
     }
 
     else if (moveString == "EXCHANGE") {
         std::string tileString;
         std::cin >> tileString;
-        ExchangeMove exchange(tileString, &p);
+        ExchangeMove* exchange = new ExchangeMove(tileString, &p);
+        return exchange;
     }
 
     else  {
-        PassMove pass(&p);
+        PassMove* pass = new PassMove(&p);
+        return pass;
     }
 
 }

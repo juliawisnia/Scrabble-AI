@@ -78,8 +78,8 @@ int main (int argc, char *argv[]) {
                 moveType += std::toupper(move[i]);
             }
 
-            Move * move = parseMove(moveType, (*it));
-            move.execute(scrabbleBoard, bag, dictionary);
+            Move * playerMove = Move::parseMove(moveType, (*it));
+            playerMove->execute(scrabbleBoard, bag, dictionary);
             console.printBoard(scrabbleBoard);
             console.printHand(*it);
             std::cout << "Press enter to continue" << std::endl;
