@@ -190,7 +190,6 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 			cnt++;
 
-			std::string currWord = "";
 			while (getSquare(i, currCol)->isOccupied()) {
 				currCol--;
 				if (currCol < 1) break;
@@ -199,6 +198,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			currCol += 1;
 
 			if (currCol != startColumn) {
+				std::string currWord = "";
 				while (getSquare(i, currCol)->isOccupied() || (currCol == startColumn)) {
 					size_t j = 0;
 					if (getSquare(i, currCol)->isOccupied() && (currCol == startColumn || currCol != startColumn)) {
