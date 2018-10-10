@@ -95,7 +95,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			// start at occupied square
 			currRow += 1;
 
-			if (getSquare(i, currRow + 1)->isOccupied()) {
+			if ((getSquare(i, currRow + 1)->isOccupied()) || ((currRow + 1) == startRow)) {
 				while (getSquare(i, currRow)->isOccupied() || (currRow == startRow)) {
 					if (getSquare(i, currRow)->isOccupied()) {
 						currWord += getSquare(i, currRow)->getLetter();
@@ -171,86 +171,85 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, flag);
 
 		// concatanate all the vertical words
-		size_t i = startColumn;
+		size_t i = startRow;
 		size_t letters = word.size();
 		size_t cnt = 0;
 		while (cnt < letters) {
 			unsigned int wMults = 1;
 			unsigned int score = 0;
-			size_t currRow = startRow - 1;
-			if (currRow < 1) currRow = 1;
+			size_t currCol = startColumn - 1;
+			if (currCol < 1) currCol = 1;
 
 			std::string currWord = "";
-			while (getSquare(i, currRow)->isOccupied()) {
-				currRow--;
-				if (currRow < 1) break;
+			while (getSquare(currCol, i)->isOccupied()) {
+				currCol--;
+				if (currCol < 1) break;
 			}
 			// start at occupied square
-			currRow += 1;
+			currCol += 1;
 
-			//if (getSquare(i, currRow + 1)->isOccupied()) {
-				while (getSquare(i, currRow)->isOccupied() || (currRow == startRow)) {
-					if (getSquare(i, currRow)->isOccupied()) {
-						currWord += getSquare(i, currRow)->getLetter();
-						score += getSquare(i, currRow)->getScore();
+			if (getSquare(currCol + 1, i)->isOccupied() || ((currCol + 1) == startColumn)) {
+				while (getSquare(currCol, i)->isOccupied() || (currCol == startColumn)) {
+					if (getSquare(currCol, i)->isOccupied()) {
+						currWord += getSquare(currCol, i)->getLetter();
+						score += getSquare(currCol, i)->getScore();
 					}
 
 					// if currRow == startRow && it is not occupied
-					else if (currRow == startRow) {
-						unsigned int lMult = getSquare(i, currRow)->getLMult();
-						wMults *= getSquare(i, currRow)->getWMult();
+					else if (currCol == startColumn) {
+						unsigned int lMult = getSquare(currCol, i)->getLMult();
+						wMults *= getSquare(currCol, i)->getWMult();
 						score += lMult*(hand[cnt]->getPoints());
 						currWord += word[cnt];
 						cnt++;
 					}
 
-					currRow++;
+					currCol++;
 				}
 				score *= wMults;
 				for (size_t k = 0; k < currWord.size(); k++) std::toupper(currWord[k]);
-				std::pair<std::string, unsigned int> add(currWord, score);
-				allWords.push_back(add);
-			//}
+					std::pair<std::string, unsigned int> add(currWord, score);
+					allWords.push_back(add);
+			}
 
 			i++;
-			if (i > columns) break;
+			if (i > rows) break;
 		}
 
-		// concatanate main horizontal word
+		// concatanate main vertical word
 		unsigned int wMult = 1;
 		size_t k = 0;
 		unsigned int mainScore = 0;
-		size_t currCol = startColumn;
+		size_t currRow = startRow;
 
-		while (getSquare(currCol, startRow)->isOccupied()) {
-			currCol--;
-			if (currCol < 1) break;
+		while (getSquare(startColumn, currRow)->isOccupied()) {
+			currRow--;
+			if (currRow < 1) break;
 		}
-		currCol += 1;
+		currRow += 1;
 
 		while (k < letters) {
-			if (getSquare(currCol, startRow)->isOccupied()) {
-				mainWord += getSquare(currCol, startRow)->getLetter();
-				mainScore += getSquare(currCol, startRow)->getScore();
+			if (getSquare(startColumn, currRow)->isOccupied()) {
+				mainWord += getSquare(startColumn, currRow)->getLetter();
+				mainScore += getSquare(startColumn, currRow)->getScore();
 			}
 
 			else {
-				unsigned int lMult = getSquare(currCol, startRow)->getLMult();
-				wMult *= getSquare(currCol, startRow)->getWMult();
+				unsigned int lMult = getSquare(startColumn, currRow)->getLMult();
+				wMult *= getSquare(startColumn, currRow)->getWMult();
 				mainScore += lMult*(hand[k]->getPoints());
 				mainWord += word[k];
 				k++;
 			}
 
-			currCol++;
-			if (currCol > columns) break;
+			currRow++;
+			if (currRow > rows) break;
 		}
 
 		mainScore *= wMult;
 		for (size_t i = 0; i < mainWord.size(); i++) std::toupper(mainWord[i]);
 		std::pair<std::string, unsigned int> add(mainWord, mainScore);
 		allWords.push_back(add);
-
 	}
 
 	return allWords;
