@@ -35,7 +35,6 @@ std::string PlaceMove::getString() const {
 
 std::vector<Tile*> const & PlaceMove::tileVector () const {
 	return take;
-
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {

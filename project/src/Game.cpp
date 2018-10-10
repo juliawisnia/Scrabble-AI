@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include "Game.h"
+#include "Move.h"
 
 int main (int argc, char *argv[]) {
     if (argc < 2) return -1;
@@ -77,54 +78,14 @@ int main (int argc, char *argv[]) {
                 moveType += std::toupper(move[i]);
             }
 
-            if (moveType == "PLACE") {
-                char dir = 0;
-                bool horizontal = false;
-                size_t row = 0;
-                size_t column = 0;
-                std::string tileString = "";
-
-                std::cin >> dir >> row >> column >> tileString;
-                // flipped bc changing
-                if (dir == '-') horizontal = false;
-                else horizontal = true;
-
-                PlaceMove place(row, column, horizontal, tileString, &(*it));
-
-                place.execute(scrabbleBoard, bag, dictionary);
-                console.printBoard(scrabbleBoard);
-                console.printHand(*it);
-                std::cout << "Press enter to continue" << std::endl;
-                std::cin.clear();
-                std::cin.ignore();
-                continue;
-            }
-
-            else if (moveType == "EXCHANGE") {
-                std::string tileString;
-                std::cin >> tileString;
-                ExchangeMove exchange(tileString, &(*it));
-                exchange.execute(scrabbleBoard, bag, dictionary);
-                console.printHand(*it);
-                std::cout << "Press enter to continue" << std::endl;
-                std::cin.clear();
-                std::string enter;
-                std::cin >> enter;
-                std::cin.ignore();
-                continue;
-            }
-
-            else  {
-               // passes++;
-                PassMove pass(&(*it));
-                pass.execute(scrabbleBoard, bag, dictionary);
-                std::cout << "You now have these tiles: " <<std::endl; 
-                console.printHand(*it);
-                std::cout << "Press enter to continue" << std::endl;
-                std::cin.clear();
-                std::cin.ignore();
-                continue;
-            }
+            Move * move = parseMove(moveType, (*it));
+            move.execute(scrabbleBoard, bag, dictionary);
+            console.printBoard(scrabbleBoard);
+            console.printHand(*it);
+            std::cout << "Press enter to continue" << std::endl;
+            std::cin.clear();
+            std::cin.ignore();
+            continue;
         }
     }
     return 0;
