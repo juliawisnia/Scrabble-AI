@@ -197,13 +197,14 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			// start at occupied square
 			currCol += 1;
 
+			std::string currWord = "";
 			if (currCol != startColumn) {
-				std::string currWord = "";
 				while (getSquare(i, currCol)->isOccupied() || (currCol == startColumn)) {
 					size_t j = 0;
 					if (getSquare(i, currCol)->isOccupied() && (currCol == startColumn || currCol != startColumn)) {
 						currWord += getSquare(i, currCol)->getLetter();
 						score += getSquare(i, currCol)->getScore();
+						currCol++;
 					}
 
 					// if currRow == startRow && it is not occupied
@@ -213,6 +214,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 						score += lMult*(hand[j]->getPoints());
 						currWord += word[j];
 						j++; 
+						currCol++;
 					}
 				}
 				score *= wMults;
