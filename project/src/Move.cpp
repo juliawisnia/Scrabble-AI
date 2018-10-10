@@ -15,8 +15,8 @@ Move * Move::parseMove(std::string moveString, Player &p) {
 
         std::cin >> dir >> row >> column >> tileString;
         // flipped bc changing
-        if (dir == '-') horizontal = false;
-        else horizontal = true;
+        if (dir == '-') horizontal = true;
+        else horizontal = false;
 
         PlaceMove* place = new PlaceMove(row, column, horizontal, tileString, &p);
         return place;
