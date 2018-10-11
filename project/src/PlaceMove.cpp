@@ -125,6 +125,27 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	// must be touching another square 
 	while (!adjacent) {
 		if (horizontal) {
+			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
+				// if it's to the left
+				if (board.getSquare(i - 1, startRow)->isOccupied()) adjacent = true;
+				// to the right
+				else if (board.getSquare(i + 1, startRow)->isOccupied()) adjacent = true;
+				// down
+				else if (board.getSquare(i, startRow + 1)->isOccupied()) adjacent = true;
+				// up
+				else if (board.getSquare(i, startRow - 1)->isOccupied()) adjacent = true;
+			}
+		}
+
+		else {
+			for (size_t i = startRow; i < startRow + word.size(); i++) {
+				if (board.getSquare(startColumn, i - 1)->isOccupied()) adjacent = true;
+				else if (board.getSquare(startColumn, i + 1)->isOccupied()) adjacent = true;
+				else if (board.getSquare(startColumn - 1, i)->isOccupied()) adjacent = true;
+				else if (board.getSquare(startColumn + 1, i)->isOccupied()) adjacent = true;
+			}
+		}
+	/*	if (horizontal) {
 			// if it's coming after a word
 			if (startColumn - 1 > 0 && board.getSquare(startColumn - 1, startRow)->isOccupied()) adjacent = true;
 
@@ -146,7 +167,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 				if (board.getSquare(startColumn + 1, j)->isOccupied() || board.getSquare(startColumn - 1, j)->isOccupied()) adjacent = true;
 			}
 
-		}
+		}*/
 
 		if (!adjacent) {
 			std::cout << "Error: your word must touch another tile." << std::endl;

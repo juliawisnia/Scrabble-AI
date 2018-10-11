@@ -33,14 +33,16 @@ Dictionary::~Dictionary () {
 }
 
 bool Dictionary::isLegalWord (std::string & word) const {
+	std::string upper = " ";
 	for (size_t i = 0; i < word.size(); i++) {
-		std::toupper(word[i]);
+		upper += std::toupper(word[i]);
 	}
 
 	std::set<std::string>::iterator it;
-	it = dictionary.find(word);
+	it = dictionary.find(upper);
 
-	if (it != dictionary.end()) return true;
+//	if (it != dictionary.end()) return true;
 
-	else return false;
+//	else return false;
+return true;
 }
