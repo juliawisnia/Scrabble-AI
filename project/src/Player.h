@@ -68,9 +68,6 @@ public:
 	   The move string is assumed to have correct syntax.
 	*/
 	std::vector<Tile*> takeTiles (std::string const & move, bool resolveBlanks);
-
-	// Adds all the tiles in the vector to the player's hand.
-	void addTiles (std::vector<Tile*> const & tilesToAdd);
 	
 	void eraseTilesFromHand(std::string const & move, bool resolveBlanks);
 

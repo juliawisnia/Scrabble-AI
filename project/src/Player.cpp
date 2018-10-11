@@ -120,7 +120,7 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 			}
 		}
 	}
-	
+
 	else {
 		erase = takeTiles(move, false);
 		for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
@@ -133,12 +133,6 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 		}
 	}
 
-}
-
-void Player::addTiles (std::vector<Tile*> const & tilesToAdd) {
-	for (size_t i = 0; i < tilesToAdd.size(); i++) {
-		Hand.insert(tilesToAdd[i]);
-	}
 }
 
 size_t Player::getScore() const {

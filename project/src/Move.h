@@ -120,7 +120,7 @@ public:
 	}
 
 	// checks that they're exchanging a valid number of tiles
-	void isValidMove (Bag & bag);
+	bool isValidMove (Bag & bag);
 
 	/* Executes this move, whichever type it is.
 	   This may throw exceptions; students: it's up to you to
