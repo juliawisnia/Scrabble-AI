@@ -40,6 +40,7 @@ std::vector<Tile*> const & PlaceMove::tileVector () const {
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	isValidMove(board, dictionary);
 	std::vector<std::pair<std::string, unsigned int>> result = board.getPlaceMoveResults(*this);
+	word = result.back().first;
 	board.executePlaceMove(*this);
 
 	std::vector<std::pair<std::string, unsigned int>>::iterator it;
@@ -102,64 +103,65 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 
 		return;
 	}
-
 	bool inbounds = false;
-	// check that it's in bounds
-	while (!inbounds) {
-		if (horizontal) {
-			if (startColumn > 0 && (startColumn + word.size() - 1 <= cols) && startRow > 0 && startRow <= rows) inbounds = true;
-		}
-		
-		else {
-			if (startRow > 0 && (startRow + word.size() - 1 <= rows) && startColumn > 0 && startColumn <= cols) inbounds = true;
-		}
-
-		if (!inbounds) {
-			std::cout << "Error: word is out of bounds." << std::endl;
-			enterNewMove();
-		}
-
-	}
-
 	bool adjacent = false;
-	// must be touching another square 
-	while (!adjacent) {
-		if (horizontal) {
-			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
-				// if it's to the left
-				if (board.getSquare(i - 1, startRow)->isOccupied()) adjacent = true;
-				// to the right
-				else if (board.getSquare(i + 1, startRow)->isOccupied()) adjacent = true;
-				// down
-				else if (board.getSquare(i, startRow + 1)->isOccupied()) adjacent = true;
-				// up
-				else if (board.getSquare(i, startRow - 1)->isOccupied()) adjacent = true;
-			}
-		}
-
-		else {
-			for (size_t i = startRow; i < startRow + word.size(); i++) {
-				if (board.getSquare(startColumn, i - 1)->isOccupied()) adjacent = true;
-				else if (board.getSquare(startColumn, i + 1)->isOccupied()) adjacent = true;
-				else if (board.getSquare(startColumn - 1, i)->isOccupied()) adjacent = true;
-				else if (board.getSquare(startColumn + 1, i)->isOccupied()) adjacent = true;
-			}
-		}
-
-		if (!adjacent) {
-			std::cout << "Error: your word must touch another tile." << std::endl;
-			enterNewMove();
-		}
-	}
-
 	bool overlap = true;
-	// cannot overlap other words
-	while (overlap) {
-		if (board.getSquare(startColumn, startRow)->isOccupied()) {
-			std::cout << "Error: cannot start on another tile" <<std::endl;
-			enterNewMove();
+	while (!inbounds || !adjacent || overlap) {
+		// check that it's in bounds
+		if (!inbounds) {
+			if (horizontal) {
+				if (startColumn > 0 && (startColumn + word.size() - 1 <= cols) && startRow > 0 && startRow <= rows) inbounds = true;
+			}
+			
+			else {
+				if (startRow > 0 && (startRow + word.size() - 1 <= rows) && startColumn > 0 && startColumn <= cols) inbounds = true;
+			}
+
+			if (!inbounds) {
+				std::cout << "Error: word is out of bounds." << std::endl;
+				enterNewMove();
+			}
+
 		}
-		overlap = false;	
+
+		// must be touching another square 
+		if (!adjacent) {
+			if (horizontal) {
+				for (size_t i = startColumn; i < startColumn + word.size(); i++) {
+					// if it's to the left
+					if (board.getSquare(i - 1, startRow)->isOccupied()) adjacent = true;
+					// to the right
+					else if (board.getSquare(i + 1, startRow)->isOccupied()) adjacent = true;
+					// down
+					else if (board.getSquare(i, startRow + 1)->isOccupied()) adjacent = true;
+					// up
+					else if (board.getSquare(i, startRow - 1)->isOccupied()) adjacent = true;
+				}
+			}
+
+			else {
+				for (size_t i = startRow; i < startRow + word.size(); i++) {
+					if (board.getSquare(startColumn, i - 1)->isOccupied()) adjacent = true;
+					else if (board.getSquare(startColumn, i + 1)->isOccupied()) adjacent = true;
+					else if (board.getSquare(startColumn - 1, i)->isOccupied()) adjacent = true;
+					else if (board.getSquare(startColumn + 1, i)->isOccupied()) adjacent = true;
+				}
+			}
+		}
+
+		// cannot overlap other words
+		if (overlap) {
+			if (!board.getSquare(startColumn, startRow)->isOccupied()) {
+				overlap = false;
+			}	
+		}
+
+		if (!inbounds) std::cout << "Error: word is out of bounds" << std::endl;
+		if (!adjacent) std::cout << "Error: must touch another tile" << std::endl;
+		if (overlap) std::cout << "Error: cannot start on another tile" <<std::endl;
+
+		if (!inbounds || !adjacent || overlap) enterNewMove();
+
 	}
 
 	while (!allWordsValid(board, dictionary));
