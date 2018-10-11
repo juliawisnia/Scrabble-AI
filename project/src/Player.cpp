@@ -97,9 +97,15 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 	return take;
 }
 
-void Player::eraseTilesFromHand(std::string const & move) {
+void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 	std::vector<Tile*> erase = takeTiles(move, true);
 	std::vector<Tile*>::iterator outerIt;
+
+	if (resolveBlanks) {
+		for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
+			if ((*outerIt)->getLetter() == '?') erase.erase(outerIt);
+		}
+	}
 
 	for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
 		std::set<Tile*>::iterator it;

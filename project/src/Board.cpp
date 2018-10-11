@@ -277,7 +277,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 				if (place[cnt]->getLetter()=='?') {
 					place[cnt]->useAs(place[cnt + 1]->getLetter());
 					getSquare(col, row)->placeTile(place[cnt]);
-					cnt+=1;
+					cnt+=2;
 					continue;
 					// go directly to next iteration, do not complete what is below
 				}
