@@ -40,6 +40,7 @@ std::vector<Tile*> const & PlaceMove::tileVector () const {
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	isValidMove(board, dictionary);
 	std::vector<std::pair<std::string, unsigned int>> result = board.getPlaceMoveResults(*this);
+	// get the main concatanated word
 	word = result.back().first;
 	board.executePlaceMove(*this);
 
@@ -139,6 +140,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 				}
 			}
 
+			// if vertical
 			else {
 				for (size_t i = startRow; i < startRow + word.size(); i++) {
 					if (board.getSquare(startColumn, i - 1)->isOccupied()) adjacent = true;
@@ -169,6 +171,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 }
 
 bool PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
+	// get concatanted words from placemove into a vector string
 	std::vector<std::pair<std::string, unsigned int>> wordAndScore = board.getPlaceMoveResults(*this);
 	std::vector<std::string> allWords;
 
@@ -180,6 +183,7 @@ bool PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
 	bool legalWords = true;
 	std::vector<std::string>::iterator it;
 
+	// make sure that all words are valid in dictionary
 	for (it = allWords.begin(); it != allWords.end(); ++it) {
 		if (!dictionary.isLegalWord(*it)) {
 			std::cout << "Error: " << (*it) << " is not a legal word." << std::endl;
@@ -187,6 +191,7 @@ bool PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
 		}
 	}
 
+	// make user enter new word if invalid
 	if (!legalWords) {
 		enterNewMove();
 		return false;

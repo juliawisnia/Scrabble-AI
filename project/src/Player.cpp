@@ -100,6 +100,7 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 }
 
 void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
+	// function to physically erase the tiles from hand once we are sure that the move is valid
 	std::vector<Tile*> erase = takeTiles(move, true);
 	std::vector<Tile*>::iterator outerIt;
 
