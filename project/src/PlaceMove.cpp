@@ -145,29 +145,6 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 				else if (board.getSquare(startColumn + 1, i)->isOccupied()) adjacent = true;
 			}
 		}
-	/*	if (horizontal) {
-			// if it's coming after a word
-			if (startColumn - 1 > 0 && board.getSquare(startColumn - 1, startRow)->isOccupied()) adjacent = true;
-
-			// if it's coming before a word
-			if (startColumn + word.size() <= cols && board.getSquare(startColumn + word.size(), startRow)->isOccupied()) adjacent = true;
-
-			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
-				if (board.getSquare(i, startRow + 1)->isOccupied() || board.getSquare(i, startRow - 1)->isOccupied()) adjacent = true;
-			}
-		}
-
-		else {
-			// if it's below a word
-			if (startRow - 1 > 0 && board.getSquare(startColumn, startRow - 1)->isOccupied()) adjacent = true;
-			// if it's above a word
-			if (startRow + word.size() <= rows && board.getSquare(startColumn, startRow + word.size())->isOccupied()) adjacent = true;
-
-			for (size_t j = startColumn; j < startColumn + word.size(); j++) {
-				if (board.getSquare(startColumn + 1, j)->isOccupied() || board.getSquare(startColumn - 1, j)->isOccupied()) adjacent = true;
-			}
-
-		}*/
 
 		if (!adjacent) {
 			std::cout << "Error: your word must touch another tile." << std::endl;

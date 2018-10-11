@@ -75,7 +75,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 	bool horizontal = m.getOrientation();
 
 	if (horizontal) {
-		std::string mainWord = "";
+		std::string mainWord;
 		bool flag = true;
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, flag);
 
@@ -89,7 +89,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			size_t currRow = startRow - 1;
 			if (currRow < 1) currRow = 1;
 
-			std::string currWord = "";
+			std::string currWord;
 			while (getSquare(i, currRow)->isOccupied()) {
 				currRow--;
 				if (currRow < 1) break;
@@ -164,7 +164,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 	// vertical
 	else {
-		std::string mainWord = "";
+		std::string mainWord;
 		bool flag = true;
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, flag);
 
@@ -178,7 +178,7 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			size_t currCol = startColumn - 1;
 			if (currCol < 1) currCol = 1;
 
-			std::string currWord = "";
+			std::string currWord;
 			while (getSquare(currCol, i)->isOccupied()) {
 				currCol--;
 				if (currCol < 1) break;
@@ -324,7 +324,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 }
 
 Square * Board::getSquare (size_t x, size_t y) const {
-	return scrabbleBoard[x-1][y-1];
+	return scrabbleBoard[y-1][x-1];
 }
 
 size_t Board::getRows() const {
