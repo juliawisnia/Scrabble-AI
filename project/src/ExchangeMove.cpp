@@ -17,7 +17,7 @@ void ExchangeMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	std::vector<Tile*> bagTiles;
 	bagTiles = player->takeTiles(exchangeTiles, move);
 	bag.addTiles(bagTiles);
-	player->eraseTilesFromHand(exchangeTiles, false);
+	//player->eraseTilesFromHand(exchangeTiles, false);
 
 	std::vector<Tile*> newTiles = bag.drawTiles(exchangeTiles.size());
 	std::vector<Tile*>::iterator tileIt;

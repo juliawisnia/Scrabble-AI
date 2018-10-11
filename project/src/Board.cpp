@@ -22,11 +22,14 @@ Board::Board (std::string board_file_name) {
 	size_t x;
 	size_t y;
 
+	// read in configuration of board
 	ifile >> rows >> columns >> x >> y;
-
+	
+	// middle of the board
 	midx = x;
 	midy = y;
 
+	// resize vector
 	scrabbleBoard.resize(rows, std::vector<Square*>(columns));
 	
 	for (size_t i=1; i<=rows; i++) {
@@ -65,14 +68,13 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 	std::vector<std::pair<std::string, unsigned int>> allWords;
 	size_t rows = getRows();
 	size_t columns = getColumns();
+	size_t startColumn = m.getColumn();
+	std::string word = m.getString();
+	size_t startRow = m.getRow();
 
 	bool horizontal = m.getOrientation();
 
 	if (horizontal) {
-		size_t startColumn = m.getColumn();
-		std::string word = m.getString();
-		size_t startRow = m.getRow();
-
 		std::string mainWord = "";
 		bool flag = true;
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, flag);
@@ -162,10 +164,6 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 
 	// vertical
 	else {
-		size_t startColumn = m.getColumn();
-		std::string word = m.getString();
-		size_t startRow = m.getRow();
-
 		std::string mainWord = "";
 		bool flag = true;
 		std::vector<Tile*> hand = m.getPlayer()->takeTiles(word, flag);
