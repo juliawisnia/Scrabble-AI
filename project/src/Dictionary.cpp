@@ -19,7 +19,7 @@ Dictionary::Dictionary (std::string dictionary_file_name) {
 		std::stringstream ss(line);
 		ss >> word;
 
-		std::string copyWord = "";
+		std::string copyWord = " ";
 
 		for (size_t i=0; i<word.size(); i++) {
 			copyWord += std::toupper(word[i]);
@@ -39,10 +39,9 @@ bool Dictionary::isLegalWord (std::string & word) const {
 	}
 
 	std::set<std::string>::iterator it;
-	it = dictionary.find(upper);
-
-//	if (it != dictionary.end()) return true;
-
-//	else return false;
-return true;
+	for (it = dictionary.begin(); it != dictionary.end(); ++it) {
+		if ((*it) == upper) return true;
+	}
+	
+	return false;
 }

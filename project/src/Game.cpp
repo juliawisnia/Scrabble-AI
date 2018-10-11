@@ -73,7 +73,7 @@ int main (int argc, char *argv[]) {
             std::string move;
             std::cin >> move;
 
-            std::string moveType = "";
+            std::string moveType = " ";
             for (size_t i = 0; i < move.size(); i++) {
                 moveType += std::toupper(move[i]);
             }

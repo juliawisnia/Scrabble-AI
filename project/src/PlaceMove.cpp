@@ -212,15 +212,7 @@ bool PlaceMove::allWordsValid(Board & board, Dictionary & dictionary) {
 		enterNewMove();
 		return false;
 	}
-
-	else {
-		std::vector<std::string>::iterator it;
-		size_t cnt = 0;
-		for (it = allWords.begin(); it != allWords.end(); ++it) {
-			allValidWords[cnt] = *it;
-		}
-		return true;
-	}
+	return true;
 }
 
 std::vector<std::string> PlaceMove::getValidWords() const {
