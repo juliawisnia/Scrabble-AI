@@ -84,8 +84,8 @@ int main (int argc, char *argv[]) {
             playerMove->execute(scrabbleBoard, bag, dictionary);
             console.printBoard(scrabbleBoard);
             console.printHand(*it);
-            std::cout << "Press enter to continue" << std::endl;
-            std::cin.clear();
+
+            std::cout << "Press [ENTER] to continue" <<std::endl;
             std::cin.ignore();
 
             if ((*it).getHandTiles().size() == 0) {

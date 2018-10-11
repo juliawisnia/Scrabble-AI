@@ -164,6 +164,7 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 		overlap = false;	
 	}
 
+	while (!allWordsValid(board, dictionary));
 	return;
 }
 
