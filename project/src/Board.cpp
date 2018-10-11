@@ -237,9 +237,13 @@ std::vector<std::pair<std::string, unsigned int>> Board::getPlaceMoveResults(con
 			else {
 				unsigned int lMult = getSquare(startColumn, currRow)->getLMult();
 				wMult *= getSquare(startColumn, currRow)->getWMult();
+				if (hand[k]->getLetter() == '?') {
+					k += 2;
+					mainWord += word[k];
+					continue;
+				}
 				mainScore += lMult*(hand[k]->getPoints());
 				mainWord += word[k];
-				if (hand[k]->getLetter() == '?') k++;
 				k++;
 			}
 
