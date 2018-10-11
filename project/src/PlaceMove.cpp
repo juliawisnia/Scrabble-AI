@@ -38,7 +38,7 @@ std::vector<Tile*> const & PlaceMove::tileVector () const {
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
-	isValidMove(board, dictionary);
+	//isValidMove(board, dictionary);
 	std::vector<std::pair<std::string, unsigned int>> result = board.getPlaceMoveResults(*this);
 	board.executePlaceMove(*this);
 
