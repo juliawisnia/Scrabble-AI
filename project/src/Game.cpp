@@ -56,15 +56,14 @@ int main (int argc, char *argv[]) {
     }
 
     // game loop
-    //size_t passes = 0;
-    //bool endPass = false;
-    //bool playerOutTiles = false;
+    size_t passes = 0;
+    bool endPass = false;
+    bool playerOutTiles = false;
     ConsolePrinter console;
-    //Player* finish;
+    Player* finish = nullptr;
 
-   // while (passes != numPlayers && bag.tilesRemaining() > 0) {
-        //passes = 0;
-        for (size_t i = 0; i < 10; i++) {
+    while(passes != numPlayers && bag.tilesRemaining() > 0) {
+        passes = 0;
         std::vector<Player>::iterator it;
         for (it = players.begin(); it != players.end(); ++it) {
             console.printBoard(scrabbleBoard);
@@ -80,94 +79,92 @@ int main (int argc, char *argv[]) {
             }
 
             Move * playerMove = Move::parseMove(moveType, (*it));
+            if (moveType == "PASS") passes++;
+
             playerMove->execute(scrabbleBoard, bag, dictionary);
             console.printBoard(scrabbleBoard);
             console.printHand(*it);
             std::cout << "Press enter to continue" << std::endl;
             std::cin.clear();
             std::cin.ignore();
-            continue;
+
+            if ((*it).getHandTiles().size() == 0) {
+                playerOutTiles = true;
+                finish = &(*it);
+                break;
+            }
+
+            if (passes >= numPlayers) {
+                endPass = true;
+                break;
+            }
         }
-    }
-    return 0;
-}
 
- /*       if ((*it).getHandTiles().size() == 0) {
-            playerOutTiles = true;
-            finish = &(*it);
-            break;
-        }
-
-        if (passes >= numPlayers) {
-            endPass = true;
-            break;
-        }*/
-/*
-    unsigned int sumTilesRemaining = 0;
-    std::vector<Player>::iterator it;
-    for (it = players.begin(); it != players.end(); ++it) {
-        std::set<Tile*> remaining = (*it).getHandTiles();
-        std::set<Tile*>::iterator scoreIt;
-        for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
-            sumTilesRemaining += (*scoreIt)->getPoints();
-        }
-    }
-
-    if (playerOutTiles) {
-        std::cout << "Player out of tiles" << std::endl;*/
-      /*  unsigned int finishScore = 0;
-        std::set<std::pair<std::string, unsigned int>> finalScores;
-
-        std::vector<Player>::iterator it;
-        for (it = players.begin(); it != players.end(); ++it) {
-            unsigned int finalScore = (*it).getScore();
-            std::set<Tile*> remaining = (*it).getHandTiles();
+        unsigned int sumTilesRemaining = 0;
+        std::vector<Player>::iterator playerIt;
+        for (playerIt = players.begin(); playerIt != players.end(); ++playerIt) {
+            std::set<Tile*> remaining = (*playerIt).getHandTiles();
             std::set<Tile*>::iterator scoreIt;
-
             for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
                 sumTilesRemaining += (*scoreIt)->getPoints();
             }
-
-            finishScore += sumTilesRemaining;
-            finalScore -= sumTilesRemaining;
-            std::string name = (*it).getName();
-            std::pair <std::string, unsigned int> add;
-            add.first = name;
-            add.second = finalScore;
-            if (&(*it) != finish) finalScores.insert(add);
-            else finishScore -= sumTilesRemaining;
         }
 
-        std::pair <std::string, unsigned int> addFinal;
-        addFinal.first = finish->getName();
-        addFinal.second = finishScore;
-        finalScores.insert(addFinal);
+        if (playerOutTiles) {
+            std::cout << "Player out of tiles" << std::endl;
+            unsigned int finishScore = 0;
+            std::set<std::pair<std::string, unsigned int>> finalScores;
 
-        std::set<std::pair<std::string, unsigned int>>::iterator it2;
-        std::cout << "Winner: ";
-        for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
-            std::cout << it2->first << " with " << it2->second << "points." << std::endl;
-        }*/
-  /*  }
+            std::vector<Player>::iterator it;
+            for (it = players.begin(); it != players.end(); ++it) {
+                unsigned int finalScore = (*it).getScore();
+                std::set<Tile*> remaining = (*it).getHandTiles();
+                std::set<Tile*>::iterator scoreIt;
 
-    if (endPass) {*/
-      /*  std::vector<Player>::iterator it;
-        std::set<std::pair<std::string, unsigned int>> results;
-        for (it = players.begin(); it != players.end(); ++it) {
-            std::pair<std::string, unsigned int> add;
-            add.first = it->getName();
-            add.second = it->getScore();
-            results.insert(add);
+                for (scoreIt = remaining.begin(); scoreIt != remaining.end(); ++scoreIt) {
+                    sumTilesRemaining += (*scoreIt)->getPoints();
+                }
+
+                finishScore += sumTilesRemaining;
+                finalScore -= sumTilesRemaining;
+                std::string name = (*it).getName();
+                std::pair <std::string, unsigned int> add;
+                add.first = name;
+                add.second = finalScore;
+                if (&(*it) != finish) finalScores.insert(add);
+                else finishScore -= sumTilesRemaining;
+            }
+
+            std::pair <std::string, unsigned int> addFinal;
+            addFinal.first = finish->getName();
+            addFinal.second = finishScore;
+            finalScores.insert(addFinal);
+
+            std::set<std::pair<std::string, unsigned int>>::iterator it2;
+            std::cout << "Winner: ";
+            for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
+                std::cout << it2->first << " with " << it2->second << "points." << std::endl;
+            }
         }
 
-        std::set<std::pair<std::string, unsigned int>> finalScores;
-        std::set<std::pair<std::string, unsigned int>>::iterator it2;
-        std::cout << "Winner: ";
-        for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
-            std::cout << it2->first << " with " << it2->second << "points." << std::endl;
-        }*/
-     /*   std::cout << "Passes" << std::endl;
+        if (endPass) {
+            std::vector<Player>::iterator it;
+            std::set<std::pair<std::string, unsigned int>> results;
+            for (it = players.begin(); it != players.end(); ++it) {
+                std::pair<std::string, unsigned int> add;
+                add.first = it->getName();
+                add.second = it->getScore();
+                results.insert(add);
+            }
 
-    }
+            std::set<std::pair<std::string, unsigned int>> finalScores;
+            std::set<std::pair<std::string, unsigned int>>::iterator it2;
+            std::cout << "Winner: ";
+            for (it2 = finalScores.begin(); it2 != finalScores.end(); ++it2) {
+                std::cout << it2->first << " with " << it2->second << "points." << std::endl;
+            }
 
-    else std::cout << "More cases to take care of" <<std::endl;*/
+        }
+     }
+    return 0;
+}
