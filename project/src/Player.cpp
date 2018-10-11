@@ -109,9 +109,7 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 			std::set<Tile*>::iterator it;
 			for (it = Hand.begin(); it != Hand.end(); ++it) {
 				if (afterBlank) {
-					erase.erase(outerIt);
-					afterBlank = false;
-					break;
+					continue;
 				}
 				if ((*outerIt)->getLetter() == '?') afterBlank = true;
 				
@@ -122,15 +120,19 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 			}
 		}
 	}
-
-	for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
-		std::set<Tile*>::iterator it;
-		for (it = Hand.begin(); it != Hand.end(); ++it) {
-			if ((*outerIt) == (*it))
-			Hand.erase(it);
-			break;
+	
+	else {
+		erase = takeTiles(move, false);
+		for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
+			std::set<Tile*>::iterator it;
+			for (it = Hand.begin(); it != Hand.end(); ++it) {
+				if ((*outerIt) == (*it))
+				Hand.erase(it);
+				break;
+			}
 		}
 	}
+
 }
 
 void Player::addTiles (std::vector<Tile*> const & tilesToAdd) {
