@@ -59,7 +59,7 @@ void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	std::cout << "You earned " << moveScore << " points on this turn." << std::endl;
 	std::cout << "Your total score is now: " << player->score << std::endl;
 
-	//player->eraseTilesFromHand(word, true);
+	player->eraseTilesFromHand(word, true);
 
 	std::vector<Tile*> newTiles = bag.drawTiles(word.size());
 	std::vector<Tile*>::iterator tileIt;

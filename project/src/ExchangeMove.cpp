@@ -12,12 +12,12 @@ ExchangeMove::ExchangeMove(std::string tileString, Player * p) {
 
 void ExchangeMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	// will query user until the move is valid
-	//isValidMove(bag);
+	isValidMove(bag);
 	bool move = false;
 	std::vector<Tile*> bagTiles;
 	bagTiles = player->takeTiles(exchangeTiles, move);
 	bag.addTiles(bagTiles);
-	//player->eraseTilesFromHand(exchangeTiles, false);
+	player->eraseTilesFromHand(exchangeTiles, false);
 
 	std::vector<Tile*> newTiles = bag.drawTiles(exchangeTiles.size());
 	std::vector<Tile*>::iterator tileIt;

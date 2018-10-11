@@ -91,7 +91,6 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 					break;
 				}
 				take.push_back((*it));
-				Hand.erase(it);
 				break;
 			}
 		}
