@@ -40,7 +40,7 @@ bool Dictionary::isLegalWord (std::string & word) const {
 	std::set<std::string>::iterator it;
 	it = dictionary.find(word);
 
-	if (it == dictionary.end()) return false;
+	if (it != dictionary.end()) return true;
 
-	else return true;
+	else return false;
 }

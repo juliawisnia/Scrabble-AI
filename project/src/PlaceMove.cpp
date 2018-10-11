@@ -38,7 +38,7 @@ std::vector<Tile*> const & PlaceMove::tileVector () const {
 }
 
 void PlaceMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
-	//isValidMove(board, dictionary);
+	isValidMove(board, dictionary);
 	std::vector<std::pair<std::string, unsigned int>> result = board.getPlaceMoveResults(*this);
 	board.executePlaceMove(*this);
 
@@ -125,9 +125,11 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 	// must be touching another square 
 	while (!adjacent) {
 		if (horizontal) {
-			// if it's coming before or after a word
+			// if it's coming after a word
 			if (startColumn - 1 > 0 && board.getSquare(startRow, startColumn - 1)->isOccupied()) adjacent = true;
-			if (startColumn + word.size() + 1 <= cols && board.getSquare(startRow, startColumn + word.size() + 1)->isOccupied()) adjacent = true;
+
+			// if it's coming before a word
+			if (startColumn + word.size() <= cols && board.getSquare(startRow, startColumn + word.size())->isOccupied()) adjacent = true;
 
 			for (size_t i = startColumn; i < startColumn + word.size(); i++) {
 				if (board.getSquare(startRow + 1, i)->isOccupied() || board.getSquare(startRow - 1, i)->isOccupied()) adjacent = true;
@@ -135,9 +137,10 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 		}
 
 		else {
-			// if it's coming before or after a word
+			// if it's below a word
 			if (startRow - 1 > 0 && board.getSquare(startRow - 1, startColumn)->isOccupied()) adjacent = true;
-			if (startRow + 1 + word.size() <= rows && board.getSquare(startRow + 1 + word.size(), startColumn)->isOccupied()) adjacent = true;
+			// if it's above a word
+			if (startRow + word.size() <= rows && board.getSquare(startRow + word.size(), startColumn)->isOccupied()) adjacent = true;
 
 			for (size_t j = startColumn; j < startColumn + word.size(); j++) {
 				if (board.getSquare(j, startColumn + 1)->isOccupied() || board.getSquare(j, startColumn - 1)->isOccupied()) adjacent = true;
@@ -181,8 +184,6 @@ void PlaceMove::isValidMove (Board & board, Dictionary & dictionary) {
 		overlap = false;	
 	}
 
-	while(!allWordsValid (board, dictionary)) {}
-
 	return;
 }
 
@@ -225,7 +226,7 @@ std::vector<std::string> PlaceMove::getValidWords() const {
 }
 
 void PlaceMove::enterNewMove() {
-	std::cout << "Enter new move: " << std::endl;
+	std::cout << "Enter new move in the format: <dir> <row> <col> <string of tiles>: " << std::endl;
 
 	char dir;
 	std::cin.clear();

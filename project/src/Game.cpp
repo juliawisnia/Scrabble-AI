@@ -43,6 +43,7 @@ int main (int argc, char *argv[]) {
 
     while (numPlayers > 8 || numPlayers < 1) {
         std::cout << "Enter a valid number of players (1-8): ";
+        std::cin.clear();
         std::cin >> numPlayers;
     }
 
