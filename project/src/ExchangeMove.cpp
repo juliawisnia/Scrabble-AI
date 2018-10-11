@@ -12,14 +12,15 @@ ExchangeMove::ExchangeMove(std::string tileString, Player * p) {
 
 void ExchangeMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 	// will query user until the move is valid
-	isValidMove(bag);
+	while (!isValidMove(bag)) {}
 	bool move = false;
 	std::vector<Tile*> bagTiles;
 	bagTiles = player->takeTiles(exchangeTiles, move);
 	bag.addTiles(bagTiles);
 	player->eraseTilesFromHand(exchangeTiles, false);
 
-	std::vector<Tile*> newTiles = bag.drawTiles(exchangeTiles.size());
+	size_t i = exchangeTiles.size();
+	std::vector<Tile*> newTiles = bag.drawTiles(i);
 	std::vector<Tile*>::iterator tileIt;
 
 	for (tileIt = newTiles.begin(); tileIt != newTiles.end(); ++tileIt) {
@@ -28,13 +29,16 @@ void ExchangeMove::execute(Board & board, Bag & bag, Dictionary & dictionary) {
 
 }
 
-void ExchangeMove::isValidMove (Bag & bag) {
-	while (!player->hasTiles(exchangeTiles, false)) {
+bool ExchangeMove::isValidMove (Bag & bag) {
+	if (!player->hasTiles(exchangeTiles, false)) {
 		std::cout << "Error: you don't have the necessary tiles." << std::endl;
 		std::cout << "Enter new tiles to exchange: " << std::endl;
 
+		std::cin.clear();
 		std::cin >> exchangeTiles;
+		return false;
 	}
+	return true;
 }
 
 std::string ExchangeMove::getString() const {
