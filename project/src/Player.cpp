@@ -109,6 +109,7 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 			if (afterBlank) {
 				erase.erase(outerIt);
 				afterBlank = false;
+				break;
 			}
 			if ((*outerIt)->getLetter() == '?') afterBlank = true;
 		}
@@ -119,6 +120,7 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 		for (it = Hand.begin(); it != Hand.end(); ++it) {
 			if ((*outerIt) == (*it))
 			Hand.erase(it);
+			break;
 		}
 	}
 }
