@@ -81,13 +81,15 @@ std::vector<Tile*> Player::takeTiles (std::string const & move, bool resolveBlan
 
 	if (!hasTiles(move, resolveBlanks)) return take;
 
-	// EXCHANGE
 	for (size_t i = 0; i < move.size(); i++) {
 		std::set<Tile*>::iterator it;
 		for (it = Hand.begin(); it != Hand.end(); ++it) {
 			if ((*it)->getLetter() == tileString[i]) {
 				// if it's a PLACEMOVE and you encounter a blank, don't look for next letter in Hand
-				if (resolveBlanks && tileString [i] == '?') i += 1;
+				if (resolveBlanks && tileString[i] == '?') {
+					i += 1;
+					break;
+				}
 				take.push_back((*it));
 				break;
 			}

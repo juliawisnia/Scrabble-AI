@@ -262,6 +262,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 	size_t row = m.getRow();
 	size_t col = m.getColumn();
 	bool horizontal = m.getOrientation();
+	std::string inputWord = m.getString();
 
 	size_t cnt = 0;
 	size_t letters = place.size();
@@ -275,7 +276,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 			// if you are at a blank space on the board
 			else {
 				if (place[cnt]->getLetter()=='?') {
-					place[cnt]->useAs(place[cnt + 1]->getLetter());
+					place[cnt]->useAs(inputWord[cnt + 1]);
 					getSquare(col, row)->placeTile(place[cnt]);
 					cnt+=2;
 					continue;
@@ -301,7 +302,7 @@ void Board::executePlaceMove (const PlaceMove & m) {
 			// if you are at a blank space on the board
 			else {
 				if (place[cnt]->getLetter()=='?') {
-					place[cnt]->useAs(place[cnt + 1]->getLetter());
+					place[cnt]->useAs(inputWord[cnt + 1]);
 					getSquare(col, row)->placeTile(place[cnt]);
 					cnt+=2;
 					continue;
