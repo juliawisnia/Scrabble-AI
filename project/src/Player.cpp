@@ -102,8 +102,13 @@ void Player::eraseTilesFromHand(std::string const & move, bool resolveBlanks) {
 	std::vector<Tile*>::iterator outerIt;
 
 	if (resolveBlanks) {
+		bool afterBlank = false;
 		for (outerIt = erase.begin(); outerIt != erase.end(); ++outerIt) {
-			if ((*outerIt)->getLetter() == '?') erase.erase(outerIt);
+			if (afterBlank) {
+				erase.erase(outerIt);
+				afterBlank = false;
+			}
+			if ((*outerIt)->getLetter() == '?') afterBlank = true;
 		}
 	}
 
