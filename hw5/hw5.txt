@@ -1,0 +1,16 @@
+Problem 2
+Array: [1, 7, 3, 12, 5, 2, 4, 6, 8, 10, 11, 9]
+I solved this problem by starting off with a blank array,
+and always taking the pivot to be the smallest element I could.
+However, because the median ensures that the pivot will never
+be the true smallest elememt, I always assumed that as more
+and more arrays were broken up, the first and middle array
+elements were the two smallest remaining elements. So, 
+array[0] = 1, and array[5] = 2, because those are the first
+elements being compared by the median to be the pivot.  Because
+they are the smallest, each time QuickSort runs, it will have 
+to move all other n - 2 elements to the right side of the "wall,"
+ensuring that the maximum swaps take place.  The wall was moved
+past these two elements, and I did the same process over with
+the other n - 2 elements, the first being the smallest and middle
+second smallest.
