@@ -8,35 +8,32 @@ int main() {
     std::cin >> read;
     std::stack<char> stk;
 
+    if (read.size() % 2 != 0) {
+        std::cout << "not rolled up" << std::endl;
+        return 0;
+    }
+
     for (size_t i = 0; i < read.size(); i++) {
-        if (read[i] != 'n' && read[i] != 'e' && read[i] != 'w' && read[i] != 's') {
+        if (read[i] != 'n' && read[i] != 's' && read[i] != 'e' && read[i] != 'w') {
             std::cout << "invalid" << std::endl;
             return -1;
         }
 
-        stk.push(read[i]);
+        if ((i + 1 < read.size()) && ((i == 'n' && i + 1 == 's') || (i == 's' && i + 1 == 'n') || (i == 'w' && i + 1 == 'e') || (i == 'e' && i + 1 == 'w'))) {
+            i++;
+        }
 
-        if ((i - 1) >= 0) {
-            int j = i - 1;
-            if ((read[i] == 'n' && read[j] == 's') || (read[i] == 's' && read[j] == 'n') || (read[i] == 'w' && read[j] == 'e') || (read[i] == 'e' && read[j] == 'w')) {
-                stk.pop();
+        else {
+            char prev = stk.top();
+            if (!stk.empty() && ((i == 'n' && prev == 's') || (i == 's' && prev == 'n') || (i == 'w' && prev == 'e') || (i == 'e' && prev== 'w'))) {
                 stk.pop();
             }
+            else stk.push(i);
         }
     }
 
-    char dir, dir2;
-    while (!stk.empty()) {
-        dir = stk.top();
-        dir2 = stk.top();
-        if ((dir == 's' && dir2 != 'n') || (dir == 'n' && dir2 != 's') || (dir == 'w' && dir2 != 'e') || (dir == 'e' && dir2 != 'w')) {
-            std::cout << "not rolled up " << std::endl; 
-            return 0;
-        }
-        stk.pop();
-        stk.pop();
-    }
-
-    std::cout << "rolled up" << std::endl;
+    if (stk.empty()) std::cout << "rolled up" << std::endl;
+    else std::cout << "not rolled up" << std::endl;
+    
     return 0;
 }
