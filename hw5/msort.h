@@ -31,14 +31,19 @@ template <class T, class Comparator>
 void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
     if (low < high) {
         int m = floor((high + low)/k);
-        std::vector<int> index(((high + low)/k)*2);
+        std::vector<int> index(myArray.size());
+
         index[0] = low;
-        index[index.size() - 1] = high;
+
         for (size_t i = 1; i < myArray.size()/k; i++) {
             if (i % 2 == 0) index[i] = m*(i - 1) + 1;
             else index[i] = m*i;
         }
-        for (int i = 0; i < index.size(); i+=2) {
+
+        index.shrink_to_fit();
+        index[index.size() - 1] = high;
+
+        for (size_t i = 0; i < index.size() - 1; i+=2) {
             multMergeSort(myArray, k, index[i], index[i + 1], comp);
         }
         merge(myArray, low, high, m, comp);
