@@ -22,3 +22,22 @@ bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
     // if neither function has returned, the hypothesis is true
     return true;
 }
+
+int main() {
+    std::vector<std::pair<int, int> > grades;
+    std::pair<int, int> add (90, 90);
+    grades.push_back(add);
+    std::pair<int, int> add1 (80, 80);
+    grades.push_back(add1);
+    std::pair<int, int> add2 (60, 60);
+    grades.push_back(add2);
+    std::pair<int, int> add3 (50, 50);
+    grades.push_back(add3);
+    std::pair<int, int> add4 (70, 70);
+    grades.push_back(add4);
+
+    bool a = FatalistHypothesis (grades);
+    std::cout << a << std::endl;
+    return 0;
+
+}
