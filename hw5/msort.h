@@ -21,8 +21,8 @@ void merge (std::vector<T>& myArray, int l, int r, int m, Comparator comp) {
             k++;
         }
     }
-    for (int k = 0; k < r + l - 1; k++) {
-        myArray[k + 1] = temp[k];
+    for (int m = 0; m < r + 1 - l; m++) {
+        myArray[m + l] = temp[m];
     }
 
 }
@@ -32,7 +32,7 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
     if (low < high) {
         int m = floor((high + low)/k);
 
-        /*std::vector<int> index((high + low)/k);
+        std::vector<int> index((high + low)/k);
         index[0] = low;
         index[index.size() - 1] = high;
         for (size_t i = 1; i < index.size() - 1; i++) {
@@ -41,7 +41,7 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
         }
         for (int i = 0; i < index.size() - 1; i++) {
             multMergeSort(myArray, k, index[i], index[i + 1], comp);
-        }*/
+        }
         multMergeSort(myArray, 2, low, m, comp);
         multMergeSort(myArray, 2, m+1, high, comp);
         merge(myArray, low, high, m, comp);
