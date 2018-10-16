@@ -7,8 +7,8 @@ void DoStringCompare(const std::string& s1, const std::string& s2, Comparator co
 }
 
 int main() {
-    std::string s1 = "abc";
-    std::string s2 = "cba";
+    std::string s1 = "ghi";
+    std::string s2 = "pqr";
 
     NumStrComp comp;
 

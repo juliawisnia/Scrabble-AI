@@ -1,52 +1,24 @@
-#include <iostream>
-#include <vector>
-#include <stack>
-#include <cmath>
+#include "fatalist.h"
+#include "msort.h"
 
-void Merge(std::vector<std::pair<int, int> >* a, int l, int r, int m) {
-    int i = 1, j = m + 1, k = 0;
-    std::vector<std::pair<int, int> > temp;
-    while (i <=m && (j > r || a->at(i).first <= a->at(j).first)) {
-        if (i <= m || j <= r) {
-            temp[k] = a->at(i);
-            i++;
-            k++;
-        }
-        else {
-            temp.at(k).first = a->at(j).first;
-            temp.at(k).second = a->at(j).second;
-        }
-        for (k = 0; k < r + l - 1; k++) {
-           // if (temp.at(k).second > temp.at(k + 1).second) return false;
-            a->at(k + 1) = temp.at(k);
-        }
+bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
+    // compares CS104 grades
+    FirstComp compA;
+    // compares CS170 grades 
+    SecondComp compB;
+
+    // first sort by CS104 grades, now check that CS170 grades are strictly greater
+    mergeSort(grades, 2, compA);
+    for (size_t i = 0; i < grades.size() - 1; i++) {
+        if (grades[i].second >= grades[i + 1].second) return false;
     }
-}
 
-void MergeSort(std::vector<std::pair<int, int> >& a, int l, int r) {
-    if (l < r) {
-        int m = floor((l+r)/2);
-        MergeSort(a, l, m);
-        MergeSort(a, m+1, r);
-        Merge(&a, l, r, m);
+    // now sort by CS170 grades, and check that CS104 grades are strictly greater
+    mergeSort(grades, 2, compB);
+    for (size_t j = 0; j < grades.size() - 1; j++) {
+        if (grades[j].first >= grades[j + 1].second) return false;
     }
-}
 
-//bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {}
-int main() {
-    std::vector<std::pair<int, int> > grades;
-
-    std::pair<int, int> add(80, 90);
-    grades.push_back(add);
-
-    std::pair<int, int> add1(70, 90);
-    grades.push_back(add1);
-
-    std::pair<int, int> add2(75, 90);
-    grades.push_back(add2);
-
-    MergeSort(grades, 0, 2);
-
-   // for (int i = 0; i < 3; i++) std::cout << grades.at(i).first << std::endl;
-
+    // if neither function has returned, the hypothesis is true
+    return true;
 }
