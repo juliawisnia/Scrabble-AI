@@ -16,7 +16,7 @@ void merge (std::vector<T>& myArray, int l, int r, int m, Comparator comp) {
             k++;
         }
         else {
-            temp[k] = myArray[i];
+            temp[k] = myArray[j];
             j++;
             k++;
         }
