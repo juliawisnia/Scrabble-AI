@@ -30,12 +30,14 @@ void merge (std::vector<T>& myArray, int l, int r, int m, Comparator comp) {
 template <class T, class Comparator>
 void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
     if (low < high) {
-        int m = ceil((high + low)/k);
-        int prevHigh = -1;
-        for (int i = 0; i < (high - low)/k; i++) {
+        int m = floor((high + low)/k);
+        //int prevHigh = -1;
+       /* for (int i = 0; i < (high - low)/k; i++) {
             multMergeSort(myArray, k, prevHigh + 1, m*i, comp);
             prevHigh = m*i;
-        }
+        }*/
+        multMergeSort(myArray, 2, low, m, comp);
+        multMergeSort(myArray, 2, m+1, high, comp);
         merge(myArray, low, high, m, comp);
     }
 }
