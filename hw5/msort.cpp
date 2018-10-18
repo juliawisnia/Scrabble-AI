@@ -9,6 +9,7 @@ int main() {
     array.push_back("abc");
     array.push_back("mno");
     array.push_back("jkl");
-    mergeSort(array, 3, comp);
+    array.push_back("stu");
+    mergeSort(array, 2, comp);
     for (size_t i = 0; i < array.size(); i++) std::cout << array[i] << std::endl;
 }
