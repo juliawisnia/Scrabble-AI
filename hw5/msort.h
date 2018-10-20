@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <vector>
 #include <queue>
-#include "functor.h"
 
 template <class T, class Comparator>
 void merge (std::vector<T>& myArray, std::vector<int>& index, int m, Comparator comp) {
@@ -34,6 +33,7 @@ void merge (std::vector<T>& myArray, std::vector<int>& index, int m, Comparator 
 
 template <class T, class Comparator>
 void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
+<<<<<<< HEAD
     if (low < high) {
         int rem = -1;
         if (myArray.size() % k != 0) rem = myArray.size() % k;
@@ -54,8 +54,42 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
  
         for (size_t i = 0; i < index.size() - 2; i+=2) {
             multMergeSort(myArray, k, index[i], index[i + 1], comp);
+=======
+    if (low <= high) {
+        int rem = 0;
+        //if ((high - low) % k != 0) rem = (high- - low) % k;
+        
+        int m = (high-low + 1)/k;
+
+        std::vector<int> index;
+
+        for (size_t i = 0; i < k; i++) {
+            index.push_back(m*i);
         }
-        merge(myArray, index, m, comp);
+
+
+        // int cnt = rem;
+        // for (size_t j = 0; j < index.size(); j++) {
+        //     if (cnt != 0 && index[j] != 0) {
+        //     	index[j] -= 1;
+        //     	cnt--;
+        //     }
+        // }
+        for (size_t i = 0; i < index.size(); i++) std::cout << index[i] << " ";
+ 			std::cout << std::endl;
+
+        for(int i = 0; i < index.size() - 1; i++){
+        	std::cout << "current start is " << index[i] << "and current end is " << index[i+1] -1 << std::endl;
+			multMergeSort(myArray, k, index[i], index[i+1]-1, comp);
+>>>>>>> fdf692fa3e89b785bfc9a9f31b2c5230c9d50c2e
+        }
+
+     	//multMergeSort(myArray,k,index[index.size()-1],high,comp);
+ 		
+ 		//return;''
+        // multMergeSort(myArray, k, index[0], index[1], comp);
+        // multMergeSort(myArray, k, index[1]+1, index[2], comp);
+        //merge(myArray, index, m, comp);
     }
 }
 
