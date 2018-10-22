@@ -34,22 +34,22 @@ void merge (std::vector<T>& myArray, std::vector<int>& index, int m, Comparator 
 template <class T, class Comparator>
 void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
     if (low < high) {
-        std::cout << "Low: " << low << " " << "High: " << high << std::endl;
+        /*std::cout << "Low: " << low << " " << "High: " << high << std::endl;
         int rem = -1;
         if ((high - low) % k != 0) rem = (high - low) % k;
-        std::cout << "Rem: " << rem << std::endl;
+        std::cout << "Rem: " << rem << std::endl;*/
         
-        int m = (high - low - rem)/k;
-        std::cout << "m: " << m << std::endl;
+        int m = (high - low)/k;
+        //std::cout << "m: " << m << std::endl;
         
         std::vector<int> index;
 
-        for (size_t i = 0; i < k; i++) {
+        /*for (size_t i = 0; i < k; i++) {
             index.push_back(m*i);
         }
 
         for (size_t i = 0; i < index.size(); i++) std::cout << index[i] << " ";
-        std::cout << std::endl;
+        std::cout << std::endl;*/
 
       /*  for (int i = 0; i < index.size() - 1; i++) {
         	std::cout << "current start is " << index[i] << " and current end is " << index[i+1] - 1 << std::endl;
