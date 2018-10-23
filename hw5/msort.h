@@ -5,6 +5,7 @@
 #include <vector>
 #include <queue>
 #include <functional>
+#include <algorithm>
 
 // after split have a vector of vectors
 // recursive calls
@@ -28,9 +29,39 @@ void selectionSort(std::vector<T> sort, Comparator comp) {
 template <class T, class Comparator>
 void merge (std::vector<T>& myArray, std::vector<std::vector<T> >& subs, int m, Comparator comp) {
     std::vector<T> temp;
+    std::vector<T> head;
     for (size_t i = 0; i < subs.size(); i++) {
     	selectionSort(subs[i], comp);
+    	head.push_back(subs[i].top());
     }
+
+    while (!head.empty()) {
+		temp.push_back(min_element(head.begin(), head.end(), comp));
+		typename std::vector<T>::iterator it;
+		for (it = head.begin(); it != head.end(); ++it) {
+			if ((*it) == temp.top()) {
+				head.erase(it);
+				break;
+			}
+		}
+
+		typename std::vector<std::vector<T> >::iterator subIt;
+		for (subIt = subs.begin(); subIt != subs.end(); ++subIt) {
+			if ((*subIt).top() == head.top()) {
+				(*subIt).pop();
+				head.push_back(*subIt.top());
+				break;
+			}
+		}
+    }
+
+ 	for (size_t i = 0; i < temp.size(); i++) std::cout << temp[i] << " ";
+ 		std::cout << std::endl;
+
+    // while (something) {}
+
+
+
     // int low = index[0];
     // int high = index[index.size() - 1];
 
@@ -95,7 +126,7 @@ void multMergeSort(std::vector<T>& myArray, std::vector<T>& array, int k, int lo
 		for (size_t i = 0; i < subArrays.size(); i++) {
 			multMergeSort(myArray, subArrays[i], k, low, high, comp);
 		}
-		merge(myArray, subArrays, k, m, comp);
+		merge(myArray, subArrays, m, comp);
 	}
    //  if (low < high) {
    //      std::cout << "Low: " << low << " " << "High: " << high << std::endl;
