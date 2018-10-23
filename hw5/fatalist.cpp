@@ -11,19 +11,19 @@ bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
     // first sort by CS104 grades, now check that CS170 grades are strictly greater
     sort(grades.begin(), grades.end());
     for (size_t i = 0; i < grades.size() - 1; i++) {
-        if (grades[i].second >= grades[i + 1].second) return false;
+        if (grades[i].second > grades[i + 1].second) return false;
     }
 
     // now sort by CS170 grades, and check that CS104 grades are strictly greater
     sort(grades.begin(), grades.end(), sortSecond);
     for (size_t j = 0; j < grades.size() - 1; j++) {
-        if (grades[j].first >= grades[j + 1].first) return false;
+        if (grades[j].first > grades[j + 1].first) return false;
     }
 
     // if neither function has returned, the hypothesis is true
     return true;
 }
 
-// int main() {
-//     return 0;
-// }
+int main() {
+    return 0;
+}
