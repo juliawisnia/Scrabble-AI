@@ -5,7 +5,7 @@
 
 int main() {
     std::string read;
-    std::cin >> read;
+    getline(std::cin, read);
     std::stack<char> stk;
 
     for (size_t i = 0; i < read.size(); i++) {
