@@ -14,14 +14,16 @@ struct NumStrComp {
         
         for (size_t i = 0; i < lWord.size(); i++) {
             int curr = lWord[i];
-            if (curr > 64) curr -= 55;
-            else curr -= 48;
+            if (curr > 64 && curr < 91) curr -= 55;
+            else if (curr > 47 && curr < 58) curr -= 48;
+            else curr = 0;
             lSum += curr;
         }
         for (size_t j = 0; j < rWord.size(); j++) {
             int curr = rWord[j];
-            if (curr > 64) curr -= 55;
-            else curr -= 48;
+            if (curr > 64 && curr < 91) curr -= 55;
+            else if (curr > 47 && curr < 58) curr -= 48;
+            else curr = 0;
             rSum += curr;
         }
 
