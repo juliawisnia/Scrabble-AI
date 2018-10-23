@@ -8,6 +8,7 @@ bool sortSecond (std::pair<int, int> a, std::pair<int, int> b) {
 }
 
 bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
+    if (grades.size() == 0 || grades.size() == 1) return true;
     // first sort by CS104 grades, now check that CS170 grades are strictly greater
     sort(grades.begin(), grades.end());
     for (size_t i = 0; i < grades.size() - 1; i++) {
@@ -24,6 +25,6 @@ bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
     return true;
 }
 
-int main() {
-    return 0;
-}
+// int main() {
+//     return 0;
+// }
