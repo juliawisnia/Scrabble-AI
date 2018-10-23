@@ -24,7 +24,3 @@ bool FatalistHypothesis(std::vector<std::pair<int,int> > grades) {
     // if neither function has returned, the hypothesis is true
     return true;
 }
-
-// int main() {
-//     return 0;
-// }
