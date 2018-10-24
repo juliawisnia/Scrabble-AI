@@ -55,7 +55,8 @@ void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index,
 }
 
 template <class T, class Comparator>
-void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
+void multMergeSort(std::vector<T>& myArray, int k, int low, int high,
+				 Comparator comp) {
 	if (low < high) {
 		// vector of pairs to hold indicies
 		std::vector<std::pair<int, int> > indicies;
