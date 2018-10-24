@@ -14,10 +14,10 @@
 template <class T, class Comparator>
 void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) { 
     int minIndex = 0;
-    int n = end - start + 1; 
-    for (int i = start; i < n - 1; i++) { 
+    //int n = end - start + 1; 
+    for (int i = start; i < end + 1; i++) { 
 	    minIndex = i; 
-	    for (int j = i + 1; j < n; j++) {
+	    for (int j = i + 1; j < end + 1; j++) {
 	    	if (comp(array[j], array[minIndex])) 
 	        	minIndex = j; 
 	    }
@@ -28,14 +28,14 @@ void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) {
 
 template <class T, class Comparator>
 void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index, Comparator comp) {
-	int low = myArray[index[0].first];
-	int high = myArray[index[index.size() - 1].second];
+	int low = index[0].first;
+	int high = index[index.size() - 1].second;
 
 	std::vector<T> temp;
-	T min = myArray[index[0].first];
 
 	while (!index.empty()) {
 		// find min element
+		T min = myArray[index[0].first];
 		int minIndex = 0;
 		for (size_t i = 1; i < index.size(); i++) {
 			if (!comp(min, myArray[index[i].first])) {
@@ -46,14 +46,13 @@ void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index, C
 
 		temp.push_back(myArray[index[minIndex].first]);
 		(index[minIndex].first)++;
-		if (index[minIndex].first >= index[minIndex].second) {
+
+		if (index[minIndex].first > index[minIndex].second) {
 			index.erase(index.begin() + minIndex);
 		}
 	}
 
 	for (int k = 0; k < high + 1 - low; k++) myArray[k+low] = temp[k];
-	for (size_t i = 0; i < temp.size(); i++) std::cerr << temp[i] << " ";
-		std::cerr << std::endl;
 }
 
 template <class T, class Comparator>
@@ -64,7 +63,7 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
 
 		for (int i = 0; i < k; i++) {
 			if (i == 0) {
-				std::pair<int, int> addFirst(low, low + m);
+				std::pair<int, int> addFirst(low, low + m - 1);
 				indicies.push_back(addFirst);
 			}
 			else if (i == k - 1) {
@@ -77,18 +76,14 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
 			}
         }
 
-        std::cerr << "Indicies: ";
-        for (size_t i = 0; i < indicies.size(); i++) std::cerr << "[" << indicies[i].first << ", " << indicies[i].second << "]" << " ";
-        	std::cerr << std::endl;
         for (size_t i = 0; i < indicies.size(); i++) {
-        	if (indicies[i].second - indicies[i].first < k) {
+        	if (indicies[i].second - indicies[i].first  + 1 < k) {
         		selectionSort(myArray, indicies[i].first, indicies[i].second, comp);
         	}
         	else {
         		multMergeSort(myArray, k, indicies[i].first, indicies[i].second, comp);
         	}
         }
-        std::cerr << "Merge" << std::endl;
         merge(myArray, indicies, comp);
 
 	}
