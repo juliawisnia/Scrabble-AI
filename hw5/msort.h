@@ -5,11 +5,6 @@
 #include <vector>
 #include <queue>
 #include <functional>
-
-// vector of pairs storing first and last element
-// call recursively while l < r
-// call merge at the end when you should just have one
-// in merge, advance pointer until pair.first == pair.second
  
 template <class T, class Comparator>
 void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) { 
@@ -85,7 +80,6 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
         	}
         }
         merge(myArray, indicies, comp);
-
 	}
 }
 
