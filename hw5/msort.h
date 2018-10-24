@@ -5,161 +5,98 @@
 #include <vector>
 #include <queue>
 #include <functional>
-#include <algorithm>
 
-// after split have a vector of vectors
-// recursive calls
-// still have vector of vectors, last vector has all remaining
-// always need k pieces, call mergeSort on each subarray, now each subarray is sorted
-// call merge, whole outer vector is sorted
+// vector of pairs storing first and last element
+// call recursively while l < r
+// call merge at the end when you should just have one
+// in merge, advance pointer until pair.first == pair.second
+ 
 template <class T, class Comparator>
-void selectionSort(std::vector<T> sort, Comparator comp) { 
-    int minIndex = 0; 
-    for (int i = 0; i < sort.size() - 1; i++) { 
+void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) { 
+    int minIndex = 0;
+    int n = end - start + 1; 
+    for (int i = start; i < n - 1; i++) { 
 	    minIndex = i; 
-	    for (int j = i + 1; j < sort.size(); j++) {
-	    	if (comp(sort[j], sort[minIndex])) 
+	    for (int j = i + 1; j < n; j++) {
+	    	if (comp(array[j], array[minIndex])) 
 	        	minIndex = j; 
 	    }
 	   
-	    swap(&sort[minIndex], &sort[i]); 
+	    std::swap(array[minIndex], array[i]); 
 	} 
-} 
-
-template <class T, class Comparator>
-void merge (std::vector<T>& myArray, std::vector<std::vector<T> >& subs, int m, Comparator comp) {
-    std::vector<T> temp;
-    std::vector<T> head;
-    for (size_t i = 0; i < subs.size(); i++) {
-    	selectionSort(subs[i], comp);
-    	head.push_back(subs[i].top());
-    }
-
-    while (!head.empty()) {
-		temp.push_back(min_element(head.begin(), head.end(), comp));
-		typename std::vector<T>::iterator it;
-		for (it = head.begin(); it != head.end(); ++it) {
-			if ((*it) == temp.top()) {
-				head.erase(it);
-				break;
-			}
-		}
-
-		typename std::vector<std::vector<T> >::iterator subIt;
-		for (subIt = subs.begin(); subIt != subs.end(); ++subIt) {
-			if ((*subIt).top() == head.top()) {
-				(*subIt).pop();
-				head.push_back(*subIt.top());
-				break;
-			}
-		}
-    }
-
- 	for (size_t i = 0; i < temp.size(); i++) std::cout << temp[i] << " ";
- 		std::cout << std::endl;
-
-    // while (something) {}
-
-
-
-    // int low = index[0];
-    // int high = index[index.size() - 1];
-
-    // // priority queue acts as pointers, only stores myArray at each index
-    // // & increments the index as we merge
-    // std::priority_queue<T, std::vector<T>, std::greater<int>> pq;
-    // for (size_t i = 0; i < index.size(); i++) {
-    //     pq.emplace(myArray[index[i]]);
-    // }
-
-    // while (!pq.empty()) {
-    //     T smallest = pq.top();
-    //     std::cout << "smallest: " << smallest << std::endl;
-    //     temp.push_back(smallest);
-    //     pq.pop();
-    //     for (size_t j = 0; j < index.size(); j++) {
-    //         if (myArray[index[j]] == smallest) {
-    //             index[j]++;
-    //             // if one of the indicies reaches the end of that segment, break
-    //             if (index[j] % m == 0) break;
-    //             pq.emplace(myArray[index[j]]);
-    //             std::cout << "break" << std::endl;
-    //             break;
-    //         }
-    //     }
-
-    // }
-    // std::cout << std::endl;
-
-    // // if (myArray.size() == temp.size()) myArray = temp;
-
-    // //else {
-    // 	for (int i = 0; i < high - low + 1; i++) myArray[i+low] = temp[i];
-    // //}
-
 }
 
 template <class T, class Comparator>
-void multMergeSort(std::vector<T>& myArray, std::vector<T>& array, int k, int low, int high, Comparator comp) {
-	if (array.size() >= k) {
-		std::vector<std::vector<T> > subArrays;
-		int m = (array.size())/k;
-		int rem = (array.size()) % k;
+void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index, Comparator comp) {
+	int low = myArray[index[0].first];
+	int high = myArray[index[index.size() - 1].second];
+
+	std::vector<T> temp;
+	T min = myArray[index[0].first];
+
+	while (!index.empty()) {
+		// find min element
+		int minIndex = 0;
+		for (size_t i = 1; i < index.size(); i++) {
+			if (!comp(min, myArray[index[i].first])) {
+				min = myArray[index[i].first];
+				minIndex = i;
+			}
+		}
+
+		temp.push_back(myArray[index[minIndex].first]);
+		(index[minIndex].first)++;
+		if (index[minIndex].first >= index[minIndex].second) {
+			index.erase(index.begin() + minIndex);
+		}
+	}
+
+	for (int k = 0; k < high + 1 - low; k++) myArray[k+low] = temp[k];
+	for (size_t i = 0; i < temp.size(); i++) std::cerr << temp[i] << " ";
+		std::cerr << std::endl;
+}
+
+template <class T, class Comparator>
+void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
+	if (low < high) {
+		std::vector<std::pair<int, int> > indicies;
+		int m = (high - low + 1)/k;
 
 		for (int i = 0; i < k; i++) {
-			std::vector<T> add;
-			for (int j = m*i; j < m*(i+1); j++) {
-				add.push_back(myArray[j]);
+			if (i == 0) {
+				std::pair<int, int> addFirst(low, low + m);
+				indicies.push_back(addFirst);
 			}
-			subArrays.push_back(add);
-		}
-
-		if (rem > 0) {
-			std::vector<T> addLast = subArrays.top();
-			subArrays.pop();
-			for (int i = k*m; i < k*m + rem; i++) {
-				addLast.push_back(myArray[i]);
+			else if (i == k - 1) {
+				std::pair<int, int> addLast(indicies.back().second + 1, high);
+				indicies.push_back(addLast);
 			}
-			subArrays.push_back(addLast);
-		}
+			else {
+				std::pair<int, int> add(indicies.back().second + 1, indicies.back().second + m);
+				indicies.push_back(add);
+			}
+        }
 
-		for (size_t i = 0; i < subArrays.size(); i++) {
-			multMergeSort(myArray, subArrays[i], k, low, high, comp);
-		}
-		merge(myArray, subArrays, m, comp);
+        std::cerr << "Indicies: ";
+        for (size_t i = 0; i < indicies.size(); i++) std::cerr << "[" << indicies[i].first << ", " << indicies[i].second << "]" << " ";
+        	std::cerr << std::endl;
+        for (size_t i = 0; i < indicies.size(); i++) {
+        	if (indicies[i].second - indicies[i].first < k) {
+        		selectionSort(myArray, indicies[i].first, indicies[i].second, comp);
+        	}
+        	else {
+        		multMergeSort(myArray, k, indicies[i].first, indicies[i].second, comp);
+        	}
+        }
+        std::cerr << "Merge" << std::endl;
+        merge(myArray, indicies, comp);
+
 	}
-   //  if (low < high) {
-   //      std::cout << "Low: " << low << " " << "High: " << high << std::endl;
-   //      //int rem = (high - low + 1) % k;
-   //      //if ((high - low + 1) % k != 0) rem = (high - low + 1) % k;
-   //      //std::cout << "Rem: " << rem << std::endl;
-        
-   //      int m = (high - low + 1)/k;
-   //      std::cout << "m: " << m << std::endl;
-        
-   //      std::vector<int> index;
-
-   //      for (int i = 0; i < k; i++) {
-   //          index.push_back(m*i + low);
-   //      }
-
-   //      std::cout << "Indicies: ";
-   //      for (size_t i = 0; i < index.size(); i++) std::cout << index[i] << " ";
-   //      	std::cout << std::endl;
-
-   //      for (size_t i = 0; i < index.size() - 1; i++) {
-			// multMergeSort(myArray, k, index[i], index[i + 1] - 1, comp);
-   //      }
-   //      multMergeSort(myArray, k, index[index.size() - 1], high, comp);
-   //      merge(myArray, index, m, comp);
-   //  }
 }
-
 
 template <class T, class Comparator>
 void mergeSort (std::vector<T>& myArray, int k, Comparator comp) {
     int low = 0;
     int high = myArray.size() - 1;
-    std::vector<T> array = myArray;
-    multMergeSort(myArray, array, k, low, high, comp);
+    multMergeSort(myArray, k, low, high, comp);
 }
