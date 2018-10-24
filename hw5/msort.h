@@ -38,23 +38,29 @@ void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index, C
 			}
 		}
 
+		// push min into temp
 		temp.push_back(myArray[index[minIndex].first]);
+		// increment the index where the min was found
 		(index[minIndex].first)++;
 
+		// means all elements from this partition have been placed
 		if (index[minIndex].first > index[minIndex].second) {
 			index.erase(index.begin() + minIndex);
 		}
 	}
 
+	// fill myArray
 	for (int k = 0; k < high + 1 - low; k++) myArray[k+low] = temp[k];
 }
 
 template <class T, class Comparator>
 void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator comp) {
 	if (low < high) {
+		// vector of pairs to hold indicies
 		std::vector<std::pair<int, int> > indicies;
 		int m = (high - low + 1)/k;
 
+		// push back partitioned indicies
 		for (int i = 0; i < k; i++) {
 			if (i == 0) {
 				std::pair<int, int> addFirst(low, low + m - 1);
@@ -70,14 +76,18 @@ void multMergeSort(std::vector<T>& myArray, int k, int low, int high, Comparator
 			}
         }
 
+     	// look through all indicies
         for (size_t i = 0; i < indicies.size(); i++) {
+        	// if it's at the minimum size -- less than k elements -- sort the fragment
         	if (indicies[i].second - indicies[i].first  + 1 < k) {
         		selectionSort(myArray, indicies[i].first, indicies[i].second, comp);
         	}
+        	// keep calling function until small enough to use selectionSort
         	else {
         		multMergeSort(myArray, k, indicies[i].first, indicies[i].second, comp);
         	}
         }
+        // call merge on partitions
         merge(myArray, indicies, comp);
 	}
 }
