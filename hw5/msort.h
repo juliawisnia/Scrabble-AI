@@ -21,7 +21,8 @@ void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) {
 }
 
 template <class T, class Comparator>
-void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index, Comparator comp) {
+void merge (std::vector<T>& myArray, std::vector<std::pair<int, int> >& index,
+			 Comparator comp) {
 	int low = index[0].first;
 	int high = index[index.size() - 1].second;
 

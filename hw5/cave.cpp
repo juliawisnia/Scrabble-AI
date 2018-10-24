@@ -14,8 +14,10 @@ int main() {
             return -1;
         }
 
-        if ((i + 1 < read.size()) && ((read[i] == 'n' && read[i + 1] == 's') || (read[i] == 's' && read[i + 1] == 'n') 
-                                || (read[i] == 'w' && read[i + 1] == 'e') || (read[i] == 'e' && read[i + 1] == 'w'))) {
+        if ((i + 1 < read.size()) && ((read[i] == 'n' && read[i + 1] == 's') 
+                                || (read[i] == 's' && read[i + 1] == 'n') 
+                                || (read[i] == 'w' && read[i + 1] == 'e') 
+                                || (read[i] == 'e' && read[i + 1] == 'w'))) {
             i++;
             continue;
         }
@@ -28,7 +30,8 @@ int main() {
 
             char prev = stk.top();
             if ((read[i] == 'n' && prev == 's') || (read[i] == 's' && prev == 'n') 
-                                || (read[i] == 'w' && prev == 'e') || (read[i] == 'e' && prev == 'w')) {
+                                || (read[i] == 'w' && prev == 'e') 
+                                || (read[i] == 'e' && prev == 'w')) {
                 stk.pop();
             }
             else stk.push(read[i]);
