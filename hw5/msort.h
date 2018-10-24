@@ -9,7 +9,6 @@
 template <class T, class Comparator>
 void selectionSort(std::vector<T>& array, int start, int end, Comparator comp) { 
     int minIndex = 0;
-    //int n = end - start + 1; 
     for (int i = start; i < end + 1; i++) { 
 	    minIndex = i; 
 	    for (int j = i + 1; j < end + 1; j++) {
