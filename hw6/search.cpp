@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     if (ifile.fail()) return -1;
 
     // read in parameters from file
-    size_t letters, rows, cols;
+    int letters, rows, cols;
     ifile >> letters >> rows >> cols;
 
     // char to create graph
@@ -24,36 +24,36 @@ int main(int argc, char *argv[]) {
 
     std::vector<std::vector<char> > graph;
     graph.resize(rows, std::vector<char> (cols));
-    for (size_t i = 0; i < rows; i++) {
-        for (size_t j = 0; j < cols; j++) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             ifile >> next;
             graph[i][j] = next;
         }
     }
 
-    std::queue<std::pair<size_t, size_t> > search;
-    std::set<std::pair<size_t, size_t> > isVisited;
+    std::queue<std::pair<int, int> > search;
+    std::set<std::pair<int, int> > isVisited;
 
-    std::pair<size_t, size_t> add(0, 0);
+    std::pair<int, int> add(0, 0);
     search.push(add);
     isVisited.insert(add);
 
     // min to compare to;
-    size_t largestCountry = -1;
-    size_t currCountry = 0;
+    int largestCountry = -1;
+    int currCountry = 0;
 
     bool nextFound = false;
-    size_t nextRow = 0;
-    size_t nextCol = 0;
+    int nextRow = 0;
+    int nextCol = 0;
 
     while (!search.empty()) {
-        size_t currRow = search.back().first;
-        size_t currCol = search.back().second;
+        int currRow = search.back().first;
+        int currCol = search.back().second;
         char comp = graph[currRow][currCol];
         search.pop();
 
         if (currRow - 1 > 0) {
-            std::pair<size_t, size_t> add(currRow - 1, currCol);
+            std::pair<int, int> add(currRow - 1, currCol);
             if (graph[currRow - 1][currCol] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
         }
 
         if (currRow + 1 > 0) {
-            std::pair<size_t, size_t> add(currRow + 1, currCol);
+            std::pair<int, int> add(currRow + 1, currCol);
             if (graph[currRow + 1][currCol] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         }
 
          if (currCol - 1 > 0) {
-            std::pair<size_t, size_t> add(currRow, currCol + 1);
+            std::pair<int, int> add(currRow, currCol + 1);
             if (graph[currRow][currCol - 1] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
         } 
 
         if (currCol + 1 > 0) {
-            std::pair<size_t, size_t> add(currRow, currCol + 1);
+            std::pair<int, int> add(currRow, currCol + 1);
             if (graph[currRow][currCol + 1] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 
         if (search.empty() && next) {
             // push that next to the queue
-            std::pair<size_t, size_t> add(nextRow, nextCol);
+            std::pair<int, int> add(nextRow, nextCol);
             search.push(add);
             isVisited.insert(add);
 
