@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (search.empty() && next) {
+        if (search.empty() && nextFound) {
             // push that next to the queue
             std::pair<int, int> add(nextRow, nextCol);
             search.push(add);
