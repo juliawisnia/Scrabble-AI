@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
     // min to compare to;
     int largestCountry = -1;
-    int currCountry = 0;
+    int currCountry = 1;
 
     bool nextFound = false;
     int nextRow = 0;
@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
             if (graph[currRow - 1][currCol] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
+                std::cout << "currRow - 1" << std::endl;
                 currCountry++;
             }
             else if (graph[currRow - 1][currCol] != comp && (isVisited.find(add) == isVisited.end()) && !nextFound) {
@@ -66,11 +67,12 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (currRow + 1 > 0) {
+        if (currRow + 1 < rows) {
             std::pair<int, int> add(currRow + 1, currCol);
             if (graph[currRow + 1][currCol] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
+                std::cout << "currRow + 1" << std::endl;
                 currCountry++;
             }
             else if (graph[currRow + 1][currCol] != comp && (isVisited.find(add) == isVisited.end()) && !nextFound) {
@@ -81,10 +83,11 @@ int main(int argc, char *argv[]) {
         }
 
          if (currCol - 1 > 0) {
-            std::pair<int, int> add(currRow, currCol + 1);
+            std::pair<int, int> add(currRow, currCol - 1);
             if (graph[currRow][currCol - 1] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
+                std::cout << "currCol - 1" << std::endl;
                 currCountry++;
             }
             else if (graph[currRow][currCol - 1] != comp && (isVisited.find(add) == isVisited.end()) && !nextFound) {
@@ -94,11 +97,12 @@ int main(int argc, char *argv[]) {
             }
         } 
 
-        if (currCol + 1 > 0) {
+        if (currCol + 1 < cols) {
             std::pair<int, int> add(currRow, currCol + 1);
             if (graph[currRow][currCol + 1] == comp && isVisited.find(add) == isVisited.end()) {
                 search.push(add);
                 isVisited.insert(add);
+                std::cout << "currCol + 1" << std::endl;
                 currCountry++;
             }
             else if (graph[currRow][currCol + 1] != comp && (isVisited.find(add) == isVisited.end()) && !nextFound) {
@@ -118,7 +122,7 @@ int main(int argc, char *argv[]) {
 
             nextFound = false;
 
-            currCountry = 0;
+            currCountry = 1;
             currRow = nextRow;
             currCol = nextCol;
         }
