@@ -19,11 +19,11 @@ int main(int argc, char *argv[]) {
     size_t letters, rows, cols;
     ifile >> letters >> rows >> cols;
 
-    // min to compare to;
-    //size_t largestCountry = -1;
-    //size_t currCountry = 0;
+    // char to create adjacency matrix
     char next;
+
     std::vector<std::vector<char> > adjacencyMatrix;
+    adjacencyMatrix.resize(rows, std::vector<char> (cols));
     for (size_t i = 0; i < rows; i++) {
         for (size_t j = 0; j < cols; j++) {
             ifile >> next;
@@ -31,13 +31,55 @@ int main(int argc, char *argv[]) {
         }
     }
    
-       for (size_t i = 0; i < rows; i++) {
-        for (size_t j = 0; j < cols; j++) {
-            std::cout << adjacencyMatrix[i][j] << " ";
+    // min to compare to;
+    size_t largestCountry = -1;
+    size_t currCountry = 0;
+
+    std::queue<int> queue; 
+    std::set<int> isVisited;
+
+    char currLetter = adjacencyMatrix[0][0];
+
+    queue.push(currLetter);
+    isVisited.insert(currLetter);
+
+    while (!queue.empty()) {
+        char compLetter = queue.front();
+        queue.pop();
+
+        if (compLetter == currLetter) {
+            
         }
-        std::cout << std::endl;
     }
 
-    //std::cout << largestCountry << std::endl;
+    std::cout << largestCountry << std::endl;
     return 0;
+}
+
+
+
+bool BFS(vector<vector<int> > adjacency_matrix, int start, int end) {
+    if (start == end) return true;
+
+    std::queue<int> queue; 
+    std::set<int> isVisited;
+
+    queue.push(start);
+    isVisited.insert(start);
+
+    while (!queue.empty()) {
+        int search = queue.front();
+        queue.pop();
+
+        // found it!
+        if (search == end) return true;
+
+        for (size_t i = 0; i < adjacency_matrix.size(); i++) {
+            if (adjacency_matrix[start][i] && isVisited.find(i) == isVisited.end()) {
+                queue.push(i);
+                isVisited.insert(i);
+            }
+        }
+    }
+    return false;
 }
