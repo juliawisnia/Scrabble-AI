@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
         char comp = graph[currRow][currCol];
         search.pop();
 
-        if (currRow - 1 > 0) {
+        if (currRow - 1 >= 0) {
             std::pair<int, int> rowMinus(currRow - 1, currCol);
             if (graph[currRow - 1][currCol] == comp && isVisited.find(rowMinus) == isVisited.end()) {
                 search.push(rowMinus);
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-         if (currCol - 1 > 0) {
+         if (currCol - 1 >= 0) {
             std::pair<int, int> colMinus(currRow, currCol - 1);
             if (graph[currRow][currCol - 1] == comp && isVisited.find(colMinus) == isVisited.end()) {
                 search.push(colMinus);
@@ -117,7 +117,6 @@ int main(int argc, char *argv[]) {
             if (currCountry > largestCountry) largestCountry = currCountry;
 
             nextFound = false;
-
             currCountry = 1;
             currRow = nextRow;
             currCol = nextCol;
