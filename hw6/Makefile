@@ -5,6 +5,7 @@ BIN_DIR = hw6
 all: $(BIN_DIR)
 
 search: search.cpp
+coloring: coloring.cpp
 
 .PHONY: clean
 
