@@ -19,6 +19,11 @@ int main(int argc, char *argv[]) {
     int letters, rows, cols;
     ifile >> letters >> rows >> cols;
 
+    if (letters == 1) {
+        std::cout << rows*cols << std::endl;
+        return 0;
+    }
+
     // char to create graph
     char next;
 
@@ -122,6 +127,8 @@ int main(int argc, char *argv[]) {
             currCol = nextCol;
         }
     }
+
+    if (currCountry > largestCountry) largestCountry = currCountry;
 
     std::cout << largestCountry << std::endl;
     return 0;
