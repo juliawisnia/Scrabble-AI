@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
         int currRow = search.front().first;
         int currCol = search.front().second;
         char comp = graph[currRow][currCol];
+
         search.pop();
 
         if (currRow - 1 >= 0) {
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
                 isVisited.insert(rowMinus);
                 currCountry++;
             }
-            else if (graph[currRow - 1][currCol] != comp && (isVisited.find(rowMinus) == isVisited.end()) && !nextFound) {
+            else if (graph[currRow - 1][currCol] != comp && (isVisited.find(rowMinus) == isVisited.end())) {
                 nextFound = true;
                 nextRow = currRow - 1;
                 nextCol = currCol;
@@ -78,7 +79,7 @@ int main(int argc, char *argv[]) {
                 isVisited.insert(rowPlus);
                 currCountry++;
             }
-            else if (graph[currRow + 1][currCol] != comp && (isVisited.find(rowPlus) == isVisited.end()) && !nextFound) {
+            else if (graph[currRow + 1][currCol] != comp && (isVisited.find(rowPlus) == isVisited.end())) {
                 nextFound = true;
                 nextRow = currRow + 1;
                 nextCol = currCol;
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
                 isVisited.insert(colMinus);
                 currCountry++;
             }
-            else if (graph[currRow][currCol - 1] != comp && (isVisited.find(colMinus) == isVisited.end()) && !nextFound) {
+            else if (graph[currRow][currCol - 1] != comp && (isVisited.find(colMinus) == isVisited.end())) {
                 nextFound = true;
                 nextRow = currRow;
                 nextCol = currCol - 1;
@@ -106,7 +107,7 @@ int main(int argc, char *argv[]) {
                 isVisited.insert(colPlus);
                 currCountry++;
             }
-            else if (graph[currRow][currCol + 1] != comp && (isVisited.find(colPlus) == isVisited.end()) && !nextFound) {
+            else if (graph[currRow][currCol + 1] != comp && (isVisited.find(colPlus) == isVisited.end())) {
                 nextFound = true;
                 nextRow = currRow;
                 nextCol = currCol + 1;
@@ -129,8 +130,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
-    if (currCountry > largestCountry) largestCountry = currCountry;
 
     std::cout << largestCountry << std::endl;
     return 0;
