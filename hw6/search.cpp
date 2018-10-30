@@ -108,18 +108,20 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (search.empty() && nextFound) {
-            // push that next to the queue
-            std::pair<int, int> nextOne(nextRow, nextCol);
-            search.push(nextOne);
-            isVisited.insert(nextOne);
-
+        if (search.empty()) {
             if (currCountry > largestCountry) largestCountry = currCountry;
 
-            nextFound = false;
-            currCountry = 1;
-            currRow = nextRow;
-            currCol = nextCol;
+            if (nextFound) {
+                // push that next to the queue
+                std::pair<int, int> nextOne(nextRow, nextCol);
+                search.push(nextOne);
+                isVisited.insert(nextOne);
+                
+                nextFound = false;
+                currCountry = 1;
+                currRow = nextRow;
+                currCol = nextCol;
+            }
         }
     }
 
