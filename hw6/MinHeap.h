@@ -105,7 +105,7 @@ class MinHeap {
           int smallestChildPriority = items[childIndex].second;
           int smallestChildIndex = childIndex;
 
-          for (int i = childIndex; i < childIndex + ary; i++) {
+          for (int i = childIndex; i < childIndex + ary*4; i++) {
             if (i >= (int)items.size()) break;
             if (items[i].second < smallestChildPriority) {
               smallestChildPriority = items[i].second;
