@@ -63,7 +63,7 @@ class MinHeap {
       void heapifyDown() {
         int index = 0;
         while (hasChild(index)) {
-          if (items[index] < items[getSmallestChildIndex(index)]) break;
+          if (items[index].second < items[getSmallestChildIndex(index)].second) break;
           else {
             int smallestChildIndex = getSmallestChildIndex(index);
             swap(index, smallestChildIndex);
@@ -74,7 +74,7 @@ class MinHeap {
 
       void heapifyUp() {
         int index = items.size() - 1;
-        while (hasParent(index) && getParentPriority(index) > items[index].second) {
+        while (hasParent(index) && index[getParentPriority(index)].second > items[index].second) {
           int parentIndex = getParentIndex(index);
           swap(parentIndex, index);
           index = parentIndex;
