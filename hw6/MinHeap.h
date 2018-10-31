@@ -91,7 +91,7 @@ class MinHeap {
       }
 
       bool hasChild(int index) {
-        if (index*ary < (int)items.size()) return true;
+        if (index*ary < items.size()) return true;
         else return false;
       }
 
@@ -102,7 +102,7 @@ class MinHeap {
           int smallestChild = -1;
           int smallestChildIndex;
 
-          while (childIndex < (int)items.size() && childIndex < index*ary + ary) {
+          while (childIndex < items.size() && childIndex < index*ary + ary) {
             if (items[childIndex].second < smallestChild) {
               smallestChild = items[childIndex].second;
               smallestChildIndex = childIndex;
