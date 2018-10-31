@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <exception>
 
 template <class T>
 class MinHeap {
@@ -35,7 +36,7 @@ class MinHeap {
       void remove () {
         if (isEmpty()) throw heapEmpty("Heap is empty");
         items[0] = items[items.size() - 1];
-        items.pop();
+        items.pop_back();
       }
 
       /* returns true iff there are no elements on the heap. */
