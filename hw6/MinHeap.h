@@ -101,12 +101,12 @@ class MinHeap {
         if (!hasChild(index)) return -1;
         else {
           int childIndex = index*ary + 1;
-          int smallestChild = items[childIndex];
+          int smallestChildPriority = items[childIndex].second;
           int smallestChildIndex = childIndex;
 
           for (int i = childIndex; i < childIndex + ary; i++) {
-            if (items[i].second < smallestChild) {
-              smallestChild = items[i].second;
+            if (items[i].second < smallestChildPriority) {
+              smallestChildPriority = items[i].second;
               smallestChildIndex = childIndex;
             }
           }
