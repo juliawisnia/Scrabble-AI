@@ -35,10 +35,7 @@ class MinHeap {
       Throws an exception if the heap is empty. */
       void remove () {
         if (isEmpty()) throw std::out_of_range("Heap is empty");
-        if (items.size() == 1) {
-          items.pop_back();
-          return;
-        }
+
         items[0] = items[items.size() - 1];
         items.pop_back();
         heapifyDown();
@@ -109,6 +106,7 @@ class MinHeap {
           int smallestChildIndex = childIndex;
 
           for (int i = childIndex; i < childIndex + ary; i++) {
+            if (i >= items.size()) break;
             if (items[i].second < smallestChildPriority) {
               smallestChildPriority = items[i].second;
               smallestChildIndex = i;
