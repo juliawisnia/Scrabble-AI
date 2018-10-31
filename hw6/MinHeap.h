@@ -26,7 +26,7 @@ class MinHeap {
       Break ties however you wish.  
       Throws an exception if the heap is empty. */
       const T & peek () const {
-        if (isEmpty()) std::cout << "error" << std::endl;//throw std::out_of_range("Heap is empty");
+        if (isEmpty()) throw std::out_of_range("Heap is empty");
         return items[0].first;
       }
 
@@ -34,7 +34,7 @@ class MinHeap {
       Break ties however you wish.
       Throws an exception if the heap is empty. */
       void remove () {
-        if (isEmpty()) std::cout << "error" << std::endl;//throw std::out_of_range("Heap is empty");
+        if (isEmpty()) throw std::out_of_range("Heap is empty");
         items[0] = items[items.size() - 1];
         items.pop_back();
         heapifyDown();
@@ -91,7 +91,7 @@ class MinHeap {
       }
 
       bool hasChild(int index) {
-        if (index*ary < items.size()) return true;
+        if (index*ary < (int)items.size()) return true;
         else return false;
       }
 
