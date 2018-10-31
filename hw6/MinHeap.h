@@ -36,7 +36,7 @@ class MinHeap {
       void remove () {
         if (isEmpty()) throw std::out_of_range("Heap is empty");
 
-        items[0] = items[items.size() - 1];
+        items[0] = items[(int)items.size() - 1];
         items.pop_back();
         heapifyDown();
       }
@@ -70,7 +70,7 @@ class MinHeap {
       }
 
       void heapifyUp() {
-        int index = items.size() - 1;
+        int index = (int)items.size() - 1;
         while (hasParent(index) && getParentPriority(index) > items[index].second) {
           int parentIndex = getParentIndex(index);
           swap(parentIndex, index);
@@ -79,7 +79,7 @@ class MinHeap {
       }
 
       bool hasParent(int index) {
-        if ((index - index % ary)/ary >= 0 && (index < items.size())) return true;
+        if ((index - index % ary)/ary >= 0 && (index < (int)items.size())) return true;
         else return false;
       }
 
@@ -94,7 +94,7 @@ class MinHeap {
       }
 
       bool hasChild(int index) {
-        if (index*ary < items.size()) return true;
+        if (index*ary < (int)items.size()) return true;
         else return false;
       }
 
@@ -106,7 +106,7 @@ class MinHeap {
           int smallestChildIndex = childIndex;
 
           for (int i = childIndex; i < childIndex + ary; i++) {
-            if (i >= items.size()) break;
+            if (i >= (int)items.size()) break;
             if (items[i].second < smallestChildPriority) {
               smallestChildPriority = items[i].second;
               smallestChildIndex = i;
