@@ -41,7 +41,7 @@ class MinHeap {
 
       /* returns true iff there are no elements on the heap. */
       bool isEmpty () {
-        if (items.empty()) return true;
+        if (items.size() == 0) return true;
         else return false;
       }
 
