@@ -74,7 +74,7 @@ class MinHeap {
 
       void heapifyUp() {
         int index = items.size() - 1;
-        while (hasParent(index) && index[getParentPriority(index)].second > items[index].second) {
+        while (hasParent(index) && getParentPriority(index) > items[index].second) {
           int parentIndex = getParentIndex(index);
           swap(parentIndex, index);
           index = parentIndex;
