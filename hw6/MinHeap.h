@@ -79,7 +79,7 @@ class MinHeap {
       }
 
       bool hasParent(int index) {
-        if ((index - index % ary)/ary >= 0) return true;
+        if ((index - 1)/ary >= 0) return true;
         else return false;
       }
 
