@@ -60,7 +60,7 @@ class MinHeap {
       void heapifyDown() {
         int index = 0;
         while (hasChild(index)) {
-          if (items[index].second < items[getSmallestChildIndex(index)].second) break;
+          if (items[index].second <= items[getSmallestChildIndex(index)].second) break;
           else {
             int smallestChildIndex = getSmallestChildIndex(index);
             swap(index, smallestChildIndex);
@@ -90,22 +90,22 @@ class MinHeap {
 
       int getParentIndex(int index) {
         if (!hasParent(index)) return -1;
-        else return ((index - index % ary)/ary);
+        else return ((index - (index % ary))/ary);
       }
 
       bool hasChild(int index) {
-        if (index*ary < (int)items.size()) return true;
+        if (index*ary + 1 < (int)items.size()) return true;
         else return false;
       }
 
       int getSmallestChildIndex(int index) {
         if (!hasChild(index)) return -1;
         else {
-          int childIndex = index*ary + 1;
+          int childIndex = index*ary;
           int smallestChildPriority = items[childIndex].second;
           int smallestChildIndex = childIndex;
 
-          for (int i = childIndex; i < childIndex + ary*4; i++) {
+          for (int i = childIndex; i <= childIndex + ary; i++) {
             if (i >= (int)items.size()) break;
             if (items[i].second < smallestChildPriority) {
               smallestChildPriority = items[i].second;
