@@ -21,7 +21,12 @@ class MinHeap {
         items.push_back(add);
         heapifyUp();
       }
-
+      /* returns true iff there are no elements on the heap. */
+      bool isEmpty () {
+        if (items.empty()) return true;
+        else return false;
+      }
+      
       /* returns the element with smallest priority.  
       Break ties however you wish.  
       Throws an exception if the heap is empty. */
@@ -37,12 +42,6 @@ class MinHeap {
         if (isEmpty()) throw std::out_of_range("Heap is empty");
         items[0] = items[items.size() - 1];
         items.pop_back();
-      }
-
-      /* returns true iff there are no elements on the heap. */
-      bool isEmpty () {
-        if (items.size() == 0) return true;
-        else return false;
       }
 
   private:
