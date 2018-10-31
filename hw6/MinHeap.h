@@ -35,6 +35,10 @@ class MinHeap {
       Throws an exception if the heap is empty. */
       void remove () {
         if (isEmpty()) throw std::out_of_range("Heap is empty");
+        if (items.size() == 1) {
+          items.pop_back();
+          return;
+        }
         items[0] = items[items.size() - 1];
         items.pop_back();
         heapifyDown();
