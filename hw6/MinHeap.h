@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 
 template <class T>
 class MinHeap {
@@ -33,8 +34,8 @@ class MinHeap {
       Throws an exception if the heap is empty. */
       void remove () {
         if (isEmpty()) throw heapEmpty("Heap is empty");
-        items[0] = items[size - 1];
-        items.pop_front();
+        items[0] = items[items.size() - 1];
+        items.pop();
       }
 
       /* returns true iff there are no elements on the heap. */
@@ -67,7 +68,7 @@ class MinHeap {
       void heapifyUp() {
         int index = items.size() - 1;
         while (hasParent(index) && getParentPriority(index) > items[index].second) {
-          swap(items[getParentIndex(index)], items[index]);
+          swap(getParentIndex(index), index);
           index = getParentIndex(index);
         }
       }
@@ -78,7 +79,7 @@ class MinHeap {
       }
 
       int getParentPriority(int index) {
-        if (!hasParent) return -1;
+        if (!hasParent(index)) return -1;
         return items[(index - index % ary)/ary].second;
       }
 
@@ -99,15 +100,14 @@ class MinHeap {
           int smallestChild = -1;
           int smallestChildIndex;
 
-          while (childIndex < items.size() && childIndex < index*d + d) {
+          while (childIndex < items.size() && childIndex < index*ary + ary) {
             if (items[childIndex].second < smallestChild) {
               smallestChild = items[childIndex].second;
               smallestChildIndex = childIndex;
             }
             childIndex++;
           }
+          return smallestChildIndex;
         }
-
-        return childIndex;
       }
 };
