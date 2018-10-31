@@ -87,13 +87,13 @@ class MinHeap {
       }
 
       int getParentPriority(int index) {
-        //if (!hasParent(index)) return -1;
-        return items[getParentIndex(index)].second;
+        if (!hasParent(index)) return -1;
+        else return items[getParentIndex(index)].second;
       }
 
       int getParentIndex(int index) {
-        //if (!hasParent(index)) return -1;
-        return ((index - index % ary)/ary);
+        if (!hasParent(index)) return -1;
+        else return ((index - index % ary)/ary);
       }
 
       bool hasChild(int index) {
@@ -102,7 +102,8 @@ class MinHeap {
       }
 
       int getSmallestChildIndex(int index) {
-        //if (!hasChild(index)) return -1;
+        if (!hasChild(index)) return -1;
+        else {
           int childIndex = index*ary + 1;
           int smallestChildPriority = items[childIndex].second;
           int smallestChildIndex = childIndex;
@@ -114,5 +115,6 @@ class MinHeap {
             }
           }
           return smallestChildIndex;
+        }
       }
 };
