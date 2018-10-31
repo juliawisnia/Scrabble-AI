@@ -37,6 +37,7 @@ class MinHeap {
         if (isEmpty()) throw std::out_of_range("Heap is empty");
         items[0] = items[items.size() - 1];
         items.pop_back();
+        heapifyDown();
       }
 
       /* returns true iff there are no elements on the heap. */
