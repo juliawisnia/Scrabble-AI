@@ -57,12 +57,12 @@ class MinHeap {
       }
 
       void heapifyDown() {
-        int index = items[0];
+        int index = 0;
         while (hasChild(index)) {
-          if (items[index] < items[getSmallestChildIndex()]) break;
+          if (items[index] < items[getSmallestChildIndex(index)]) break;
           else {
-            swap(index, getSmallestChildIndex());
-            index = getSmallestChildIndex();
+            swap(index, getSmallestChildIndex(index));
+            index = getSmallestChildIndex(index);
           }
         }
       }
@@ -91,7 +91,7 @@ class MinHeap {
       }
 
       bool hasChild(int index) {
-        if (index*ary <= items.size()) return true;
+        if (index*ary < items.size()) return true;
         else return false;
       }
 
