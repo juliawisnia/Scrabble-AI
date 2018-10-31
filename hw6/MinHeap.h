@@ -101,8 +101,8 @@ class MinHeap {
         if (!hasChild(index)) return -1;
         else {
           int childIndex = index*ary + 1;
-          int smallestChild = -1;
-          int smallestChildIndex = -1;
+          int smallestChild = index[childIndex];
+          int smallestChildIndex = childIndex;
 
           for (int i = childIndex; i < childIndex + ary; i++) {
             if (items[i].second < smallestChild) {
