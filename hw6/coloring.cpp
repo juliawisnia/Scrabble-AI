@@ -13,11 +13,9 @@ struct country {
 
 void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<char> > graph, int cols, int rows) {
     std::queue<std::pair<int, int> > search;
-    std::set<std::pair<int, int> > isVisited;
 
     std::pair<int, int> first(0, 0);
     search.push(first);
-    isVisited.insert(first);
 
     int nextRow = 0;
     int nextCol = 0;
@@ -25,7 +23,9 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
     bool nextFound = false;
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
-        if (nextFound) {
+        std::set<std::pair<int, int> > isVisited;
+        if (!nextFound) isVisited.insert(first);
+        else {
             std::pair<int, int> again(nextRow, nextCol);
             search.push(again);
             isVisited.insert(again);
@@ -168,6 +168,14 @@ int main(int argc, char *argv[]) {
     }
 
     findAllNeighbors(countries, graph, cols, rows);
+    // std::set<country*>::iterator it;
+    // for (size_t i = 0; i < countries.size(); i++) {
+    //     std::cout << countries[i].name << "'s color is: " << countries[i].color << " and it's neighbors are : ";
+    //     for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
+    //         std::cout << (*it)->name << " " << (*it)->color << "   ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     std::set<country*>::iterator it;
     for (size_t i = 0; i < countries.size(); i++) {
         for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
