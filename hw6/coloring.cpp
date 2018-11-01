@@ -25,6 +25,11 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
     bool nextFound = false;
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
+        if (nextFound) {
+            std::pair<int, int> again(nextRow, nextCol);
+            search.push(again);
+            isVisited.insert(again);
+        }
         while (!search.empty()) {
             int currRow = search.front().first;
             int currCol = search.front().second;
@@ -109,15 +114,6 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
                     nextRow = currRow;
                     nextCol = currCol + 1;
                     nextFound = true;
-                }
-            }
-
-            if (search.empty()) {
-                if (nextFound) {
-                    std::pair<int, int> again(currRow, currCol);
-                    search.push(again);
-                    isVisited.insert(again);
-                    nextFound = false;
                 }
             }
         }
