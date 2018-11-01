@@ -24,12 +24,14 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
         std::set<std::pair<int, int> > isVisited;
-        if (!nextFound) isVisited.insert(first);
-        else {
+
+        if (nextFound) {
             std::pair<int, int> again(nextRow, nextCol);
             search.push(again);
             isVisited.insert(again);
+            nextFound = false;
         }
+
         while (!search.empty()) {
             int currRow = search.front().first;
             int currCol = search.front().second;
@@ -148,7 +150,16 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < cols; j++) {
             ifile >> next;
             graph[i][j] = next;
+        }
+    }
 
+    country first;
+    first.name = graph[0][0];
+    first.color = 1;
+    countries.push_back(first);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
             std::vector<country>::iterator it;
             bool newCountry = true;
             for (it = countries.begin(); it != countries.end(); it++) {
@@ -168,26 +179,26 @@ int main(int argc, char *argv[]) {
     }
 
     findAllNeighbors(countries, graph, cols, rows);
-    // std::set<country*>::iterator it;
-    // for (size_t i = 0; i < countries.size(); i++) {
-    //     std::cout << countries[i].name << "'s color is: " << countries[i].color << " and it's neighbors are : ";
-    //     for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
-    //         std::cout << (*it)->name << " " << (*it)->color << "   ";
-    //     }
-    //     std::cout << std::endl;
-    // }
     std::set<country*>::iterator it;
     for (size_t i = 0; i < countries.size(); i++) {
+        std::cout << countries[i].name <<  "'s neighbors are : ";
         for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
-            if (countries[i].color == (*it)->color) {
-                ((*it)->color)++;
-            }
+            std::cout << (*it)->name << " ";
         }
+        std::cout << std::endl;
     }
+    // std::set<country*>::iterator it;
+    // for (size_t i = 0; i < countries.size(); i++) {
+    //     for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
+    //         if (countries[i].color == (*it)->color) {
+    //             ((*it)->color)++;
+    //         }
+    //     }
+    // }
 
-    for (size_t i = 0; i < countries.size(); i++) {
-        std::cout << countries[i].name << " " << countries[i].color << std::endl;
-    }
+    // for (size_t i = 0; i < countries.size(); i++) {
+    //     std::cout << countries[i].name << " " << countries[i].color << std::endl;
+    // }
     
     return 0;
 }
