@@ -150,14 +150,6 @@ int main(int argc, char *argv[]) {
     }
 
     findAllNeighbors(countries, graph, cols, rows);
-    // std::set<country*>::iterator it;
-    // for (size_t i = 0; i < countries.size(); i++) {
-    //     std::cout << countries[i].name << "'s color is: " << countries[i].color << " and it's neighbors are : ";
-    //     for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
-    //         std::cout << (*it)->name << " " << (*it)->color << "   ";
-    //     }
-    //     std::cout << std::endl;
-    // }
     std::set<country*>::iterator it;
     for (size_t i = 0; i < countries.size(); i++) {
         for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
