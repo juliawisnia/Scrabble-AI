@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
+    
     for (size_t i = 0; i < countries.size(); i++) {
         std::cout << countries[i].name << " " << countries[i].color << std::endl;
     }
