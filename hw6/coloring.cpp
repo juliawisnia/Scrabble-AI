@@ -9,41 +9,33 @@ struct country {
     char name;
     int color;
     std::set<country*> neighbors;
+    std::pair<int, int> start;
 };
 
 void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<char> > graph, int cols, int rows) {
-    std::queue<std::pair<int, int> > search;
-
-    std::pair<int, int> first(0, 0);
-    search.push(first);
-
-    int nextRow = 0;
-    int nextCol = 0;
-
-    bool nextFound = false;
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
+        std::queue<std::pair<int, int> > search;
         std::set<std::pair<int, int> > isVisited;
-        if (!nextFound) isVisited.insert(first);
-        else {
-            std::pair<int, int> again(nextRow, nextCol);
-            search.push(again);
-            isVisited.insert(again);
-        }
+
+        search.push(it->start);
+        isVisited.insert(it->start);
+
+        char currCountry = it->name;
+
         while (!search.empty()) {
             int currRow = search.front().first;
             int currCol = search.front().second;
-            char comp = graph[currRow][currCol];
 
             search.pop();
 
             if (currRow - 1 >= 0) {
                 std::pair<int, int> rowMinus(currRow - 1, currCol);
-                if (graph[currRow - 1][currCol] == comp && isVisited.find(rowMinus) == isVisited.end()) {
+                if (graph[currRow - 1][currCol] == currCountry && isVisited.find(rowMinus) == isVisited.end()) {
                     search.push(rowMinus);
                     isVisited.insert(rowMinus);
                 }
-                else if (graph[currRow - 1][currCol] != comp && (isVisited.find(rowMinus) == isVisited.end())) {
+                else if (graph[currRow - 1][currCol] != currCountry && (isVisited.find(rowMinus) == isVisited.end())) {
                     std::vector<country>::iterator countryIt;
                     for (countryIt = countries.begin(); countryIt != countries.end(); ++countryIt) {
                         if (graph[currRow - 1][currCol] == countryIt->name) {
@@ -51,19 +43,16 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
                             break;
                         }
                     }
-                    nextRow = currRow - 1;
-                    nextCol = currCol;
-                    nextFound = true;
                 }
             }
 
             if (currRow + 1 < rows) {
                 std::pair<int, int> rowPlus(currRow + 1, currCol);
-                if (graph[currRow + 1][currCol] == comp && isVisited.find(rowPlus) == isVisited.end()) {
+                if (graph[currRow + 1][currCol] == currCountry && isVisited.find(rowPlus) == isVisited.end()) {
                     search.push(rowPlus);
                     isVisited.insert(rowPlus);
                 }
-                else if (graph[currRow + 1][currCol] != comp && (isVisited.find(rowPlus) == isVisited.end())) {
+                else if (graph[currRow + 1][currCol] != currCountry && (isVisited.find(rowPlus) == isVisited.end())) {
                    std::vector<country>::iterator countryIt;
                     for (countryIt = countries.begin(); countryIt != countries.end(); ++countryIt) {
                         if (graph[currRow + 1][currCol] == countryIt->name) {
@@ -71,19 +60,16 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
                             break;
                         }
                     }
-                    nextRow = currRow + 1;
-                    nextCol = currCol;
-                    nextFound = true;
                 }
             }
 
             if (currCol - 1 >= 0) {
                 std::pair<int, int> colMinus(currRow, currCol - 1);
-                if (graph[currRow][currCol - 1] == comp && isVisited.find(colMinus) == isVisited.end()) {
+                if (graph[currRow][currCol - 1] == currCountry && isVisited.find(colMinus) == isVisited.end()) {
                     search.push(colMinus);
                     isVisited.insert(colMinus);
                 }
-                else if (graph[currRow][currCol - 1] != comp && (isVisited.find(colMinus) == isVisited.end())) {
+                else if (graph[currRow][currCol - 1] != currCountry && (isVisited.find(colMinus) == isVisited.end())) {
                    std::vector<country>::iterator countryIt;
                     for (countryIt = countries.begin(); countryIt != countries.end(); ++countryIt) {
                         if (graph[currRow][currCol - 1] == countryIt->name) {
@@ -91,19 +77,16 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
                             break;
                         }
                     }
-                    nextRow = currRow;
-                    nextCol = currCol - 1;
-                    nextFound = true;
                 }
             } 
 
             if (currCol + 1 < cols) {
                 std::pair<int, int> colPlus(currRow, currCol + 1);
-                if (graph[currRow][currCol + 1] == comp && isVisited.find(colPlus) == isVisited.end()) {
+                if (graph[currRow][currCol + 1] == currCountry && isVisited.find(colPlus) == isVisited.end()) {
                     search.push(colPlus);
                     isVisited.insert(colPlus);
                 }
-                else if (graph[currRow][currCol + 1] != comp && (isVisited.find(colPlus) == isVisited.end())) {
+                else if (graph[currRow][currCol + 1] != currCountry && (isVisited.find(colPlus) == isVisited.end())) {
                     std::vector<country>::iterator countryIt;
                     for (countryIt = countries.begin(); countryIt != countries.end(); ++countryIt) {
                         if (graph[currRow][currCol + 1] == countryIt->name) {
@@ -111,9 +94,6 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
                             break;
                         }
                     }
-                    nextRow = currRow;
-                    nextCol = currCol + 1;
-                    nextFound = true;
                 }
             }
         }
@@ -162,6 +142,8 @@ int main(int argc, char *argv[]) {
                 country add;
                 add.name = graph[i][j];
                 add.color = 1;
+                add.start.first = i;
+                add.start.second = j;
                 countries.push_back(add);
             }
         }
