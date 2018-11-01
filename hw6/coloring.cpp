@@ -3,7 +3,7 @@
 #include <vector>
 #include <set>
 #include <queue>
-#include <map>
+#include <algorithm>
 
 struct country {
     char name;
@@ -11,6 +11,10 @@ struct country {
     std::set<country*> neighbors;
     std::pair<int, int> start;
 };
+
+bool compare(country lhs, country rhs) {
+    return (lhs.name < rhs.name);
+}
 
 void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<char> > graph, int cols, int rows) {
     std::vector<country>::iterator it;
@@ -148,7 +152,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
     findAllNeighbors(countries, graph, cols, rows);
     std::set<country*>::iterator it;
     for (size_t i = 0; i < countries.size(); i++) {
@@ -158,10 +161,11 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    
+    std::sort(countries.begin(), countries.end(), compare);
     for (size_t i = 0; i < countries.size(); i++) {
         std::cout << countries[i].name << " " << countries[i].color << std::endl;
     }
+
     
     return 0;
 }
