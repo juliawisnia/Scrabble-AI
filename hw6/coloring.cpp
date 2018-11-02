@@ -168,6 +168,7 @@ int main(int argc, char *argv[]) {
     graph.resize(rows, std::vector<char> (cols));
     std::vector<country> countries;
     
+    // fill the graph, and add new countries to our vector as discovered
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             ifile >> next;
