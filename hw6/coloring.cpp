@@ -16,6 +16,35 @@ bool compare(country lhs, country rhs) {
     return (lhs.name < rhs.name);
 }
 
+bool goodNeighbors(country* curr, int color) {
+    std::set<country*>::iterator it;
+    for (it = curr->neighbors.begin(); it != curr->neighbors.end(); ++it) {
+        if (color == (*it)->color) return false;
+    }
+    return true;
+}
+
+bool backtrack(country* curr, std::vector<country> &countries) {
+    if (curr == nullptr) return true;
+
+    for (int i = 1; i < 5; i++) {
+        curr->color = i;
+        country* search = nullptr;
+
+        if (goodNeighbors(curr, curr->color)) {
+            for(int j = 0; j < (int)countries.size(); j++) {
+                if(countries[j].color == -1) {
+                    search = &countries[j];
+                    break;
+                }
+            }
+            if (backtrack(search, countries)) return true;
+        }
+    }
+
+    return false;
+}
+
 void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<char> > graph, int cols, int rows) {
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
@@ -145,7 +174,7 @@ int main(int argc, char *argv[]) {
             if (newCountry) {
                 country add;
                 add.name = graph[i][j];
-                add.color = 1;
+                add.color = -1;
                 add.start.first = i;
                 add.start.second = j;
                 countries.push_back(add);
@@ -153,14 +182,8 @@ int main(int argc, char *argv[]) {
         }
     }
     findAllNeighbors(countries, graph, cols, rows);
-    std::set<country*>::iterator it;
-    for (size_t i = 0; i < countries.size(); i++) {
-        for (it = countries[i].neighbors.begin(); it != countries[i].neighbors.end(); ++it) {
-            if (countries[i].color == (*it)->color) {
-                ((*it)->color)++;
-            }
-        }
-    }
+    backtrack(&countries[0], countries);
+    
     std::sort(countries.begin(), countries.end(), compare);
     for (size_t i = 0; i < countries.size(); i++) {
         std::cout << countries[i].name << " " << countries[i].color << std::endl;
