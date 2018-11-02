@@ -16,28 +16,34 @@ bool compare(country lhs, country rhs) {
     return (lhs.name < rhs.name);
 }
 
-bool goodNeighbors(country* curr, int color) {
+bool goodNeighbors(country* curr) {
+    // iterate through curr's neighbors and check against its own color
     std::set<country*>::iterator it;
     for (it = curr->neighbors.begin(); it != curr->neighbors.end(); ++it) {
-        if (color == (*it)->color) return false;
+        if ((*it)->color == curr->color) return false;
     }
     return true;
 }
 
 bool backtrack(country* curr, std::vector<country> &countries) {
+    // base case, we've checked all the countries and neighbors
     if (curr == nullptr) return true;
 
     for (int i = 1; i < 5; i++) {
+        // check if this will be a valid coloring
         curr->color = i;
+        // create a search to look for all valid colors
         country* search = nullptr;
-
-        if (goodNeighbors(curr, curr->color)) {
-            for(int j = 0; j < (int)countries.size(); j++) {
+        // this coloring works for this country and its neighbors
+        if (goodNeighbors(curr)) {
+            for(int j = 0; j < (int) countries.size(); j++) {
+                // we have not checked this country yet, search it next
                 if(countries[j].color == -1) {
                     search = &countries[j];
                     break;
                 }
             }
+            
             if (backtrack(search, countries)) return true;
         }
     }
@@ -46,8 +52,10 @@ bool backtrack(country* curr, std::vector<country> &countries) {
 }
 
 void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<char> > graph, int cols, int rows) {
+    // iterate through each country to find its neighbors
     std::vector<country>::iterator it;
     for (it = countries.begin(); it != countries.end(); ++it) {
+        // create an individual stack and queue for each country
         std::queue<std::pair<int, int> > search;
         std::set<std::pair<int, int> > isVisited;
 
@@ -64,12 +72,15 @@ void findAllNeighbors(std::vector<country>& countries, std::vector<std::vector<c
 
             if (currRow - 1 >= 0) {
                 std::pair<int, int> rowMinus(currRow - 1, currCol);
+                // if its part of the same country, push it
                 if (graph[currRow - 1][currCol] == currCountry && isVisited.find(rowMinus) == isVisited.end()) {
                     search.push(rowMinus);
                     isVisited.insert(rowMinus);
                 }
+                // it's a different country and adjacent, make it a neighbor
                 else if (graph[currRow - 1][currCol] != currCountry && (isVisited.find(rowMinus) == isVisited.end())) {
                     std::vector<country>::iterator countryIt;
+                    // find which country it's a part of, and push a pointer to that country
                     for (countryIt = countries.begin(); countryIt != countries.end(); ++countryIt) {
                         if (graph[currRow - 1][currCol] == countryIt->name) {
                             it->neighbors.insert(&(*countryIt));
@@ -181,14 +192,16 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    // fill each country struct with the neighbors
     findAllNeighbors(countries, graph, cols, rows);
+    // check all valid colorings
     backtrack(&countries[0], countries);
     
+    // sort countries by letter so it prints in alphabetical order
     std::sort(countries.begin(), countries.end(), compare);
     for (size_t i = 0; i < countries.size(); i++) {
         std::cout << countries[i].name << " " << countries[i].color << std::endl;
     }
 
-    
     return 0;
 }
