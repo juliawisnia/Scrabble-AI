@@ -9,7 +9,8 @@
 #include "bst.h"
 
 template <typename Key, typename Value>
-class rotateBST : public BinarySearchTree {
+class rotateBST : public BinarySearchTree<Key, Value> 
+{
 	protected:
 		/*perform a left rotation at the parameter node.If r has no right child, 
 		this function should do nothing. This should run in constant time.*/
@@ -26,7 +27,9 @@ class rotateBST : public BinarySearchTree {
 		this function should do nothing and neither BST should be modified.*/
 		void transform(rotateBST& t2) const;
 	private:
-		void InOrder(vector<Key>& result, Node<Key, Value>* start);
+		void InOrder(std::vector<Key>& result, Node<Key, Value>* start) const;
+		void allRightRotates(rotateBST& t2);
+		void leftRotateToRoot(rotateBST& t2);
 };
 
 template <typename Key, typename Value>
@@ -34,9 +37,27 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 	// has no right child
 	if (z->getRight() == NULL) return;
 
+	bool rotateRoot = false;
+	bool rotateLeftChild = false;
+	if (z == this->mRoot) rotateRoot = true;
+	else if (z->getKey() < z->getParent()->getKey()) rotateLeftChild = true;
+
 	Node<Key, Value>* y = z->getRight();
-	Node<Key, Value>* x = y->getRight();
 	Node<Key, Value>* t1 = y->getLeft();
+
+	// y node
+	y->setLeft(z);
+
+	if (rotateRoot) {
+		y->setParent(NULL);
+		this->mRoot = y;
+	}
+
+	else {
+		y->setParent(z->getParent());
+		if (rotateLeftChild) y->getParent()->setLeft(y);
+		else z->getParent()->setRight(y);
+	}
 
 	// z node
 	z->setParent(y);
@@ -44,20 +65,33 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 		t1->setParent(z);
 		z->setRight(t1);
 	}
-
-	// y node
-	y->setLeft(z);
-	y->setParent(NULL);
-	this->mRoot = y;
 }
 
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 	if (z->getLeft() == NULL) return;
 
+	bool rotateRoot = false;
+	bool rotateLeftChild = false;
+	if (z == this->mRoot) rotateRoot = true;
+	else if (z->getKey() < z->getParent()->getKey()) rotateLeftChild = true;
+
 	Node<Key, Value>* y = z->getLeft();
-	Node<Key, Value>* x = y->getLeft();
 	Node<Key, Value>* t2 = y->getRight();
+
+	// y node
+	y->setRight(z);
+
+	if (rotateRoot) {
+		y->setParent(NULL);
+		this->mRoot = y;
+	}
+
+	else {
+		y->setParent(z->getParent());
+		if (rotateLeftChild) y->getParent()->setLeft(y);
+		else z->getParent()->setRight(y);
+	}	
 
 	// z node
 	z->setParent(y);
@@ -65,15 +99,10 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 		t2->setParent(z);
 		z->setLeft(t2);
 	}
-
-	// y node
-	y->setRight(z);
-	y->setParent(NULL);
-	this->mRoot = y;
 }
 
 template <typename Key, typename Value>
-void rotateBST<Key, Value>::InOrder(std::vector<Key>& result, Node<Key, Value>* start) {
+void rotateBST<Key, Value>::InOrder(std::vector<Key>& result, Node<Key, Value>* start) const {
     if(start->getLeft() != NULL) {
         InOrder(result, start->getLeft());
     }
@@ -90,7 +119,7 @@ bool rotateBST<Key, Value>::sameKeys(const rotateBST& t2) const {
 	std::vector<Key> thisResult;
 	std::vector<Key> thatResult;
 	InOrder(thisResult, this->mRoot);
-	InOrder(thatResult, t2->mRoot);
+	InOrder(thatResult, t2.mRoot);
 
 	if (thisResult == thatResult) return true;
 	else return false;
@@ -102,4 +131,24 @@ void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 	// don't have the same keys
 	if (!sameKeys(t2)) return;
 
+	allRightRotates(t2);
+
+}
+
+template <typename Key, typename Value>
+void rotateBST<Key, Value>::allRightRotates(rotateBST& t2) {
+	// base case, there are no left children
+	if (t2.mRoot->getLeft() == NULL) return;
+
+	while (t2.mRoot->getLeft() != NULL) {
+		rightRotate(t2.mRoot);
+	}
+	allRightRotates(t2);
+}
+
+template <typename Key, typename Value>
+void rotateBST<Key, Value>::leftRotateToRoot(rotateBST& t2) {
+	while (t2.mRoot != this->mRoot) {
+		leftRotate(t2.mRoot);
+	}
 }
