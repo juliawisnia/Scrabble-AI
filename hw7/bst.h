@@ -5,6 +5,8 @@
 #include <exception>
 #include <cstdlib>
 #include <utility>
+#include <algorithm>
+#include <climits>
 
 /**
 * A templated class for a Node in a search tree. The getters for parent/left/right are virtual so that they
@@ -699,11 +701,11 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
  * Return true iff the BST is an AVL Tree.
  */
 template<typename Key, typename Value>
-int height(Node<Key, Value>* root) {
+int BinarySearchTree<Key, Value>::height(Node<Key, Value>* root) const {
 	if (root == NULL) return 0;
 
-	int l = height(root->getKey());
-	int r = height(root->getKey());
+	int l = height(root->getLeft());
+	int r = height(root->getRight());
 	if (l == -1 || r == -1) return -1;
 	int comp = std::abs(l - r);
 	if (comp > 1) return -1;
@@ -713,7 +715,6 @@ int height(Node<Key, Value>* root) {
 template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
-	return true;
 	int h = height(mRoot);
 	if (h == -1) return false;
 	return true;
