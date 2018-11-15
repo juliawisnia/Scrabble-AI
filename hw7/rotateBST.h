@@ -11,7 +11,7 @@
 template <typename Key, typename Value>
 class rotateBST : public BinarySearchTree<Key, Value> 
 {
-	protected:
+	// protected:
 		/*perform a left rotation at the parameter node.If r has no right child, 
 		this function should do nothing. This should run in constant time.*/
 		void leftRotate(Node<Key, Value>* z);
@@ -28,8 +28,8 @@ class rotateBST : public BinarySearchTree<Key, Value>
 		void transform(rotateBST& t2) const;
 	private:
 		void InOrder(std::vector<Key>& result, Node<Key, Value>* start) const;
-		void allRightRotates(rotateBST& t2);
-		void leftRotateToRoot(rotateBST& t2);
+		void allRightRotates(rotateBST& t2) const;
+		void leftRotateToRoot(rotateBST& t2) const;
 };
 
 template <typename Key, typename Value>
@@ -39,7 +39,7 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 
 	bool rotateRoot = false;
 	bool rotateLeftChild = false;
-	if (z == this->mRoot) rotateRoot = true;
+	if (z->getParent() == NULL) rotateRoot = true;
 	else if (z->getKey() < z->getParent()->getKey()) rotateLeftChild = true;
 
 	Node<Key, Value>* y = z->getRight();
@@ -50,7 +50,7 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 
 	if (rotateRoot) {
 		y->setParent(NULL);
-		this->mRoot = y;
+		//this->mRoot = y;
 	}
 
 	else {
@@ -73,7 +73,7 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 
 	bool rotateRoot = false;
 	bool rotateLeftChild = false;
-	if (z == this->mRoot) rotateRoot = true;
+	if (z->getParent() == NULL) rotateRoot = true;
 	else if (z->getKey() < z->getParent()->getKey()) rotateLeftChild = true;
 
 	Node<Key, Value>* y = z->getLeft();
@@ -84,7 +84,7 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 
 	if (rotateRoot) {
 		y->setParent(NULL);
-		this->mRoot = y;
+		//this->mRoot = y;
 	}
 
 	else {
@@ -136,7 +136,7 @@ void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 }
 
 template <typename Key, typename Value>
-void rotateBST<Key, Value>::allRightRotates(rotateBST& t2) {
+void rotateBST<Key, Value>::allRightRotates(rotateBST& t2) const {
 	// base case, there are no left children
 	if (t2.mRoot->getLeft() == NULL) return;
 
@@ -147,7 +147,7 @@ void rotateBST<Key, Value>::allRightRotates(rotateBST& t2) {
 }
 
 template <typename Key, typename Value>
-void rotateBST<Key, Value>::leftRotateToRoot(rotateBST& t2) {
+void rotateBST<Key, Value>::leftRotateToRoot(rotateBST& t2) const {
 	while (t2.mRoot != this->mRoot) {
 		leftRotate(t2.mRoot);
 	}
