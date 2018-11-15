@@ -11,13 +11,13 @@
 template <typename Key, typename Value>
 class rotateBST : public BinarySearchTree<Key, Value> 
 {
-	// protected:
+	protected:
 		/*perform a left rotation at the parameter node.If r has no right child, 
 		this function should do nothing. This should run in constant time.*/
 		void leftRotate(Node<Key, Value>* z);
 		/*perform a right rotation at the parameter node. If r has no left child, 
 		this function should do nothing. This should run in constant time.*/
-		void rightRotate(Node<Key, Value>* node);
+		void rightRotate(Node<Key, Value>* z);
 	public:
 		/*given another BST, checks that the set of keys in both trees are identical. 
 		This should run in O(n) time, where n is the number of nodes in the tree.*/
@@ -28,8 +28,8 @@ class rotateBST : public BinarySearchTree<Key, Value>
 		void transform(rotateBST& t2) const;
 	private:
 		void InOrder(std::vector<Key>& result, Node<Key, Value>* start) const;
-		void allRightRotates(rotateBST& t2) const;
-		void leftRotateToRoot(rotateBST& t2) const;
+		void allRightRotates(Node<Key, Value>* root);
+		void makeSameTree(Node<Key, Value>* changeRoot, Node<Key, Value>* compRoot);
 };
 
 template <typename Key, typename Value>
@@ -48,9 +48,10 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 	// y node
 	y->setLeft(z);
 
+	// if you're rotating the root set parent
 	if (rotateRoot) {
 		y->setParent(NULL);
-		//this->mRoot = y;
+		this->mRoot = y;
 	}
 
 	else {
@@ -69,6 +70,7 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
+	// has no left child
 	if (z->getLeft() == NULL) return;
 
 	bool rotateRoot = false;
@@ -82,9 +84,10 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 	// y node
 	y->setRight(z);
 
+	// if you're rotating the root set parent to NULL
 	if (rotateRoot) {
 		y->setParent(NULL);
-		//this->mRoot = y;
+		this->mRoot = y;
 	}
 
 	else {
@@ -123,32 +126,53 @@ bool rotateBST<Key, Value>::sameKeys(const rotateBST& t2) const {
 
 	if (thisResult == thatResult) return true;
 	else return false;
-
 }
 
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 	// don't have the same keys
 	if (!sameKeys(t2)) return;
-
-	allRightRotates(t2);
-
-}
-
-template <typename Key, typename Value>
-void rotateBST<Key, Value>::allRightRotates(rotateBST& t2) const {
-	// base case, there are no left children
-	if (t2.mRoot->getLeft() == NULL) return;
-
 	while (t2.mRoot->getLeft() != NULL) {
-		rightRotate(t2.mRoot);
+		t2.rightRotate(t2.mRoot);
 	}
-	allRightRotates(t2);
+
+	t2.allRightRotates(t2.mRoot->getRight());
+	Node<Key, Value>* compRoot = this->mRoot;
+	t2.makeSameTree(t2.mRoot, compRoot);
 }
 
 template <typename Key, typename Value>
-void rotateBST<Key, Value>::leftRotateToRoot(rotateBST& t2) const {
-	while (t2.mRoot != this->mRoot) {
-		leftRotate(t2.mRoot);
+void rotateBST<Key, Value>::allRightRotates(Node<Key, Value>* root) {
+	if (root->getRight() == NULL && root->getLeft() == NULL) return;
+
+	while (root->getLeft() != NULL) {
+		this->rightRotate(root);
+		root = root->getParent();
 	}
+	if (root->getRight() == NULL) return;
+	this->allRightRotates(root->getRight());
+}
+
+template <typename Key, typename Value>
+void rotateBST<Key, Value>::makeSameTree(Node<Key, Value>* changeRoot, Node<Key, Value>* compRoot) {
+	// base case, we have reached the leaf nodes so we're done
+	if (changeRoot->getRight() == NULL && changeRoot->getLeft() == NULL) return;
+
+	if (changeRoot->getKey() < compRoot->getKey()) {
+		while (changeRoot->getKey() != compRoot->getKey()) {
+			this->rightRotate(changeRoot);
+			changeRoot = changeRoot->getParent();
+		}
+	}
+
+	else if (changeRoot->getKey() > compRoot->getKey()) {
+		while (changeRoot->getKey() != compRoot->getKey()) {
+			this->leftRotate(changeRoot);
+			changeRoot = changeRoot->getParent();
+		}
+	}
+
+	// recursive calls for left and right subtrees
+	makeSameTree(changeRoot->getLeft(), compRoot->getLeft());
+	makeSameTree(changeRoot->getRight(), compRoot->getRight());
 }
