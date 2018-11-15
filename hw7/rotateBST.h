@@ -152,12 +152,12 @@ bool rotateBST<Key, Value>::sameKeys(const rotateBST& t2) const {
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 	// don't have the same keys
-	//if (!sameKeys(t2)) return;
+	if (!sameKeys(t2)) return;
 	//t2.rightRotate(t2.mRoot);
 	t2.allRightRotates(t2.mRoot);
 
-	// Node<Key, Value>* compRoot = this->mRoot;
-	// t2.makeSameTree(t2.mRoot, compRoot);
+	Node<Key, Value>* compRoot = this->mRoot;
+	t2.makeSameTree(t2.mRoot, compRoot);
 }
 
 template <typename Key, typename Value>
