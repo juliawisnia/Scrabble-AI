@@ -663,6 +663,7 @@ void BinarySearchTree<Key, Value>::clear()
 template<typename Key, typename Value>
 Node<Key, Value>* BinarySearchTree<Key, Value>::getSmallestNode() const
 {
+	if (mRoot == NULL) return NULL;
 	Node<Key, Value>* smallest = mRoot;
 	while (smallest->getLeft() != NULL) {
 		smallest = smallest->getLeft();
