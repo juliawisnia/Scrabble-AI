@@ -164,6 +164,8 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             if (search->getLeft() == NULL) {
                 AVLNode<Key, Value>* insertLeft = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
                 search->setLeft(insertLeft);
+                // set to the child so that we can traverse from the newly inserted node
+                search = search->getLeft();
                 break;
             }
             else search = search->getLeft();
@@ -172,11 +174,14 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             if (search->getRight() == NULL) {
                 AVLNode<Key, Value>* insertRight = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
                 search->setRight(insertRight);
+                search = search->getRight();
                 break;
             }
             else search = search->getRight();
         }
     }
+
+    std::cout << "search node is currently: " << search->getKey() << std::endl;
 
     // update all heights
     while (search->getParent() != NULL) {
@@ -186,13 +191,16 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
         if (search->getLeft() != NULL) {
             heightLeft = search->getLeft()->getHeight() + 1;
+            std::cout << "Unbalanced, height of left is: " << heightLeft << std::endl;
         }
         if (search->getRight() != NULL) {
             heightRight = search->getRight()->getHeight() + 1;
+            std::cout << "Unbalanced, height of right is: " << heightRight << std::endl;
         }
 
         // unbalanced, do rotations
         if (std::abs(heightLeft - heightRight) > 1) {
+            std::cout << "unbalanced" << std::endl;
             // going to rotate this node, will have one less child
             int prevHeight = search->getHeight();
             search->setHeight(prevHeight--);
@@ -211,7 +219,9 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         else {
             int prevHeight = search->getHeight();
             int newHeight = prevHeight + 1;
+            std::cout << "height before: " << prevHeight << std::endl;
             search->setHeight(newHeight);
+            std::cout << "height after: " << search->getHeight() << std::endl;
         }
     }
 
