@@ -140,6 +140,7 @@ Begin implementations for the AVLTree class.
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {
+    //std::cout << "avl insert" << std::endl;
     // if node is already in tree, just update values and move on
     Node<Key, Value>* temp = this->internalFind(keyValuePair.first);
     AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(temp);
@@ -152,19 +153,18 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
     // if it's the empty tree, insert new AVLNode
     if (this->mRoot == NULL) {
         AVLNode<Key, Value>* add = new AVLNode<Key, Value>(keyValuePair.first, keyValuePair.second, NULL);
-        dynamic_cast<AVLNode<Key, Value>*>(this->mRoot) = add;
+        (this->mRoot) = add;
         return;
     }
     // adapted BST insert, just now inserting AVLNodes
     else search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
 
     while (search != NULL) {
-
         if (keyValuePair.first < search->getKey()) {
             if (search->getLeft() == NULL) {
                 AVLNode<Key, Value>* insertLeft = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
                 search->setLeft(insertLeft);
-                return;
+                break;
             }
             else search = search->getLeft();
         }
@@ -172,7 +172,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             if (search->getRight() == NULL) {
                 AVLNode<Key, Value>* insertRight = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
                 search->setRight(insertRight);
-                return;
+                break;
             }
             else search = search->getRight();
         }
@@ -184,8 +184,12 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         int heightLeft = 0;
         int heightRight = 0;
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
-        if (search->getLeft() != NULL) heightLeft = search->getLeft()->getHeight() + 1;
-        if (search->getRight() != NULL) heightRight = search->getRight()->getHeight() + 1;
+        if (search->getLeft() != NULL) {
+            heightLeft = search->getLeft()->getHeight() + 1;
+        }
+        if (search->getRight() != NULL) {
+            heightRight = search->getRight()->getHeight() + 1;
+        }
 
         // unbalanced, do rotations
         if (std::abs(heightLeft - heightRight) > 1) {
@@ -206,7 +210,8 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         // if not unbalanced, increase height because it has a new node
         else {
             int prevHeight = search->getHeight();
-            search->setHeight(prevHeight++);
+            int newHeight = prevHeight + 1;
+            search->setHeight(newHeight);
         }
     }
 
