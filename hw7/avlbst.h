@@ -124,7 +124,7 @@ public:
     void remove(const Key& key);
 
 private:
-    void deleteNode(AVLNode<Key, Value>* search);
+    AVLNode<Key, Value>* deleteNode(AVLNode<Key, Value>* search);
 	/* Helper functions are strongly encouraged to help separate the problem
 	   into smaller pieces. You should not need additional data members. */
 };
@@ -182,7 +182,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         }
     }
 
-    // update all heights until an unbalanced tree is found, balance it then return
+    // update all heights until you reach unbalanced node, balance, then return
     while (search->getParent() != NULL) {
         search = search->getParent();
 
@@ -207,7 +207,6 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             search->setHeight(newHeight);
             // left child is heavier, do a right rotate
             if (heightLeft > heightRight) {
-                bool zigzag = false;
                 // zig-zag rotation
                 int zagRightHeight = 0;
                 int zagLeftHeight = 0;
@@ -215,33 +214,14 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (leftChild->getLeft() != NULL) zagLeftHeight = leftChild->getLeft()->getHeight() + 1;
 
                 if (zagRightHeight > zagLeftHeight) {
-                    zigzag = true;
                     this->leftRotate(leftChild);
                 }
 
                 this->rightRotate(search);
-                // search will become child, dec by one
-                int prevHeight = search->getHeight();
-                int newHeight = prevHeight - 1;
-                search->setHeight(newHeight);
-
-                if (zigzag) { 
-                    // parent will increase by one
-                    prevHeight = search->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    search->getParent()->setHeight(newHeight);  
-
-                    // guaranteed to be left child, will decrease by one
-                    prevHeight = search->getParent()->getLeft()->getHeight();
-                    newHeight = prevHeight - 1;
-                    search->getParent()->getLeft()->setHeight(newHeight);              
-                }
-
                 return;
             }
-            // right child is heavier, do a left rotate
+            // right child is heavier, do a left rotate;
             else {
-                bool zigzag = false;
                 // zig-zag rotation
                 int zagRightHeight = 0;
                 int zagLeftHeight = 0;
@@ -249,26 +229,10 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (rightChild->getLeft() != NULL) zagLeftHeight = rightChild->getLeft()->getHeight() + 1;
 
                 if (zagRightHeight < zagLeftHeight) {
-                    zigzag = true;
                     this->rightRotate(leftChild);
                 }
+
                 this->leftRotate(search);
-                // search will become child, dec by one
-                int prevHeight = search->getHeight();
-                int newHeight = prevHeight - 1;
-                search->setHeight(newHeight);
-
-                if (zigzag) { 
-                    // parent will increase by one
-                    prevHeight = search->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    search->getParent()->setHeight(newHeight);  
-
-                    // guaranteed to be right child, will decrease by one
-                    prevHeight = search->getParent()->getRight()->getHeight();
-                    newHeight = prevHeight - 1;
-                    search->getParent()->getRight()->setHeight(newHeight);              
-                }
                 return;
             }
         }
@@ -292,18 +256,19 @@ void AVLTree<Key, Value>::remove(const Key& key)
 {
     Node<Key, Value>* temp = this->internalFind(key);
     AVLNode<Key, Value>* nodeToDelete = dynamic_cast<AVLNode<Key, Value>*>(temp);
-
     // key is not in the tree
     if (nodeToDelete == NULL) return;
 
-    this->deleteNode(nodeToDelete);
+    AVLNode<Key, Value>* search = NULL;
+    search = this->deleteNode(nodeToDelete);
+    if (search == NULL) search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
 
-    Node<Key, Value>* tempSearch = this->getSmallestNode();
-    AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
+    // Node<Key, Value>* tempSearch = this->getSmallestNode();
+    // AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
 
-        while (search->getParent() != NULL) {
-        search = search->getParent();
-
+    // check all nodes until you reach one that doesn't need to be updated
+    bool balanced = false;
+    while (!balanced) {
         int heightLeft = 0;
         int heightRight = 0;
 
@@ -323,9 +288,8 @@ void AVLTree<Key, Value>::remove(const Key& key)
             int prevHeight = search->getHeight();
             int newHeight = prevHeight - 1;
             search->setHeight(newHeight);
-            // left child is heavier, do a right rotate
+            // left child is heavier, do a left rotate
             if (heightLeft > heightRight) {
-                bool zigzag = false;
                 // zig-zag rotation
                 int zagRightHeight = 0;
                 int zagLeftHeight = 0;
@@ -333,32 +297,13 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (leftChild->getLeft() != NULL) zagLeftHeight = leftChild->getLeft()->getHeight() + 1;
 
                 if (zagRightHeight > zagLeftHeight) {
-                    zigzag = true;
                     this->leftRotate(leftChild);
                 }
 
                 this->rightRotate(search);
-                // search will become child, dec by one
-                int prevHeight = search->getHeight();
-                int newHeight = prevHeight - 1;
-                search->setHeight(newHeight);
-
-                if (zigzag) { 
-                    // parent will increase by one
-                    prevHeight = search->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    search->getParent()->setHeight(newHeight);  
-
-                    // guaranteed to be left child, will decrease by one
-                    prevHeight = search->getParent()->getLeft()->getHeight();
-                    newHeight = prevHeight - 1;
-                    search->getParent()->getLeft()->setHeight(newHeight);              
-                }
-
             }
-            // right child is heavier, do a left rotate
+            // right child is heavier, do a left rotate;
             else {
-                bool zigzag = false;
                 // zig-zag rotation
                 int zagRightHeight = 0;
                 int zagLeftHeight = 0;
@@ -366,47 +311,29 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (rightChild->getLeft() != NULL) zagLeftHeight = rightChild->getLeft()->getHeight() + 1;
 
                 if (zagRightHeight < zagLeftHeight) {
-                    zigzag = true;
                     this->rightRotate(leftChild);
                 }
+
                 this->leftRotate(search);
-                // search will become child, dec by one
-                int prevHeight = search->getHeight();
-                int newHeight = prevHeight - 1;
-                search->setHeight(newHeight);
-
-                if (zigzag) { 
-                    // parent will increase by one
-                    prevHeight = search->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    search->getParent()->setHeight(newHeight);  
-
-                    // guaranteed to be right child, will decrease by one
-                    prevHeight = search->getParent()->getRight()->getHeight();
-                    newHeight = prevHeight - 1;
-                    search->getParent()->getRight()->setHeight(newHeight);              
-                }
-
             }
         }
         // if not unbalanced, increase height because it has a new node
         else {
-            int prevHeight = search->getHeight();
-            int newHeight = prevHeight + 1;
-            search->setHeight(newHeight);
+            balanced = true;
         }
     }
    // TODO
 }
 
 template<typename Key, typename Value>
-void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
+AVLNode<Key, Value>* AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
+    AVLNode<Key, Value>* nodeToReturn = search->getParent();
     // no children
     if (search->getRight() == NULL && search->getLeft() == NULL) {
         if (search == this->mRoot) {
             this->mRoot = NULL;
             delete search;
-            return;
+            return NULL;
         }
         // search is the right child
         if (search->getKey() > search->getParent()->getKey()) {
@@ -417,7 +344,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             search->getParent()->setLeft(NULL);
         }
         delete search;
-        return;
+        return nodeToReturn;
     }
     // one child
     else if (search->getRight() == NULL || search->getLeft() == NULL) {
@@ -428,21 +355,21 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = search->getRight();
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return NULL;
             }
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
                 search->getParent()->setRight(search->getRight());
                 search->getRight()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the left child
             else {
                 search->getParent()->setLeft(search->getRight());
                 search->getRight()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
         // has a left child
@@ -451,27 +378,28 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = search->getLeft();
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return NULL;
             }
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
                 search->getParent()->setRight(search->getLeft());
                 search->getLeft()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the left child
             else {
                 search->getParent()->setLeft(search->getLeft());
                 search->getLeft()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
     }
     // two children
     else {
         Node<Key, Value>* predecessor = search->getLeft();
+        nodeToReturn =  dynamic_cast<AVLNode<Key, Value>*>(predecessor);
         // predecessor is adjacent to search
         if (predecessor->getRight() == NULL) {
             // search is root
@@ -481,7 +409,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = predecessor;
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return nodeToReturn;
             }           
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
@@ -490,7 +418,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 predecessor->setRight(search->getRight());
                 search->getRight()->setParent(predecessor);
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is left child
             else {
@@ -499,7 +427,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 predecessor->setRight(search->getRight());
                 search->getRight()->setParent(predecessor);
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
 
@@ -522,7 +450,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             this->mRoot = predecessor;
             this->mRoot->setParent(NULL);
             delete search;
-            return;
+            return NULL;
         }
 
         // search is the right child
@@ -540,7 +468,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             predecessor->getLeft()->setParent(predecessor);
             predecessor->getRight()->setParent(predecessor);
             delete search;
-            return;
+            return nodeToReturn;
         }
         // search is left child
         else {
@@ -557,10 +485,10 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             predecessor->getLeft()->setParent(predecessor);
             predecessor->getRight()->setParent(predecessor);
             delete search;
-            return; 
+            return nodeToReturn; 
         }
     }
-    return;
+    return NULL;
 }
 /*
 ------------------------------------------
