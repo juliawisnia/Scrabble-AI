@@ -140,10 +140,77 @@ Begin implementations for the AVLTree class.
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {
-    AVLNode<Key, Value>* search = internalFind(keyValuePair.first);
-    if (search == NULL) {
-        
+    // if node is already in tree, just update values and move on
+    Node<Key, Value>* temp = this->internalFind(keyValuePair.first);
+    AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(temp);
+
+    if (search != NULL) {
+        search->setValue(keyValuePair.second);
+        return;
     }
+
+    // if it's the empty tree, insert new AVLNode
+    if (this->mRoot == NULL) {
+        AVLNode<Key, Value>* add = new AVLNode<Key, Value>(keyValuePair.first, keyValuePair.second, NULL);
+        dynamic_cast<AVLNode<Key, Value>*>(this->mRoot) = add;
+        return;
+    }
+    // adapted BST insert, just now inserting AVLNodes
+    else search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
+
+    while (search != NULL) {
+
+        if (keyValuePair.first < search->getKey()) {
+            if (search->getLeft() == NULL) {
+                AVLNode<Key, Value>* insertLeft = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
+                search->setLeft(insertLeft);
+                return;
+            }
+            else search = search->getLeft();
+        }
+        else {
+            if (search->getRight() == NULL) {
+                AVLNode<Key, Value>* insertRight = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
+                search->setRight(insertRight);
+                return;
+            }
+            else search = search->getRight();
+        }
+    }
+
+    // update all heights
+    while (search->getParent() != NULL) {
+        search = search->getParent();
+        int heightLeft = 0;
+        int heightRight = 0;
+        // plus one, because each node is initialized w val of 0, but an empty tree has val 0
+        if (search->getLeft() != NULL) heightLeft = search->getLeft()->getHeight() + 1;
+        if (search->getRight() != NULL) heightRight = search->getRight()->getHeight() + 1;
+
+        // unbalanced, do rotations
+        if (std::abs(heightLeft - heightRight) > 1) {
+            // going to rotate this node, will have one less child
+            int prevHeight = search->getHeight();
+            search->setHeight(prevHeight--);
+            // left child is heavier, do a right rotate
+            if (heightLeft > heightRight) {
+                this->rightRotate(search);
+                return;
+            }
+            // right child is heavier, do a left rotate;
+            else {
+                this->leftRotate(search);
+                return;
+            }
+        }
+        // if not unbalanced, increase height because it has a new node
+        else {
+            int prevHeight = search->getHeight();
+            search->setHeight(prevHeight++);
+        }
+    }
+
+
     // TODO
 }
 

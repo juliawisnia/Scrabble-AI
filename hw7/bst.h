@@ -434,6 +434,7 @@ void BinarySearchTree<Key, Value>::insert(const std::pair<Key, Value>& keyValueP
 {
 	if (mRoot == NULL) {
 		mRoot = new Node<Key, Value>(keyValuePair.first, keyValuePair.second, NULL);
+		return;
 	}
 
 	Node<Key, Value>* search = internalFind(keyValuePair.first);
