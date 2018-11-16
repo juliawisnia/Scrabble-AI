@@ -175,6 +175,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             if (search->getRight() == NULL) {
                 AVLNode<Key, Value>* insertRight = new AVLNode<Key, Value> (keyValuePair.first, keyValuePair.second, search);
                 search->setRight(insertRight);
+                // set to child so that we can traverse from the newly inserted node
                 search = search->getRight();
                 break;
             }
@@ -194,9 +195,22 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
         if (leftChild != NULL) {
             heightLeft = leftChild->getHeight() + 1;
+            // node was inserted here, so add one
+            if (leftchild->getHeight() == 0) {
+                // where the node has been inserted, will be one greater
+                prevHeight = leftChild->getHeight();
+                newHeight = prevHeight + 1;
+                leftChild->setHeight(newHeight);
+            }
         }
         if (rightChild != NULL) {
             heightRight = rightChild->getHeight() + 1;
+            if (rightChild->getHeight() == 0) {
+                // where the node has been inserted, will be one greater
+                prevHeight = rightChild->getHeight();
+                newHeight = prevHeight + 1;
+                rightChild->setHeight(newHeight);
+            }
         }
 
         // unbalanced, do rotations
@@ -218,13 +232,13 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (zagRightHeight > zagLeftHeight) {
                     this->leftRotate(leftChild);
 
-                    int prevHeight = leftChild->getHeight();
-                    int newHeight = prevHeight - 1;
-                    leftChild->setHeight(newHeight);
+                    // int prevHeight = leftChild->getHeight();
+                    // int newHeight = prevHeight - 1;
+                    // leftChild->setHeight(newHeight);
 
-                    prevHeight = leftChild->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    leftChild->getParent()->setHeight(newHeight);
+                    // prevHeight = leftChild->getParent()->getHeight();
+                    // newHeight = prevHeight + 1;
+                    // leftChild->getParent()->setHeight(newHeight);
                 }
 
                 this->rightRotate(search);
@@ -242,13 +256,13 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (zagRightHeight < zagLeftHeight) {
                     this->rightRotate(rightChild);
 
-                    int prevHeight = rightChild->getHeight();
-                    int newHeight = prevHeight - 1;
-                    rightChild->setHeight(newHeight);
+                    // int prevHeight = rightChild->getHeight();
+                    // int newHeight = prevHeight - 1;
+                    // rightChild->setHeight(newHeight);
 
-                    prevHeight = rightChild->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    rightChild->getParent()->setHeight(newHeight);
+                    // prevHeight = rightChild->getParent()->getHeight();
+                    // newHeight = prevHeight + 1;
+                    // rightChild->getParent()->setHeight(newHeight);
                 }
 
                 this->leftRotate(search);
@@ -260,6 +274,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             int prevHeight = search->getHeight();
             int newHeight = prevHeight + 1;
             search->setHeight(newHeight);
+            search = search->getParent();
         }
     }
 
@@ -318,13 +333,13 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (zagRightHeight > zagLeftHeight) {
                     this->leftRotate(leftChild);
 
-                    int prevHeight = leftChild->getHeight();
-                    int newHeight = prevHeight - 1;
-                    leftChild->setHeight(newHeight);
+                    // int prevHeight = leftChild->getHeight();
+                    // int newHeight = prevHeight - 1;
+                    // leftChild->setHeight(newHeight);
 
-                    prevHeight = leftChild->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    leftChild->getParent()->setHeight(newHeight);
+                    // prevHeight = leftChild->getParent()->getHeight();
+                    // newHeight = prevHeight + 1;
+                    // leftChild->getParent()->setHeight(newHeight);
                 }
 
                 this->rightRotate(search);
@@ -341,13 +356,13 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (zagRightHeight < zagLeftHeight) {
                     this->rightRotate(rightChild);
 
-                    int prevHeight = rightChild->getHeight();
-                    int newHeight = prevHeight - 1;
-                    rightChild->setHeight(newHeight);
+                    // int prevHeight = rightChild->getHeight();
+                    // int newHeight = prevHeight - 1;
+                    // rightChild->setHeight(newHeight);
 
-                    prevHeight = rightChild->getParent()->getHeight();
-                    newHeight = prevHeight + 1;
-                    rightChild->getParent()->setHeight(newHeight);
+                    // prevHeight = rightChild->getParent()->getHeight();
+                    // newHeight = prevHeight + 1;
+                    // rightChild->getParent()->setHeight(newHeight);
                 }
 
                 this->leftRotate(search);
