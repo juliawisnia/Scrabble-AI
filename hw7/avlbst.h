@@ -124,6 +124,7 @@ public:
     void remove(const Key& key);
 
 private:
+    void deleteNode(AVLNode<Key, Value>* search);
 	/* Helper functions are strongly encouraged to help separate the problem
 	   into smaller pieces. You should not need additional data members. */
 };
@@ -229,9 +230,217 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::remove(const Key& key)
 {
+    Node<Key, Value>* temp = this->internalFind(key);
+    AVLNode<Key, Value>* nodeToDelete = dynamic_cast<AVLNode<Key, Value>*>(temp);
+
+    // key is not in the tree
+    if (nodeToDelete == NULL) return;
+
+    this->deleteNode(nodeToDelete);
+
+    Node<Key, Value>* tempSearch = this->getSmallestNode();
+    AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
+
+    while (search->getParent() != NULL) {
+        search = search->getParent();
+        int heightLeft = 0;
+        int heightRight = 0;
+        // plus one, because each node is initialized w val of 0, but an empty tree has val 0
+        if (search->getLeft() != NULL) {
+            heightLeft = search->getLeft()->getHeight() + 1;
+        }
+        if (search->getRight() != NULL) {
+            heightRight = search->getRight()->getHeight() + 1;
+        }
+
+        // unbalanced, do rotations
+        if (std::abs(heightLeft - heightRight) > 1) {
+            // going to rotate this node, will have one less child
+            int prevHeight = search->getHeight();
+            int newHeight = prevHeight - 1;
+            search->setHeight(newHeight);
+            // left child is heavier, do a right rotate
+            if (heightLeft > heightRight) {
+                this->rightRotate(search);
+            }
+            // right child is heavier, do a left rotate;
+            else {
+                this->leftRotate(search);
+            }
+        }
+        // if not unbalanced, increase height because it has a new node
+        else {
+            int prevHeight = search->getHeight();
+            int newHeight = prevHeight + 1;
+            search->setHeight(newHeight);
+        }
+    }
    // TODO
 }
 
+template<typename Key, typename Value>
+void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
+    // no children
+    if (search->getRight() == NULL && search->getLeft() == NULL) {
+        if (search == this->mRoot) {
+            this->mRoot = NULL;
+            delete search;
+            return;
+        }
+        // search is the right child
+        if (search->getKey() > search->getParent()->getKey()) {
+            search->getParent()->setRight(NULL);
+        }
+        // search is the left child
+        else {
+            search->getParent()->setLeft(NULL);
+        }
+        delete search;
+        return;
+    }
+    // one child
+    else if (search->getRight() == NULL || search->getLeft() == NULL) {
+        // has a right child
+        if (search->getRight() != NULL) {
+            // it's the root
+            if (search == this->mRoot) {
+                this->mRoot = search->getRight();
+                this->mRoot->setParent(NULL);
+                delete search;
+                return;
+            }
+            // search is the right child
+            if (search->getKey() > search->getParent()->getKey()) {
+                search->getParent()->setRight(search->getRight());
+                search->getRight()->setParent(search->getParent());
+                delete search;
+                return;
+            }
+            // search is the left child
+            else {
+                search->getParent()->setLeft(search->getRight());
+                search->getRight()->setParent(search->getParent());
+                delete search;
+                return;
+            }
+        }
+        // has a left child
+        else {
+            if (search == this->mRoot) {
+                this->mRoot = search->getLeft();
+                this->mRoot->setParent(NULL);
+                delete search;
+                return;
+            }
+            // search is the right child
+            if (search->getKey() > search->getParent()->getKey()) {
+                search->getParent()->setRight(search->getLeft());
+                search->getLeft()->setParent(search->getParent());
+                delete search;
+                return;
+            }
+            // search is the left child
+            else {
+                search->getParent()->setLeft(search->getLeft());
+                search->getLeft()->setParent(search->getParent());
+                delete search;
+                return;
+            }
+        }
+    }
+    // two children
+    else {
+        Node<Key, Value>* predecessor = search->getLeft();
+        // predecessor is adjacent to search
+        if (predecessor->getRight() == NULL) {
+            // search is root
+            if (search == this->mRoot) {
+                predecessor->setRight(this->mRoot->getRight());
+                this->mRoot->getRight()->setParent(predecessor);
+                this->mRoot = predecessor;
+                this->mRoot->setParent(NULL);
+                delete search;
+                return;
+            }           
+            // search is the right child
+            if (search->getKey() > search->getParent()->getKey()) {
+                search->getParent()->setRight(predecessor);
+                predecessor->setParent(search->getParent());
+                predecessor->setRight(search->getRight());
+                search->getRight()->setParent(predecessor);
+                delete search;
+                return;
+            }
+            // search is left child
+            else {
+                search->getParent()->setLeft(predecessor);
+                predecessor->setParent(search->getParent());
+                predecessor->setRight(search->getRight());
+                search->getRight()->setParent(predecessor);
+                delete search;
+                return;
+            }
+        }
+
+        while (predecessor->getRight() != NULL) {
+            predecessor = predecessor->getRight();
+        }
+
+        // search is root
+        if (search == this->mRoot) {
+            if (predecessor->getLeft() != NULL) {
+                predecessor->getParent()->setRight(predecessor->getLeft());
+                predecessor->getLeft()->setParent(predecessor->getParent());
+            }
+            else predecessor->getParent()->setRight(NULL);
+
+            predecessor->setRight(this->mRoot->getRight());
+            predecessor->setLeft(this->mRoot->getLeft()); 
+            this->mRoot->getRight()->setParent(predecessor);
+            this->mRoot->getLeft()->setParent(predecessor);
+            this->mRoot = predecessor;
+            this->mRoot->setParent(NULL);
+            delete search;
+            return;
+        }
+
+        // search is the right child
+        if (search->getKey() > search->getParent()->getKey()) {
+            if (predecessor->getLeft() != NULL) {
+                predecessor->getParent()->setRight(predecessor->getLeft());
+                predecessor->getLeft()->setParent(predecessor->getParent());
+            }
+            else predecessor->getParent()->setRight(NULL);
+
+            search->getParent()->setRight(predecessor);
+            predecessor->setParent(search->getParent());
+            predecessor->setRight(search->getRight());
+            predecessor->setLeft(search->getLeft());
+            predecessor->getLeft()->setParent(predecessor);
+            predecessor->getRight()->setParent(predecessor);
+            delete search;
+            return;
+        }
+        // search is left child
+        else {
+            if (predecessor->getLeft() != NULL) {
+                predecessor->getParent()->setRight(predecessor->getLeft());
+                predecessor->getLeft()->setParent(predecessor->getParent());
+            }
+            else predecessor->getParent()->setRight(NULL);
+
+            search->getParent()->setLeft(predecessor);
+            predecessor->setParent(search->getParent());
+            predecessor->setRight(search->getRight());
+            predecessor->setLeft(search->getLeft());
+            predecessor->getLeft()->setParent(predecessor);
+            predecessor->getRight()->setParent(predecessor);
+            delete search;
+            return; 
+        }
+    }
+    return;
+}
 /*
 ------------------------------------------
 End implementations for the AVLTree class.
