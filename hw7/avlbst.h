@@ -264,17 +264,20 @@ void AVLTree<Key, Value>::remove(const Key& key)
 
     Node<Key, Value>* tempSearch = this->getSmallestNode();
     AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
-
+    
     while (search->getParent() != NULL) {
         search = search->getParent();
         int heightLeft = 0;
         int heightRight = 0;
+
+        AVLNode<Key, Value>* leftChild = search->getLeft();
+        AVLNode<Key, Value>* rightChild = search->getRight();
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
-        if (search->getLeft() != NULL) {
-            heightLeft = search->getLeft()->getHeight() + 1;
+        if (leftChild != NULL) {
+            heightLeft = leftChild->getHeight() + 1;
         }
-        if (search->getRight() != NULL) {
-            heightRight = search->getRight()->getHeight() + 1;
+        if (rightChild != NULL) {
+            heightRight = rightChild->getHeight() + 1;
         }
 
         // unbalanced, do rotations
@@ -283,12 +286,32 @@ void AVLTree<Key, Value>::remove(const Key& key)
             int prevHeight = search->getHeight();
             int newHeight = prevHeight - 1;
             search->setHeight(newHeight);
-            // left child is heavier, do a right rotate
+            // left child is heavier, do a left rotate
             if (heightLeft > heightRight) {
+                // zig-zag rotation
+                int zagRightHeight = 0;
+                int zagLeftHeight = 0;
+                if (leftChild->getRight() != NULL) zagRightHeight = leftChild->getRight()->getHeight() + 1;
+                if (leftChild->getLeft() != NULL) zagLeftHeight = leftChild->getLeft()->getHeight() + 1;
+
+                if (zagRightHeight > zagLeftHeight) {
+                    this->leftRotate(leftChild);
+                }
+
                 this->rightRotate(search);
             }
             // right child is heavier, do a left rotate;
             else {
+                // zig-zag rotation
+                int zagRightHeight = 0;
+                int zagLeftHeight = 0;
+                if (rightChild->getRight() != NULL) zagRightHeight = rightChild->getRight()->getHeight() + 1;
+                if (rightChild->getLeft() != NULL) zagLeftHeight = rightChild->getLeft()->getHeight() + 1;
+
+                if (zagRightHeight < zagLeftHeight) {
+                    this->rightRotate(leftChild);
+                }
+
                 this->leftRotate(search);
             }
         }
