@@ -141,7 +141,6 @@ Begin implementations for the AVLTree class.
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {
-    //std::cout << "avl insert" << std::endl;
     // if node is already in tree, just update values and move on
     Node<Key, Value>* temp = this->internalFind(keyValuePair.first);
     AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(temp);
@@ -183,100 +182,107 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         }
     }
 
+    // BinarySearchTree<Key, Value>* tree = NULL;
     // update all heights until you reach unbalanced node, balance, then return
-    while (search->getParent() != NULL) {
-        search = search->getParent();
-
-        int heightLeft = 0;
-        int heightRight = 0;
-
-        AVLNode<Key, Value>* leftChild = search->getLeft();
-        AVLNode<Key, Value>* rightChild = search->getRight();
-        // plus one, because each node is initialized w val of 0, but an empty tree has val 0
-        if (leftChild != NULL) {
-            heightLeft = leftChild->getHeight() + 1;
-            // node was inserted here, so add one
-            if (leftchild->getHeight() == 0) {
-                // where the node has been inserted, will be one greater
-                prevHeight = leftChild->getHeight();
-                newHeight = prevHeight + 1;
-                leftChild->setHeight(newHeight);
-            }
-        }
-        if (rightChild != NULL) {
-            heightRight = rightChild->getHeight() + 1;
-            if (rightChild->getHeight() == 0) {
-                // where the node has been inserted, will be one greater
-                prevHeight = rightChild->getHeight();
-                newHeight = prevHeight + 1;
-                rightChild->setHeight(newHeight);
-            }
-        }
-
-        // unbalanced, do rotations
-        if (std::abs(heightLeft - heightRight) > 1) {
-            // going to rotate this node, will have one less child
-            int prevHeight = search->getHeight();
-            int newHeight = prevHeight - 1;
-            search->setHeight(newHeight);
-
-            // left child is heavier, do a right rotate
-            if (heightLeft > heightRight) {
-                // zig-zag rotation
-                int zagRightHeight = 0;
-                int zagLeftHeight = 0;
-                if (leftChild->getRight() != NULL) zagRightHeight = leftChild->getRight()->getHeight() + 1;
-                if (leftChild->getLeft() != NULL) zagLeftHeight = leftChild->getLeft()->getHeight() + 1;
-
-
-                if (zagRightHeight > zagLeftHeight) {
-                    this->leftRotate(leftChild);
-
-                    // int prevHeight = leftChild->getHeight();
-                    // int newHeight = prevHeight - 1;
-                    // leftChild->setHeight(newHeight);
-
-                    // prevHeight = leftChild->getParent()->getHeight();
-                    // newHeight = prevHeight + 1;
-                    // leftChild->getParent()->setHeight(newHeight);
-                }
-
-                this->rightRotate(search);
-                return;
-            }
-
-            // right child is heavier, do a left rotate;
-            else {
-                // zig-zag rotation
-                int zagRightHeight = 0;
-                int zagLeftHeight = 0;
-                if (rightChild->getRight() != NULL) zagRightHeight = rightChild->getRight()->getHeight() + 1;
-                if (rightChild->getLeft() != NULL) zagLeftHeight = rightChild->getLeft()->getHeight() + 1;
-
-                if (zagRightHeight < zagLeftHeight) {
-                    this->rightRotate(rightChild);
-
-                    // int prevHeight = rightChild->getHeight();
-                    // int newHeight = prevHeight - 1;
-                    // rightChild->setHeight(newHeight);
-
-                    // prevHeight = rightChild->getParent()->getHeight();
-                    // newHeight = prevHeight + 1;
-                    // rightChild->getParent()->setHeight(newHeight);
-                }
-
-                this->leftRotate(search);
-                return;
-            }
-        }
-        // if not unbalanced, increase height because it has a new node
-        else {
-            int prevHeight = search->getHeight();
-            int newHeight = prevHeight + 1;
-            search->setHeight(newHeight);
+    while (!this->isBalanced()) {
+        tree->mRoot = search;
+        while (search->getParent() != NULL) {
             search = search->getParent();
+
+            int heightLeft = 0;
+            int heightRight = 0;
+
+            AVLNode<Key, Value>* leftChild = search->getLeft();
+            AVLNode<Key, Value>* rightChild = search->getRight();
+            // plus one, because each node is initialized w val of 0, but an empty tree has val 0
+            if (leftChild != NULL) {
+                heightLeft = leftChild->getHeight() + 1;
+                // // node was inserted here, so add one
+                // if (leftchild->getHeight() == 0) {
+                //     // where the node has been inserted, will be one greater
+                //     prevHeight = leftChild->getHeight();
+                //     newHeight = prevHeight + 1;
+                //     leftChild->setHeight(newHeight);
+                // }
+            }
+            if (rightChild != NULL) {
+                heightRight = rightChild->getHeight() + 1;
+                // if (rightChild->getHeight() == 0) {
+                //     // where the node has been inserted, will be one greater
+                //     prevHeight = rightChild->getHeight();
+                //     newHeight = prevHeight + 1;
+                //     rightChild->setHeight(newHeight);
+                //     /************HERE******************/
+                // }
+            }
+
+            // unbalanced, do rotations
+            if (std::abs(heightLeft - heightRight) > 1) {
+                // going to rotate this node, will have one less child
+                int prevHeight = search->getHeight();
+                int newHeight = prevHeight - 1;
+                search->setHeight(newHeight);
+
+                // left child is heavier, do a right rotate
+                if (heightLeft > heightRight) {
+                    // zig-zag rotation
+                    int zagRightHeight = 0;
+                    int zagLeftHeight = 0;
+                    if (leftChild->getRight() != NULL) zagRightHeight = leftChild->getRight()->getHeight() + 1;
+                    if (leftChild->getLeft() != NULL) zagLeftHeight = leftChild->getLeft()->getHeight() + 1;
+
+
+                    if (zagRightHeight > zagLeftHeight) {
+                        this->leftRotate(leftChild);
+
+                        // int prevHeight = leftChild->getHeight();
+                        // int newHeight = prevHeight - 1;
+                        // leftChild->setHeight(newHeight);
+
+                        // prevHeight = leftChild->getParent()->getHeight();
+                        // newHeight = prevHeight + 1;
+                        // leftChild->getParent()->setHeight(newHeight);
+                    }
+
+                    this->rightRotate(search);
+                    return;
+                }
+
+                // right child is heavier, do a left rotate;
+                else {
+                    // zig-zag rotation
+                    int zagRightHeight = 0;
+                    int zagLeftHeight = 0;
+                    if (rightChild->getRight() != NULL) zagRightHeight = rightChild->getRight()->getHeight() + 1;
+                    if (rightChild->getLeft() != NULL) zagLeftHeight = rightChild->getLeft()->getHeight() + 1;
+
+                    if (zagRightHeight < zagLeftHeight) {
+                        this->rightRotate(rightChild);
+
+                        // int prevHeight = rightChild->getHeight();
+                        // int newHeight = prevHeight - 1;
+                        // rightChild->setHeight(newHeight);
+
+                        // prevHeight = rightChild->getParent()->getHeight();
+                        // newHeight = prevHeight + 1;
+                        // rightChild->getParent()->setHeight(newHeight);
+                    }
+
+                    this->leftRotate(search);
+                    return;
+                }
+            }
         }
     }
+    
+        // if not unbalanced, increase height because it has a new node
+        // else {
+        //     int prevHeight = search->getHeight();
+        //     int newHeight = prevHeight + 1;
+        //     search->setHeight(newHeight);
+        //     search = search->getParent();
+        // }
+
 
 
     // TODO
