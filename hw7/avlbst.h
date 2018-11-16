@@ -124,7 +124,8 @@ public:
     void remove(const Key& key);
 
 private:
-    void deleteNode(AVLNode<Key, Value>* search);
+    // deletes node and returns node to start from
+    AVLNode<Key, Value>* deleteNode(AVLNode<Key, Value>* search);
 	/* Helper functions are strongly encouraged to help separate the problem
 	   into smaller pieces. You should not need additional data members. */
 };
@@ -236,13 +237,11 @@ void AVLTree<Key, Value>::remove(const Key& key)
     // key is not in the tree
     if (nodeToDelete == NULL) return;
 
-    this->deleteNode(nodeToDelete);
+    AVLNode<Key, Value>* search = this->deleteNode(nodeToDelete);
 
-    Node<Key, Value>* tempSearch = this->getSmallestNode();
-    AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
-
-    while (search->getParent() != NULL) {
-        search = search->getParent();
+    bool foundBalanced = false;
+    while (!foundBalanced) {
+        //if (search->getParent()!=NULL)search = search->getParent();
         int heightLeft = 0;
         int heightRight = 0;
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
@@ -273,19 +272,22 @@ void AVLTree<Key, Value>::remove(const Key& key)
             int prevHeight = search->getHeight();
             int newHeight = prevHeight + 1;
             search->setHeight(newHeight);
+            foundBalanced = true;
         }
     }
    // TODO
 }
 
 template<typename Key, typename Value>
-void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
+AVLNode<Key, Value>* AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
+    // this will be the parent of the node you delete
+    AVLNode<Key, Value>* nodeToReturn = search->getParent();
     // no children
     if (search->getRight() == NULL && search->getLeft() == NULL) {
         if (search == this->mRoot) {
             this->mRoot = NULL;
             delete search;
-            return;
+            return NULL;
         }
         // search is the right child
         if (search->getKey() > search->getParent()->getKey()) {
@@ -296,7 +298,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             search->getParent()->setLeft(NULL);
         }
         delete search;
-        return;
+        return nodeToReturn;
     }
     // one child
     else if (search->getRight() == NULL || search->getLeft() == NULL) {
@@ -307,21 +309,21 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = search->getRight();
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
                 search->getParent()->setRight(search->getRight());
                 search->getRight()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the left child
             else {
                 search->getParent()->setLeft(search->getRight());
                 search->getRight()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
         // has a left child
@@ -330,21 +332,21 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = search->getLeft();
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
                 search->getParent()->setRight(search->getLeft());
                 search->getLeft()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is the left child
             else {
                 search->getParent()->setLeft(search->getLeft());
                 search->getLeft()->setParent(search->getParent());
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
     }
@@ -360,7 +362,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 this->mRoot = predecessor;
                 this->mRoot->setParent(NULL);
                 delete search;
-                return;
+                return nodeToReturn;
             }           
             // search is the right child
             if (search->getKey() > search->getParent()->getKey()) {
@@ -369,7 +371,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 predecessor->setRight(search->getRight());
                 search->getRight()->setParent(predecessor);
                 delete search;
-                return;
+                return nodeToReturn;
             }
             // search is left child
             else {
@@ -378,7 +380,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
                 predecessor->setRight(search->getRight());
                 search->getRight()->setParent(predecessor);
                 delete search;
-                return;
+                return nodeToReturn;
             }
         }
 
@@ -401,7 +403,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             this->mRoot = predecessor;
             this->mRoot->setParent(NULL);
             delete search;
-            return;
+            return nodeToReturn;
         }
 
         // search is the right child
@@ -419,7 +421,7 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             predecessor->getLeft()->setParent(predecessor);
             predecessor->getRight()->setParent(predecessor);
             delete search;
-            return;
+            return nodeToReturn;
         }
         // search is left child
         else {
@@ -436,10 +438,10 @@ void AVLTree<Key, Value>::deleteNode(AVLNode<Key, Value>* search) {
             predecessor->getLeft()->setParent(predecessor);
             predecessor->getRight()->setParent(predecessor);
             delete search;
-            return; 
+            return nodeToReturn; 
         }
     }
-    return;
+    return nodeToReturn;
 }
 /*
 ------------------------------------------
