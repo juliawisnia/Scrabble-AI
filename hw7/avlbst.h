@@ -330,7 +330,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 this->rightRotate(search);
             }
 
-            // right child is heavier, do a left rotate;
+            // right child is heavier, do a left rotate
             else {
                 // zig-zag rotation
                 int zagRightHeight = 0;
