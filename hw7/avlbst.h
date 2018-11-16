@@ -261,10 +261,8 @@ void AVLTree<Key, Value>::remove(const Key& key)
 
     AVLNode<Key, Value>* search = NULL;
     search = this->deleteNode(nodeToDelete);
+    
     if (search == NULL) search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
-
-    // Node<Key, Value>* tempSearch = this->getSmallestNode();
-    // AVLNode<Key, Value>* search = dynamic_cast<AVLNode<Key, Value>*>(tempSearch);
 
     // check all nodes until you reach one that doesn't need to be updated
     bool balanced = false;
@@ -288,6 +286,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
             int prevHeight = search->getHeight();
             int newHeight = prevHeight - 1;
             search->setHeight(newHeight);
+
             // left child is heavier, do a left rotate
             if (heightLeft > heightRight) {
                 // zig-zag rotation
@@ -298,6 +297,10 @@ void AVLTree<Key, Value>::remove(const Key& key)
 
                 if (zagRightHeight > zagLeftHeight) {
                     this->leftRotate(leftChild);
+
+                    int prevHeight = leftChild->getHeight();
+                    int newHeight = prevHeight - 1;
+                    leftChild->setHeight(newHeight);
                 }
 
                 this->rightRotate(search);
@@ -312,12 +315,16 @@ void AVLTree<Key, Value>::remove(const Key& key)
 
                 if (zagRightHeight < zagLeftHeight) {
                     this->rightRotate(leftChild);
+
+                    int prevHeight = rightChild->getHeight();
+                    int newHeight = prevHeight - 1;
+                    leftChild->setHeight(newHeight);
                 }
 
                 this->leftRotate(search);
             }
         }
-        // if not unbalanced, increase height because it has a new node
+        // if not unbalanced, we're done
         else {
             balanced = true;
         }
