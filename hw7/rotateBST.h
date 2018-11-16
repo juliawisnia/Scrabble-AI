@@ -51,9 +51,10 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 	// z was the root node, so make mRoot y and set parent to NULL
 	else {
 		this->mRoot = y;
-		y->setParent(NULL);
+		//y->setParent(NULL);
 	}
 	z->setRight(y->getLeft());
+	y->getLeft()->setParent(z);
 	z->setParent(y);
 	y->setLeft(z);
 
@@ -91,6 +92,10 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 	// has no left child
+	std::cerr << "ROTATE RIGHT" << std::endl;
+	std::cerr << "calling right rotate on " << z->getKey() << std::endl;
+	this->print();
+	std::cerr << "After Print " << std::endl;
 	if (z->getLeft() == NULL) return;
 
 	Node<Key, Value>* y = z->getLeft();
@@ -104,10 +109,11 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 	}
 	// z was the root node, so make mRoot y and set parent to NULL
 	else {
+		std::cout << "We should be here " << std::endl;
 		this->mRoot = y;
-		y->setParent(NULL);
 	}
 	z->setLeft(y->getRight());
+	y->getRight()->setParent(z);
 	z->setParent(y);
 	y->setRight(z);
 
@@ -169,27 +175,27 @@ template <typename Key, typename Value>
 void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 	// don't have the same keys
 	if (!sameKeys(t2)) return;
-	//t2.rightRotate(t2.mRoot);
 	t2.allRightRotates(t2.mRoot);
-	t2.print();
+	//t2.print();
 	Node<Key, Value>* compRoot = this->mRoot;
 	t2.leftRotateToRoot(t2.mRoot, compRoot);
-
+	//t2.print();
 	Node<Key, Value>* leftCompRoot = this->mRoot->getLeft();
 	Node<Key, Value>* rightCompRoot = this->mRoot->getRight();
-	t2.makeSameTree(t2.mRoot, leftCompRoot);
-	t2.makeSameTree(t2.mRoot, rightCompRoot);
+	t2.makeSameTree(t2.mRoot->getLeft(), leftCompRoot);
+	t2.makeSameTree(t2.mRoot->getRight(), rightCompRoot);
 
 }
 
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::allRightRotates(Node<Key, Value>* root) {
 	// base case, we're at a leaf node
-	if (root->getLeft() == NULL && root->getRight() == NULL) return;
+	if (root == NULL) return;
 
 	while (root->getLeft() != NULL) {
 		this->rightRotate(root);
 		root = root->getParent();
+		std::cout << "We are here " << std::endl; 
 		// if (root->getLeft() == NULL && root->getRight() != NULL) root = root->getRight();
 	}
 	allRightRotates(root->getRight());
@@ -206,6 +212,13 @@ void rotateBST<Key, Value>::leftRotateToRoot(Node<Key, Value>* changeRoot, Node<
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::makeSameTree(Node<Key, Value>* changeRoot, Node<Key, Value>* compRoot) {
 	// base case, we have reached the leaf nodes so we're done
+	if(changeRoot == NULL && compRoot == NULL){
+		return;
+	} 
+	// else if(changeRoot == NULL || compRoot == NULL){
+	// 	return;
+	// }
+
 	if (changeRoot->getRight() == NULL && changeRoot->getLeft() == NULL) return;
 
 	// we want a key that's less than what we have, rotate right
@@ -221,6 +234,7 @@ void rotateBST<Key, Value>::makeSameTree(Node<Key, Value>* changeRoot, Node<Key,
 		while (changeRoot->getKey() != compRoot->getKey()) {
 			this->leftRotate(changeRoot);
 			changeRoot = changeRoot->getParent();
+			std::cout << changeRoot->getKey() << std::endl;
 		}
 	}
 
