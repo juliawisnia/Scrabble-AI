@@ -140,7 +140,10 @@ Begin implementations for the AVLTree class.
 template<typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 {
-    
+    AVLNode<Key, Value>* search = internalFind(keyValuePair.first);
+    if (search == NULL) {
+        
+    }
     // TODO
 }
 
