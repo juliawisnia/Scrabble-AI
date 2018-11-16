@@ -49,12 +49,10 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 		else z->getParent()->setRight(y);
 	}
 	// z was the root node, so make mRoot y and set parent to NULL
-	else {
-		this->mRoot = y;
-		//y->setParent(NULL);
-	}
+	else this->mRoot = y;
+
 	z->setRight(y->getLeft());
-	y->getLeft()->setParent(z);
+	if (y->getLeft() != NULL) y->getLeft()->setParent(z);
 	z->setParent(y);
 	y->setLeft(z);
 
@@ -92,11 +90,9 @@ void rotateBST<Key, Value>::leftRotate(Node<Key, Value>* z) {
 template <typename Key, typename Value>
 void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 	// has no left child
-	std::cerr << "ROTATE RIGHT" << std::endl;
-	std::cerr << "calling right rotate on " << z->getKey() << std::endl;
-	this->print();
-	std::cerr << "After Print " << std::endl;
 	if (z->getLeft() == NULL) return;
+
+	//this->print();
 
 	Node<Key, Value>* y = z->getLeft();
 	y->setParent(z->getParent());
@@ -108,15 +104,12 @@ void rotateBST<Key, Value>::rightRotate(Node<Key, Value>* z) {
 		else z->getParent()->setRight(y);
 	}
 	// z was the root node, so make mRoot y and set parent to NULL
-	else {
-		std::cout << "We should be here " << std::endl;
-		this->mRoot = y;
-	}
+	else this->mRoot = y;
+
 	z->setLeft(y->getRight());
-	y->getRight()->setParent(z);
+	if (y->getRight() != NULL) y->getRight()->setParent(z);
 	z->setParent(y);
 	y->setRight(z);
-
 	// bool rotateRoot = false;
 	// bool rotateLeftChild = false;
 	// if (z->getParent() == NULL) rotateRoot = true;
@@ -176,7 +169,10 @@ void rotateBST<Key, Value>::transform(rotateBST& t2) const {
 	// don't have the same keys
 	if (!sameKeys(t2)) return;
 	t2.allRightRotates(t2.mRoot);
+	//std::cout << "LINKED LIST" << std::endl;
 	//t2.print();
+	//t2.print();
+	// std::cout << "I made it bitch" << std::endl;
 	Node<Key, Value>* compRoot = this->mRoot;
 	t2.leftRotateToRoot(t2.mRoot, compRoot);
 	//t2.print();
@@ -195,8 +191,6 @@ void rotateBST<Key, Value>::allRightRotates(Node<Key, Value>* root) {
 	while (root->getLeft() != NULL) {
 		this->rightRotate(root);
 		root = root->getParent();
-		std::cout << "We are here " << std::endl; 
-		// if (root->getLeft() == NULL && root->getRight() != NULL) root = root->getRight();
 	}
 	allRightRotates(root->getRight());
 }
@@ -215,26 +209,25 @@ void rotateBST<Key, Value>::makeSameTree(Node<Key, Value>* changeRoot, Node<Key,
 	if(changeRoot == NULL && compRoot == NULL){
 		return;
 	} 
-	// else if(changeRoot == NULL || compRoot == NULL){
-	// 	return;
-	// }
-
-	if (changeRoot->getRight() == NULL && changeRoot->getLeft() == NULL) return;
 
 	// we want a key that's less than what we have, rotate right
 	if (changeRoot->getKey() < compRoot->getKey()) {
 		while (changeRoot->getKey() != compRoot->getKey()) {
-			this->rightRotate(changeRoot);
+			this->leftRotate(changeRoot);
+			// if (changeRoot->getParent()->getParent()!=NULL) 
 			changeRoot = changeRoot->getParent();
+			// else break;
 		}
 	}
 
 	// we want a key that's greater than what we have, rotate left
 	else if (changeRoot->getKey() > compRoot->getKey()) {
 		while (changeRoot->getKey() != compRoot->getKey()) {
-			this->leftRotate(changeRoot);
+			this->rightRotate(changeRoot);
+			// if (changeRoot->getParent()->getParent()!=NULL) 
 			changeRoot = changeRoot->getParent();
-			std::cout << changeRoot->getKey() << std::endl;
+			// else break;
+			//std::cout << changeRoot->getKey() << std::endl;
 		}
 	}
 
