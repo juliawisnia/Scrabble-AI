@@ -303,7 +303,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
     if (search == NULL) search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
 
     // check all nodes until you reach one that doesn't need to be updated
-    while (!this->isBalanced()) {
+    while (search != NULL) {
         int heightLeft = 0;
         int heightRight = 0;
 
@@ -366,6 +366,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
         else {
             int newHeight = getMaxChildHeight(search);
             search->setHeight(newHeight);
+            // if you have not reached the root node, advance search
             if (search->getParent() != NULL) search = search->getParent();
             else break;
         }
