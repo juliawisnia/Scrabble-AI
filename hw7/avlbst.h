@@ -42,7 +42,7 @@ Begin implementations for the AVLNode class.
 */
 
 /**
-* Constructor for an AVLNode. Nodes are initialized with a height of 0.
+* Constructor for an AVLNode. Nodes are initialized with a height of 1.
 */
 template<typename Key, typename Value>
 AVLNode<Key, Value>::AVLNode(const Key& key, const Value& value, AVLNode<Key, Value>* parent)
@@ -247,7 +247,6 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
                     this->leftRotate(leftChild);
                 }
-                std::cout << "Height of node with key value " << search->getKey() << " : " << search->getHeight();
                 this->rightRotate(search);
                 break;
             }
@@ -317,8 +316,6 @@ void AVLTree<Key, Value>::remove(const Key& key)
         if (rightChild != NULL) {
             heightRight = getMaxChildHeight(rightChild) + 1;
         }
-
-        std::cout << std::endl;
 
         // unbalanced, do rotations
         if (std::abs(heightLeft - heightRight) > 1) {
