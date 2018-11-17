@@ -217,7 +217,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
         AVLNode<Key, Value>* leftChild = search->getLeft();
         AVLNode<Key, Value>* rightChild = search->getRight();
-        // plus one, because each node is initialized w val of 0, but an empty tree has val 0
+        // plus one, because getMaxChildHeight gets height of child, and we need the node
         if (leftChild != NULL) {
             heightLeft = getMaxChildHeight(leftChild) + 1;
         }
@@ -275,9 +275,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             int newHeight = getMaxChildHeight(search) + 1;
             search->setHeight(newHeight);
             if (search->getParent() != NULL) search = search->getParent();
-            else {
-                break;
-            }
+            else break;
         }
     }
     
@@ -303,13 +301,14 @@ void AVLTree<Key, Value>::remove(const Key& key)
     if (search == NULL) search = dynamic_cast<AVLNode<Key, Value>*>(this->mRoot);
 
     // check all nodes until you reach one that doesn't need to be updated
+    // will quit early normally, worst case scenario is when it reaches root node
     while (search != NULL) {
         int heightLeft = 0;
         int heightRight = 0;
 
         AVLNode<Key, Value>* leftChild = search->getLeft();
         AVLNode<Key, Value>* rightChild = search->getRight();
-        // plus one, because each node is initialized w val of 0, but an empty tree has val 0
+        // plus one, because getMaxChildHeight gets height of child, and we need the node
         if (leftChild != NULL) {
             heightLeft = getMaxChildHeight(leftChild) + 1;
         }

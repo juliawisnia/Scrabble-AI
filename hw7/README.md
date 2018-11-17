@@ -16,3 +16,7 @@ This is implemented in rotateBST.h.
 
 Problem 4: AVL Trees 
 This is implemented in avlbst.h.
+My heights are implemented to start at 1, because
+my code works on rotations by getting the max child's
+height, and an empty tree has a height 0. Thus each leaf
+node would have a height 1.
