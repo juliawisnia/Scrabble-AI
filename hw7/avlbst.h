@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <algorithm>
 #include "rotateBST.h"
 
 /**
@@ -146,7 +147,7 @@ int AVLTree<Key, Value>::getMaxChildHeight(AVLNode<Key, Value>* search) {
     if (leftChild != NULL) leftHeight = leftChild->getHeight();
     if (rightChild != NULL) rightHeight = rightChild->getHeight();
 
-    return (leftHeight > rightHeight) ? leftHeight : rightHeight;
+    return std::max(leftHeight, rightHeight);
 }
 
 template<typename Key, typename Value>
@@ -246,7 +247,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
                     this->leftRotate(leftChild);
                 }
-
+                std::cout << "Height of node with key value " << search->getKey() << " : " << search->getHeight();
                 this->rightRotate(search);
                 break;
             }
@@ -267,7 +268,8 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                     this->rightRotate(rightChild);
                 }
                 this->leftRotate(search);
-               break;
+                std::cout << "Height of node with key value " << search->getKey() << " : " << search->getHeight();
+                break;
             }
         }
 
@@ -275,7 +277,10 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             int newHeight = getMaxChildHeight(search) + 1;
             search->setHeight(newHeight);
             if (search->getParent() != NULL) search = search->getParent();
-            else break;
+            else {
+                std::cout << "Height of node with key value " << search->getKey() << " : " << search->getHeight();
+                break;
+            }
         }
     }
     
@@ -310,11 +315,11 @@ void AVLTree<Key, Value>::remove(const Key& key)
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
         if (leftChild != NULL) {
             heightLeft = getMaxChildHeight(leftChild) + 1;
-            if (search->getKey() == 2) std::cout << "HEIGHT LEFT OF 2: " << heightLeft << std::endl;
+            if (search->getKey() == 2) std::cout << "HEIGHT LEFT OF " << search->getKey() << ": " << heightLeft << std::endl;
         }
         if (rightChild != NULL) {
             heightRight = getMaxChildHeight(rightChild) + 1;
-            if (search->getKey() == 2) std::cout << "HEIGHT RIGHT OF 2: " << heightRight << std::endl;
+           if (search->getKey() == 2) std::cout << "HEIGHT RIGHT OF " << search->getKey() << ": " << heightRight << std::endl;
         }
 
         std::cout << std::endl;
