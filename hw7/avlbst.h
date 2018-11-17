@@ -247,6 +247,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
                     this->leftRotate(leftChild);
                 }
+
                 this->rightRotate(search);
                 break;
             }
@@ -266,6 +267,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
 
                     this->rightRotate(rightChild);
                 }
+
                 this->leftRotate(search);
                 break;
             }
@@ -358,6 +360,7 @@ void AVLTree<Key, Value>::remove(const Key& key)
 
                     this->rightRotate(rightChild);
                 }
+                
                 this->leftRotate(search);
                 break;
             }
