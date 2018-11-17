@@ -15,7 +15,7 @@ template <typename Key, typename Value>
 class AVLNode : public Node<Key, Value>
 {
 public:
-	// Constructor/destructor.
+    // Constructor/destructor.
     AVLNode(const Key& key, const Value& value, AVLNode<Key, Value>* parent);
     virtual ~AVLNode();
 
@@ -118,8 +118,8 @@ template <class Key, class Value>
 class AVLTree : public rotateBST<Key, Value>
 {
 public:
-	// Methods for inserting/removing elements from the tree. You must implement
-	// both of these methods. 
+    // Methods for inserting/removing elements from the tree. You must implement
+    // both of these methods. 
     virtual void insert(const std::pair<Key, Value>& keyValuePair) override;
     void remove(const Key& key);
 
@@ -128,8 +128,8 @@ private:
     int getMaxChildHeight(AVLNode<Key, Value>* search);
     AVLNode<Key, Value>* AVLInsert(const std::pair<Key, Value>& keyValuePair);
     //bool isAVLBalanced(AVLNode<Key, Value>* search);
-	/* Helper functions are strongly encouraged to help separate the problem
-	   into smaller pieces. You should not need additional data members. */
+    /* Helper functions are strongly encouraged to help separate the problem
+       into smaller pieces. You should not need additional data members. */
 };
 
 /*
@@ -218,7 +218,7 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
         AVLNode<Key, Value>* rightChild = search->getRight();
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
         if (leftChild != NULL) {
-            heightLeft = getMaxChildHeight(leftChild)+ 1;
+            heightLeft = getMaxChildHeight(leftChild) + 1;
         }
         if (rightChild != NULL) {
             heightRight = getMaxChildHeight(rightChild) + 1;
@@ -240,6 +240,10 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (leftChild->getLeft() != NULL) zagLeftHeight = getMaxChildHeight(leftChild->getLeft()) + 1;
 
                 if (zagRightHeight > zagLeftHeight) {
+                    int prevHeight = getMaxChildHeight(leftChild);
+                    int newHeight = prevHeight - 1;
+                    leftChild->setHeight(newHeight);
+
                     this->leftRotate(leftChild);
                 }
 
@@ -256,10 +260,14 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
                 if (rightChild->getLeft() != NULL) zagLeftHeight = getMaxChildHeight(rightChild->getLeft()) + 1;
 
                 if (zagRightHeight < zagLeftHeight) {
+                    int prevHeight = getMaxChildHeight(rightChild);
+                    int newHeight = prevHeight - 1;
+                    rightChild->setHeight(newHeight);
+
                     this->rightRotate(rightChild);
                 }
                 this->leftRotate(search);
-                break;
+               break;
             }
         }
 
@@ -270,7 +278,6 @@ void AVLTree<Key, Value>::insert(const std::pair<Key, Value>& keyValuePair)
             else break;
         }
     }
-    // now it is balanced, update heights
     
     return;
     // TODO
@@ -303,10 +310,14 @@ void AVLTree<Key, Value>::remove(const Key& key)
         // plus one, because each node is initialized w val of 0, but an empty tree has val 0
         if (leftChild != NULL) {
             heightLeft = getMaxChildHeight(leftChild) + 1;
+            if (search->getKey() == 2) std::cout << "HEIGHT LEFT OF 2: " << heightLeft << std::endl;
         }
         if (rightChild != NULL) {
             heightRight = getMaxChildHeight(rightChild) + 1;
+            if (search->getKey() == 2) std::cout << "HEIGHT RIGHT OF 2: " << heightRight << std::endl;
         }
+
+        std::cout << std::endl;
 
         // unbalanced, do rotations
         if (std::abs(heightLeft - heightRight) > 1) {
@@ -324,6 +335,10 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (leftChild->getLeft() != NULL) zagLeftHeight = getMaxChildHeight(leftChild->getLeft()) + 1;
 
                 if (zagRightHeight > zagLeftHeight) {
+                    int prevHeight = getMaxChildHeight(leftChild);
+                    int newHeight = prevHeight - 1;
+                    leftChild->setHeight(newHeight);
+
                     this->leftRotate(leftChild);
                 }
 
@@ -340,6 +355,10 @@ void AVLTree<Key, Value>::remove(const Key& key)
                 if (rightChild->getLeft() != NULL) zagLeftHeight = getMaxChildHeight(rightChild->getLeft()) + 1;
 
                 if (zagRightHeight < zagLeftHeight) {
+                    int prevHeight = getMaxChildHeight(rightChild);
+                    int newHeight = prevHeight - 1;
+                    rightChild->setHeight(newHeight);
+
                     this->rightRotate(rightChild);
                 }
                 this->leftRotate(search);
