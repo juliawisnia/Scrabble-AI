@@ -29,6 +29,9 @@ class TrieSet {
   TrieNode* prefix (std::string px);
    /* returns the TrieNode matching the provided string, or returns NULL 
       if it is not the prefix of a word in the Trie. */
+  
+    // prints trieSet for debugging purposes
+    void printSet();
 
   private:
     size_t childrenSize;
@@ -42,8 +45,6 @@ class TrieSet {
     void deleteChildren (TrieNode* node);
     // helper function that recursively deallocates all memory from the set
     void helper(TrieNode* node);
-    // prints trieSet for debugging purposes
-    void printSet();
 
 };
 

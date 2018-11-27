@@ -130,6 +130,15 @@ void TrieSet::deleteChildren (TrieNode* node) {
 }
 
 void TrieSet::printSet() {
-	TrieNode* traverse = this->root;
+//	TrieNode* traverse = this->root;
+	std::cout << "                             " << this->root->letter << std::endl;
+	for (size_t i = 0; i < 26; i++) {
+		std::cout << this->root->children[i]->letter << " ";
+	}
+	std::cout << std::endl;
+	for (size_t i = 0; i < 26; i++) {
+		std::cout << this->root->children[0]->children[i]->letter << " ";
+	}
+	std::cout << std::endl;
 
 }
