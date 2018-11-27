@@ -30,6 +30,11 @@ class TrieSet {
     TrieNode* root;
     // function to insert 26 new children initialized with '$'
     void insertChildren(TrieNode* node);
+    // returns false if all children are '$' meaning the end of a word
+    bool hasChildren (TrieNode* node);
+    // deletes all children of node if they are all '$', then moves on until
+    // it reaches a node with children initialized to letters or the root
+    void deleteChildren (TrieNode* node);
 
 };
 

@@ -12,27 +12,6 @@ TrieSet::TrieSet() {
 }
 
 TrieSet::~TrieSet() {
-	int cnt = 0;
-	TrieNode* traverse = this->root->children[cnt];
-
-	while (traverse != root) {
-		if (traverse->letter == '$') {
-			TrieNode* temp = traverse->parent;
-			delete traverse;
-			taverse = temp;
-			if (cnt > 25) {
-				temp->letter = '$';
-				cnt = 0;
-			}
-
-			else cnt++;
-		}
-	}
-
-	else {
-		cnt = 0;
-		traverse = traverse->children[cnt];
-	}
 
 }
 
@@ -61,6 +40,7 @@ void TrieSet::remove (std::string input) {
 	TrieNode* traverse = this->root;
 	std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
+	// make sure that the word is in it
 	for (size_t i = 0; i < input.size(); ++i) {
 		// convert to ASCII indexing
 		int index = input[i] - 97;
@@ -73,8 +53,7 @@ void TrieSet::remove (std::string input) {
 		}
 	}
 
-	// set the word to false, 'removing' it from the set of words
-	traverse->inSet = false;
+	deleteChildren(traverse);
 
 }
 
@@ -106,4 +85,22 @@ void TrieSet::insertChildren (TrieNode* node) {
 		insertChild->parent = node;
 		node->children[i] = insertChild;
 	}	
+}
+
+bool TrieSet::hasChildren (TrieNode* node) {
+	for (size_t i = 0; i < node->children.size(); i++) {
+		if (node->children[i] != '$') return true;
+	}
+	return false;
+}
+
+void TrieSet::deleteChildren (TrieNode* node) {
+	while (!hasChildren(node) && node != this->root) {
+		node->letter = '$';
+		node->inSet = false;
+		for (size_t i = 0; i < node->children.size(); ++i) {
+			delete node->children[i];
+		}
+		node = node->parent;
+	}
 }
