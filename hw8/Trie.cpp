@@ -12,7 +12,30 @@ TrieSet::TrieSet() {
 }
 
 TrieSet::~TrieSet() {
+	helper(root->children[0]);
+}
 
+void TrieSet::helper(TrieNode* node) {
+	if (node == root && !hasChildren(node)) {
+		delete root;
+		return;
+	}
+
+	// if it has no children, delete it's children and go to it's parent
+	if (!hasChildren(node)) {
+		TrieNode* temp = node->parent;
+		deleteChildren(node);
+		helper(temp);
+	}
+
+	// move on to the 'first' sequential child
+	else {
+		TrieNode* temp = node->parent;
+		for (size_t i = 0; i < node->children.size(); ++i) {
+			helper(node->children[i]);
+		}
+		helper(temp);
+	}
 }
 
 void TrieSet::insert (std::string input) {
