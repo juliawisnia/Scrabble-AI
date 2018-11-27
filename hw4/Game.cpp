@@ -1,9 +1,17 @@
-#include <iostream>
 #include <fstream>
 #include <string>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include <sstream>
-#include "Game.h"
-#include "Move.h"
+
+#include "Board.h"
+#include "Bag.h"
+#include "Dictionary.h"
+#include "ConsolePrinter.h"
+#include "Player.h"
+#include "Exceptions.h"
+#include "rang.h"
 
 int main (int argc, char *argv[]) {
     if (argc < 2) return -1;
