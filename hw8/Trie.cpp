@@ -3,7 +3,7 @@
 TrieSet::TrieSet() {
 	childrenSize = 26;
 	TrieNode* _root = new TrieNode;
-	_root->letter = '&';
+	_root->letter = '$';
 	_root->inSet = false;
 	_root->parent = nullptr;
 
@@ -114,6 +114,6 @@ void TrieSet::deleteChildren (TrieNode* node) {
 }
 
 bool TrieSet::isRoot(TrieNode* node) {
-	if (node->letter == '&') return true;
+	if (node->letter == '$') return true;
 	return false;
 }
