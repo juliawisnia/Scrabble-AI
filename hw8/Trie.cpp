@@ -1,7 +1,7 @@
 #include "Trie.h"
-#include <algorithm>
 
 TrieSet::TrieSet() {
+	childrenSize = 26;
 	TrieNode* _root = new TrieNode;
 	_root->letter = '&';
 	_root->inSet = false;
@@ -12,31 +12,31 @@ TrieSet::TrieSet() {
 }
 
 TrieSet::~TrieSet() {
-	helper(root->children[0]);
+	//helper(root->children[0]);
 }
 
 void TrieSet::helper(TrieNode* node) {
-	if (node == root && !hasChildren(node)) {
-		deleteChildren(root);
-		delete root;
-		return;
-	}
+	// if (node == root && !hasChildren(node)) {
+	// 	deleteChildren(root);
+	// 	delete root;
+	// 	return;
+	// }
 
-	// if it has no children, delete it's children and go to it's parent
-	if (!hasChildren(node)) {
-		TrieNode* temp = node->parent;
-		deleteChildren(node);
-		helper(temp);
-	}
+	// // if it has no children, delete it's children and go to it's parent
+	// if (!hasChildren(node)) {
+	// 	TrieNode* temp = node->parent;
+	// 	deleteChildren(node);
+	// 	helper(temp);
+	// }
 
-	// move on to the 'first' sequential child
-	else {
-		TrieNode* temp = node->parent;
-		for (size_t i = 0; i < node->children.size(); ++i) {
-			helper(node->children[i]);
-		}
-		helper(temp);
-	}
+	// // move on to the 'first' sequential child
+	// else {
+	// 	TrieNode* temp = node->parent;
+	// 	for (size_t i = 0; i < childrenSize; ++i) {
+	// 		helper(node->children[i]);
+	// 	}
+	// 	helper(temp);
+	// }
 }
 
 void TrieSet::insert (std::string input) {
@@ -102,7 +102,7 @@ TrieNode* TrieSet::prefix (std::string px) {
 }
 
 void TrieSet::insertChildren (TrieNode* node) {
-	for (size_t i = 0; i < node->children.size(); ++i) {
+	for (size_t i = 0; i < childrenSize; ++i) {
 		TrieNode* insertChild = new TrieNode;
 		insertChild->letter = '$';
 		insertChild->inSet = false;
@@ -112,8 +112,8 @@ void TrieSet::insertChildren (TrieNode* node) {
 }
 
 bool TrieSet::hasChildren (TrieNode* node) {
-	for (size_t i = 0; i < node->children.size(); i++) {
-		if (node->children[i] != '$') return true;
+	for (size_t i = 0; i < childrenSize; i++) {
+		if (node->children[i]->letter != '$') return true;
 	}
 	return false;
 }
@@ -122,9 +122,14 @@ void TrieSet::deleteChildren (TrieNode* node) {
 	while (!hasChildren(node) && node != this->root) {
 		node->letter = '$';
 		node->inSet = false;
-		for (size_t i = 0; i < node->children.size(); ++i) {
+		for (size_t i = 0; i < childrenSize; ++i) {
 			delete node->children[i];
 		}
 		node = node->parent;
 	}
+}
+
+void TrieSet::printSet() {
+	TrieNode* traverse = this->root;
+
 }

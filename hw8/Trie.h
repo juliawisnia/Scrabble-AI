@@ -1,6 +1,10 @@
 #ifndef TRIE_H_
 #define TRIE_H_
 
+#include <string>
+#include <algorithm>
+#include <iostream>
+
 struct TrieNode {
   char letter; // what letter it is holding
   bool inSet;   // Is this node the end of a string in your dictionary?
@@ -27,6 +31,7 @@ class TrieSet {
       if it is not the prefix of a word in the Trie. */
 
   private:
+    size_t childrenSize;
     TrieNode* root;
     // function to insert 26 new children initialized with '$'
     void insertChildren(TrieNode* node);
@@ -37,6 +42,8 @@ class TrieSet {
     void deleteChildren (TrieNode* node);
     // helper function that recursively deallocates all memory from the set
     void helper(TrieNode* node);
+    // prints trieSet for debugging purposes
+    void printSet();
 
 };
 
