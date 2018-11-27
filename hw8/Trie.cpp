@@ -17,6 +17,7 @@ TrieSet::~TrieSet() {
 
 void TrieSet::helper(TrieNode* node) {
 	if (node == root && !hasChildren(node)) {
+		deleteChildren(root);
 		delete root;
 		return;
 	}

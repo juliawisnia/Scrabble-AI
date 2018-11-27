@@ -35,6 +35,8 @@ class TrieSet {
     // deletes all children of node if they are all '$', then moves on until
     // it reaches a node with children initialized to letters or the root
     void deleteChildren (TrieNode* node);
+    // helper function that recursively deallocates all memory from the set
+    void helper(TrieNode* node);
 
 };
 
