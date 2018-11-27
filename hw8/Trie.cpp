@@ -8,27 +8,49 @@ TrieSet::TrieSet() {
 	_root->parent = nullptr;
 
 	this->root = _root;
-	insertChildren(root);
+	insertChildren(this->root);
 }
 
 TrieSet::~TrieSet() {
+	int cnt = 0;
+	TrieNode* traverse = this->root->children[cnt];
+
+	while (traverse != root) {
+		if (traverse->letter == '$') {
+			TrieNode* temp = traverse->parent;
+			delete traverse;
+			taverse = temp;
+			if (cnt > 25) {
+				temp->letter = '$';
+				cnt = 0;
+			}
+
+			else cnt++;
+		}
+	}
+
+	else {
+		cnt = 0;
+		traverse = traverse->children[cnt];
+	}
 
 }
 
 void TrieSet::insert (std::string input) {
-	TrieNode* traverse = root;
+	TrieNode* traverse = this->root;
 	std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
 	for (size_t i = 0; i < input.size(); i++) {
 		// convert to ASCII indexing
 		int index = input[i] - 97;
-		// new unexplored path
-		if (traverse->children[index] == '$') {
-			traverse->children[index]->letter = input[i];
-			insertChildren(traverse->children[index]);
-		}
-		// move onto the next node
+		// move onto the next node, always guaranteed to have a '$' or char so won't segfault
 		traverse = traverse->children[index];
+		
+		// new unexplored path
+		if (traverse->letter == '$') {
+			traverse->letter = input[i];
+			insertChildren(traverse);
+		}
 	}
 
 	// set the word to true
@@ -36,18 +58,19 @@ void TrieSet::insert (std::string input) {
 }
 
 void TrieSet::remove (std::string input) {
-	TrieNode* traverse = root;
+	TrieNode* traverse = this->root;
 	std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
 	for (size_t i = 0; i < input.size(); ++i) {
 		// convert to ASCII indexing
 		int index = input[i] - 97;
+		// move onto the next node, always guaranteed to have a '$' or char so won't segfault
+		traverse = traverse->children[index];
+
 		// word is not complete and is thus not in the set
-		if (traverse->children[index] == '$') {
+		if (traverse->letter == '$') {
 			return;
 		}
-		// move onto the next node
-		traverse = traverse->children[index];
 	}
 
 	// set the word to false, 'removing' it from the set of words
@@ -56,18 +79,19 @@ void TrieSet::remove (std::string input) {
 }
 
 TrieNode* TrieSet::prefix (std::string px) {
-	TrieNode* traverse = root;
+	TrieNode* traverse = this->root;
 	std::transform(px.begin(), px.end(), px.begin(), ::tolower);
 
 	for (size_t i = 0; i < px.size(); ++i) {
 		// convert to ASCII indexing
 		int index = px[i] - 97;
+		// move onto the next node, always guaranteed to have a '$' or char so won't segfault
+		traverse = traverse->children[index];
+		
 		// word is not complete and is thus not in the set
-		if (traverse->children[index] == '$') {
+		if (traverse->letter == '$') {
 			return NULL;
 		}
-		// move onto the next node
-		traverse = traverse->children[index];
 	}
 
 	// return the final letter where the prefix is
