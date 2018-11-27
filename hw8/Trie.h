@@ -32,9 +32,6 @@ class TrieSet {
     /* returns the TrieNode matching the provided string, or returns NULL 
     if it is not the prefix of a word in the Trie. */
 
-    // prints trieSet for debugging purposes
-    void printSet();
-
   private:
     size_t childrenSize;
     TrieNode* root;
