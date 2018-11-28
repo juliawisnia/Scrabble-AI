@@ -12,11 +12,12 @@
 
 #include <set>
 #include <string>
+#include <Trie.h>
 
 class Dictionary
 {
 	//STUDENTS: Add private members & functions here
-	std::set<std::string> words;
+	TrieSet words;
 
 public:
 
