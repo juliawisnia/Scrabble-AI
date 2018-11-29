@@ -222,6 +222,8 @@ int main(int argc, char** argv)
 				std::cout << std::endl;
 				std::cout << MOVE_PROMPT_COLOR << "Your move, "	<< PLAYER_NAME_COLOR << players[playerNum]->getName() << MOVE_PROMPT_COLOR << ": " << rang::style::reset;
 				std::string moveString;
+				// if (players[playerNum]->getName() == "CPUL") moveString = CPULStrategy();
+				// if (players[playerNum]->getName() == "CPUS") moveString = CPUSStrategy();
 				std::getline(std::cin, moveString);
 
 				try
