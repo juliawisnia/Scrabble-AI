@@ -50,7 +50,6 @@ class TrieSet {
 
     // returns true iff node is the root
     bool isRoot(TrieNode* node);
-
 };
 
 #endif
