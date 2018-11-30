@@ -30,7 +30,7 @@ void permute(std::set<std::string>& hand, std::string input, size_t n) {
 
 int main() {
 	std::set<std::string> hand;
-	std::string input = "california";
+	std::string input = "abcde";
 	permute(hand, input, input.size());
 	std::set<std::string>::iterator it;
 	for (it = hand.begin(); it != hand.end(); ++it) std::cout << (*it) << std::endl;
