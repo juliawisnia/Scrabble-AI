@@ -3,6 +3,7 @@
 #include <utility>
 #include <string>
 #include <algorithm>
+#include <queue>
 #include <functional>
 #include <bits/stdc++.h>
 
@@ -30,9 +31,17 @@ void permute(std::set<std::string>& hand, std::string input, size_t n) {
 
 int main() {
 	std::set<std::string> hand;
-	std::string input = "abcde";
+	std::priority_queue<std::string, std::vector<std::string>, sortByLength> pq;
+	std::string input = "california";
 	permute(hand, input, input.size());
 	std::set<std::string>::iterator it;
-	for (it = hand.begin(); it != hand.end(); ++it) std::cout << (*it) << std::endl;
+	for (it = hand.begin(); it != hand.end(); ++it) {
+		pq.emplace(*it);
+	}
+	//std::priority_queue<std::string, std::vector<std::string>, sortByLength>::iterator by;
+	while (!pq.empty()) {
+		std::cout << pq.top() << std::endl;
+		pq.pop();
+	}
 	return 0;
 }
