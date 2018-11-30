@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <set>
 #include <utility>
 #include <string>
 #include <algorithm>
@@ -12,23 +12,27 @@ struct sortByLength {
 	}
 };
 
-void permutate(std::priority_queue<std::string, std::vector<std::string>, sortByLength>& hand, std::string input) {
-	for (size_t i = 0; i < input.size(); i++) {
-		std::sort(input.begin(), input.begin() + i);
-		do {
-			hand.emplace(input.substr(0, i + 1));
-		} 
-		while (std::next_permutation(input.begin(), input.begin() + i + 1));
+void permute(std::set<std::string>& hand, std::string input, size_t n) {
+	if (n == 0) return;
+	do {
+		hand.emplace(input.substr(0, input.size()));
+	} while (std::next_permutation(input.begin(), input.begin() + input.size()));
+
+	for (size_t i = 0; i < n; i++) {
+		std::string temp = "";
+		for (size_t j = 0; j < input.size(); j++) {
+			if (i == j) continue;
+			temp += input[j];
+		}
+		permute(hand, temp, n - 1);
 	}
 }
 
 int main() {
-	std::priority_queue<std::string, std::vector<std::string>, sortByLength> hand;
-	std::string input = "abc";
-	permutate(hand, input);
-	while (!hand.empty()) {
-		std::cout << hand.top() << std::endl;
-		hand.pop();
-	}
-	std::cout << std::endl;
+	std::set<std::string> hand;
+	std::string input = "california";
+	permute(hand, input, input.size());
+	std::set<std::string>::iterator it;
+	for (it = hand.begin(); it != hand.end(); ++it) std::cout << (*it) << std::endl;
+	return 0;
 }
