@@ -16,6 +16,7 @@
 #include "ConfigFile.h"
 #include "Exceptions.h"
 #include "rang.h"
+#include "Util.h"
 
 // Get a friendly string to print to the user in response to a move exception
 std::string getFriendlyError(MoveException const & exception)
@@ -193,6 +194,16 @@ int main(int argc, char** argv)
 		std::string playerName;
 		std::getline(std::cin, playerName);
 		std::cout << "Player " << playerNum << ", named \"" << playerName << "\", has been added." << std::endl;
+		std::string temp = playerName;
+		makeUppercase(temp);
+		if (temp == "CPUL") {
+			std::cout << "Get ready for a challenge! You have added a computer player that will";
+			std::cout << " always play the maximum length word possible. Good luck!" << std::endl;
+		}
+		if (temp == "CPUS") {
+			std::cout << "Get ready for a challenge! You have added a computer player that will";
+			std::cout << " always play the maximum scoring word. Good luck!" << std::endl;
+		}
 
 		// create player with a full initial hand
 		players.push_back(new Player(playerName, configFile->handSize));
@@ -217,40 +228,49 @@ int main(int argc, char** argv)
 			Move * playerMove = nullptr;
 			bool correctMove = false;
 
-			while(!correctMove)
-			{
-				std::cout << std::endl;
-				std::cout << MOVE_PROMPT_COLOR << "Your move, "	<< PLAYER_NAME_COLOR << players[playerNum]->getName() << MOVE_PROMPT_COLOR << ": " << rang::style::reset;
-				std::string moveString;
-				// if (players[playerNum]->getName() == "CPUL") moveString = CPULStrategy();
-				// if (players[playerNum]->getName() == "CPUS") moveString = CPUSStrategy();
-				std::getline(std::cin, moveString);
+			std::string temp = players[playerNum]->getName();
+			makeUppercase(temp);
+			if (temp == "CPUL" || temp == "CPUS") {
+				if (temp == "CPUL") // do this ones
+				else // do the other ones
+			}
 
-				try
+			else {
+				while(!correctMove)
 				{
-					// first construct the move, which could throw an exception
-					playerMove = Move::parseMove(moveString, *players[playerNum]);
+					std::cout << std::endl;
+					std::cout << MOVE_PROMPT_COLOR << "Your move, "	<< PLAYER_NAME_COLOR << players[playerNum]->getName() << MOVE_PROMPT_COLOR << ": " << rang::style::reset;
+					std::string moveString;
+					// if (players[playerNum]->getName() == "CPUL") moveString = CPULStrategy();
+					// if (players[playerNum]->getName() == "CPUS") moveString = CPUSStrategy();
+					std::getline(std::cin, moveString);
 
-					// now execute it, which could also throw exceptions
-					playerMove->execute(*board, *bag, *dictionary);
-
-					if(playerMove->isPass())
+					try
 					{
-						++sequentialPasses;
+						// first construct the move, which could throw an exception
+						playerMove = Move::parseMove(moveString, *players[playerNum]);
+
+						// now execute it, which could also throw exceptions
+						playerMove->execute(*board, *bag, *dictionary);
+
+						if(playerMove->isPass())
+						{
+							++sequentialPasses;
+						}
+						else
+						{
+							sequentialPasses = 0;
+						}
+
+						correctMove = true;
 					}
-					else
+					catch(MoveException & exception)
 					{
-						sequentialPasses = 0;
+						// print error message and reprompt the player
+						std::cout << "Error in move: " << getFriendlyError(exception) << std::endl;
 					}
 
-					correctMove = true;
 				}
-				catch(MoveException & exception)
-				{
-					// print error message and reprompt the player
-					std::cout << "Error in move: " << getFriendlyError(exception) << std::endl;
-				}
-
 			}
 
 			// draw more tiles from the bag to bring the player up to a full hand
