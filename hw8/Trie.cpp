@@ -75,7 +75,7 @@ void TrieSet::remove(std::string input) {
 	deleteChildren(traverse);
 }
 
-TrieNode* TrieSet::prefix(std::string px) {
+TrieNode* TrieSet::prefix(std::string px) const {
 	makeLowercase(px);
 	TrieNode* traverse = this->root;
 

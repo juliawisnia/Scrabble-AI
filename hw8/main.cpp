@@ -105,7 +105,7 @@ unsigned int doFinalSubtraction(std::vector<Player *> & players, ssize_t emptyHa
 
 int main(int argc, char** argv)
 {
-	if(argc != 2)
+	if(argc < 2)
 	{
 		std::cerr << "Usage: " << argv[0] << " <configuration file>" << std::endl;
 		return 3;
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 
 		bag = new Bag(configFile->tilesetFile, configFile->randomSeed);
 		dictionary = new Dictionary(configFile->dictionaryFile);
-		board = new Board(configFile->boardFile);
+		board = new Board(configFile->boardFile, configFile->initFile);
 	}
 	catch(FileException & fileException)
 	{
@@ -461,9 +461,9 @@ ConfigFile::ConfigFile(std::string const &configPath)
 					{
 						boardFile = valueBuffer;
 					}
-					else
+					else if (keyBuffer == "INIT")
 					{
-						// unrecognized key, ignore
+						initFile = valueBuffer;
 					}
 
 					nextState = ParserState::LOOKING_FOR_KEY;

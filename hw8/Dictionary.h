@@ -12,7 +12,7 @@
 
 #include <set>
 #include <string>
-#include <Trie.h>
+#include "Trie.h"
 
 class Dictionary
 {

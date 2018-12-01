@@ -15,6 +15,7 @@ public:
 	std::string dictionaryFile;
 	std::string boardFile;
 	uint32_t randomSeed;
+	std::string initFile;
 
 	// construct with path to file on disk.
 	// Throws a FileException("MISSINGCONFIG") if the file could not be found.

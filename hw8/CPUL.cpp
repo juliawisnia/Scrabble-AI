@@ -32,7 +32,7 @@ void permute(std::set<std::string>& hand, std::string input, size_t n) {
 int main() {
 	std::set<std::string> hand;
 	std::priority_queue<std::string, std::vector<std::string>, sortByLength> pq;
-	std::string input = "california";
+	std::string input = "apple";
 	permute(hand, input, input.size());
 	std::set<std::string>::iterator it;
 	for (it = hand.begin(); it != hand.end(); ++it) {

@@ -28,7 +28,7 @@ class TrieSet {
     /* Removes this string from the set.
     Do nothing if the string is not already in the set. */
 
-    TrieNode* prefix (std::string px);
+    TrieNode* prefix (std::string px) const;
     /* returns the TrieNode matching the provided string, or returns NULL 
     if it is not the prefix of a word in the Trie. */
 

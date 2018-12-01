@@ -21,6 +21,8 @@ set(SCRABBLE_SOURCES
 	Move.cpp
 	Util.h
 	Tile.h
-	Square.h)
+	Square.h
+	Trie.h
+	Trie.cpp)
 
 add_executable(scrabble ${SCRABBLE_SOURCES})

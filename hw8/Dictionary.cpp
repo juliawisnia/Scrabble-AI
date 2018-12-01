@@ -41,10 +41,8 @@ Dictionary::~Dictionary()
 
 bool Dictionary::isLegalWord(std::string const &word) const
 {
-	// transform word to lowercase
-	std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 	//search in TrieSet
-	TrieNode* temp = prefix(word);
+	TrieNode* temp = words.prefix(word);
 	// if it was not in dictionary, or it was but not as a word, not legal
 	if (temp == nullptr || !temp->inSet) return false;
 	else return true;

@@ -81,7 +81,7 @@ public:
 	   If the file contains unexpected characters, will throw a FileException
 	   with message "BOARDCONTENT".
 	*/
-	Board (std::string board_file_namey);
+	Board (std::string board_file_namey, std::string init_file_namey);
 
 	~Board ();
 
