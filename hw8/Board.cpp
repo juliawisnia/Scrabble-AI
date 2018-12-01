@@ -247,10 +247,11 @@ _isFirstMove(false)
 		std::string read;
 		size_t row = 0;
 		size_t col = 0;
-		
+
 		while (!initFileStream.eof()) {
 			std::getline(initFileStream, read);
 			row++;
+			col = 0;
 			for (size_t i = 0; i < read.size(); i++) {
 				if (i%3 == 0) col++;
 				char curr = read[i];
@@ -258,11 +259,12 @@ _isFirstMove(false)
 					continue;
 				}
 				else {
-					size_t first = read[i+1];
-					size_t second = read[i+2];
-					size_t score = first*10 + second;
+					std::string temp = "";
+					temp += read[i + 1];
+					temp += read[i + 2];
+					int score = std::stoi(temp);
 					Tile* add = new Tile(curr, score);
-					this->getSquare(row, col)->placeTile(add);
+					this->getSquare(col, row)->placeTile(add);
 					i+=2;
 				}
 			}
