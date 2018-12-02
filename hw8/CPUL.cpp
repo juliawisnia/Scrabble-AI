@@ -27,11 +27,11 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 		unused.push_back((*it)->getLetter());
 	}
 
-	std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std::pair<unsigned int, Move*>>, compare> verticalResults;
-	std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std::pair<unsigned int, Move*>>, compare> horizontalResults;
+	std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare> verticalResults;
+	std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare> horizontalResults;
 
-	for (unsigned int i = 0; i < (unsigned int)board.getColumns(); i++) {
-		for (unsigned int j = 0; j < (unsigned int)board.getRows(); j++) {
+	for (size_t i = 1; i <= (size_t)board.getColumns(); i++) {
+		for (size_t j = 1; j <= (size_t)board.getRows(); j++) {
 			helper(verticalResults, i, j, board, dictionary, "", "", unused, player, false);
 			helper(horizontalResults, i, j, board, dictionary, "", "", unused, player, true);
 		}
@@ -56,10 +56,10 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	// try and place all of them, then i - 1, until 1 tile
 }
 
-void helper(std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std::pair<unsigned int, Move*>>, compare>& results, 
-	unsigned int col, unsigned int row, Board & board, Dictionary & dictionary, std::string currWord, std::string tiles, std::vector<char> unusedTiles,
+void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare>& results, 
+	size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string tiles, std::vector<char> unusedTiles,
 	 Player & player, bool horizontal) {
-
+	std::cout << "CURRWORD: " << currWord << std::endl;
 	if (unusedTiles.empty()) return;
 
 	char currLetter = '$';
@@ -80,9 +80,15 @@ void helper(std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std
 		board.getPlaceMoveResults(*tempMove);
 	}
 	catch (MoveException & m) {
+		std::cout << "CAUGHT BISH" << std::endl;
 		// backtrack in this case, beacuse we have gone out of bounds, start over placing letters
-		if (horizontal) helper(results, col - 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
-		else helper(results, col, row - 1, board, dictionary, "", "", unusedTiles, player, horizontal);
+		if (horizontal) {
+			helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
+		}
+		else {
+			std::cout << "trying vertical" << std::endl;
+			helper(results, col, row + 1, board, dictionary, "", "", unusedTiles, player, horizontal);
+		}
 	}
 
 	// no out of bounds errors, but we have to check if the words are valid
@@ -92,7 +98,7 @@ void helper(std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std
 	if (check == nullptr) {
 		std::string temp;
 		// take out the last letter that we added
-		for (unsigned int i = 0; i < (unsigned int)tiles.size() - 1; i++) temp += tiles[i];
+		for (size_t i = 0; i < (size_t)tiles.size() - 1; i++) temp += tiles[i];
 		helper(results, col, row, board, dictionary, currWord, temp, unusedTiles, player, horizontal);
 	}
 
@@ -103,7 +109,7 @@ void helper(std::priority_queue <std::pair<unsigned int, Move*>, std::vector<std
 		// check that all words were valid, if so add to set, otherwise backtrack
 		if (checkAllWords(board, dictionary, player, *tempMove)) {
 			// add to list
-			results.emplace(std::make_pair(tempMove->_tiles.size(), &tempMove));
+			results.emplace(std::make_pair(tempMove->_tiles.size(), tempMove));
 			// backtrack to see if I can make a longer word
 			if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
 			else helper(results, col, row + 1, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
