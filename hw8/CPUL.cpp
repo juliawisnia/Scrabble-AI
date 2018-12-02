@@ -12,6 +12,7 @@ bool checkAllWords(Board & board, Dictionary & dictionary, Player & player, Plac
 		if(!dictionary.isLegalWord(sequencesFormed[sequenceIndex].first))
 		{
 		// 	throw MoveException("INVALIDWORD:" + sequencesFormed[sequenceIndex].first);
+			std::cout << "do u hear me bish" << std::endl;
 			player.addTiles(move._tiles);
 			return false;
 		}
@@ -24,8 +25,10 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	std::vector<char> unused;
 	std::set<Tile*>::iterator it;
 	for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
+		std::cout << " " << (*it)->getLetter();
 		unused.push_back((*it)->getLetter());
 	}
+	std::cout << std::endl;
 
 	std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare> verticalResults;
 	std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare> horizontalResults;
@@ -80,15 +83,25 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		board.getPlaceMoveResults(*tempMove);
 	}
 	catch (MoveException & m) {
-		std::cout << "CAUGHT BISH" << std::endl;
+		// std::cout << "CAUGHT BISH" << std::endl;
+		std::cout << m.what() << std::endl;
+		//player.addTiles(tempMove->_tiles);
+		std::cout << "SET OF TILES: ";
+		std::set<Tile*>::iterator it;
+		for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
+			std::cout << " " << (*it)->getLetter();
+		}
+		std::cout << std::endl;
+		// player.addTiles(tempMove->_tiles);
 		// backtrack in this case, beacuse we have gone out of bounds, start over placing letters
-		if (horizontal) {
-			helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
-		}
-		else {
-			std::cout << "trying vertical" << std::endl;
-			helper(results, col, row + 1, board, dictionary, "", "", unusedTiles, player, horizontal);
-		}
+		// if (horizontal) {
+		// 	helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
+		// }
+		// else {
+		// 	std::cout << "trying vertical" << std::endl;
+		// 	helper(results, col, row + 1, board, dictionary, "", "", unusedTiles, player, horizontal);
+		// 	helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
+		// }
 	}
 
 	// no out of bounds errors, but we have to check if the words are valid
@@ -98,8 +111,8 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 	if (check == nullptr) {
 		std::string temp;
 		// take out the last letter that we added
-		for (size_t i = 0; i < (size_t)tiles.size() - 1; i++) temp += tiles[i];
-		helper(results, col, row, board, dictionary, currWord, temp, unusedTiles, player, horizontal);
+		// for (size_t i = 0; i < (size_t)tiles.size() - 1; i++) temp += tiles[i];
+		helper(results, col, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
 	}
 
 	// valid prefix, check it it's a valid word
