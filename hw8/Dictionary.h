@@ -17,7 +17,7 @@
 class Dictionary
 {
 	//STUDENTS: Add private members & functions here
-	TrieSet words;
+
 
 public:
 
@@ -33,6 +33,7 @@ public:
 	   Case should not matter. Must run in O(n) for the number of words in the dictionary. */
 	bool isLegalWord (std::string const & word) const;
 
+	TrieSet words;
 };
 
 
