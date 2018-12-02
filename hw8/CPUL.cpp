@@ -62,8 +62,8 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare>& results, 
 	size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string tiles, std::vector<char> unusedTiles,
 	 Player & player, bool horizontal) {
-	std::cout << "CURRWORD: " << currWord << std::endl;
-	if (unusedTiles.empty()) return;
+	// std::cout << "CURRWORD: " << currWord << std::endl;
+	if (unusedTiles.empty() || col > board.getColumns() || row > board.getRows()) return;
 
 	char currLetter = '$';
 	// there's a tile on this square that we need to account for in our word
@@ -84,14 +84,14 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 	}
 	catch (MoveException & m) {
 		// std::cout << "CAUGHT BISH" << std::endl;
-		std::cout << m.what() << std::endl;
+		// std::cout << m.what() << std::endl;
 		//player.addTiles(tempMove->_tiles);
-		std::cout << "SET OF TILES: ";
-		std::set<Tile*>::iterator it;
-		for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-			std::cout << " " << (*it)->getLetter();
-		}
-		std::cout << std::endl;
+		// std::cout << "SET OF TILES: ";
+		// std::set<Tile*>::iterator it;
+		// for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
+		// 	std::cout << " " << (*it)->getLetter();
+		// }
+		// std::cout << std::endl;
 		// player.addTiles(tempMove->_tiles);
 		// backtrack in this case, beacuse we have gone out of bounds, start over placing letters
 		// if (horizontal) {
@@ -122,7 +122,8 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		// check that all words were valid, if so add to set, otherwise backtrack
 		if (checkAllWords(board, dictionary, player, *tempMove)) {
 			// add to list
-			results.emplace(std::make_pair(tempMove->_tiles.size(), tempMove));
+			size_t size = currWord.size();
+			results.emplace(std::make_pair(size, tempMove));
 			// backtrack to see if I can make a longer word
 			if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
 			else helper(results, col, row + 1, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
