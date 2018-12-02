@@ -17,6 +17,7 @@
 #include "Exceptions.h"
 #include "rang.h"
 #include "Util.h"
+#include "CPUL.h"
 
 // Get a friendly string to print to the user in response to a move exception
 std::string getFriendlyError(MoveException const & exception)
@@ -231,8 +232,14 @@ int main(int argc, char** argv)
 			std::string temp = players[playerNum]->getName();
 			makeUppercase(temp);
 			if (temp == "CPUL" || temp == "CPUS") {
-				if (temp == "CPUL") // do this ones
-				else // do the other ones
+				if (temp == "CPUL") {
+					playerMove = CPULStrategy(*board, *dictionary, *players[playerNum]);
+				}
+				else {
+					//playerMove = CPUSStrategy(*board, *dictionary, *players[playerNum]);
+				}
+
+				playerMove->execute(*board, *bag, *dictionary);
 			}
 
 			else {
