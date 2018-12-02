@@ -138,7 +138,6 @@ class PlaceMove : public Move
 
 	size_t _x, _y;
 	bool _horizontal;
-	std::vector<Tile *> _tiles;
 
 public:
 	/* Creates a PLACE move, starting at row y, column x, placing the tiles
@@ -183,6 +182,7 @@ public:
 	 * one of the words formed by the move was not in the dictionary (where the
 	 * text after the colon is the invalid word).*/
 	void execute(Board & board, Bag & bag, Dictionary & dictionary);
+	std::vector<Tile *> _tiles;
 };
 
 
