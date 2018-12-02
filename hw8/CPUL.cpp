@@ -53,14 +53,6 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 		return verticalResults.top().second;
 	}
 	else return horizontalResults.top().second;
-
-
-	// first we are going to try and place all words that play the max tiles in hand, then max - 1, etc
-	// start by placing at square - n, then square - n + 1, until valid move
-	// use prefix to get a TrieNode* to first letter in the trie, and then traverse yourself instead of calling it to save on runtime
-	// once we have determined that there are no words made from there, we can quit and backtrack
-	// if we find one that works, we make it a place move. If it throws no exceptions, we can quit
-	// try and place all of them, then i - 1, until 1 tile
 }
 
 void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare>& results, 
@@ -68,7 +60,7 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 	 Player & player, bool horizontal) {
 	// std::cout << "CURRWORD: " << currWord << std::endl;
 	if (col > board.getColumns() || row > board.getRows() || col < 1 || row < 1) return;
-	
+
 	std::vector<std::pair<std::string, unsigned int>> tempResult;
 	char currLetter = '$';
 	// there's a tile on this square that we need to account for in our word, and now we can check PlaceMove
@@ -93,7 +85,10 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		// valid prefix and valid word
 		if (check != nullptr && check->inSet) {
 			// create a PlaceMove to check if valid
-			PlaceMove* tempMove = new PlaceMove(col, row, horizontal, moveString, &player);
+			PlaceMove* tempMove = nullptr;
+			if (horizontal) tempMove = new PlaceMove(col - currWord.size() + 1, row, horizontal, moveString, &player);
+			else tempMove = new PlaceMove(col, row - currWord.size() + 1, horizontal, moveString, &player);
+
 			try {
 				tempResult = board.getPlaceMoveResults(*tempMove);
 			}
@@ -104,6 +99,7 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 				std::cout << m.what() << std::endl;
 				// add tiles back to the hand
 				player.addTiles(tempMove->tileVector());
+				delete tempMove;
 				// reset unused tiles, we are completely starting over
 				unusedTiles = "";
 				std::set<Tile*>::iterator it;
@@ -133,8 +129,6 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 
 			// we got through all the iterations, way to go. We can add this move to our priority queue now
 			results.emplace(std::make_pair(moveString.size(), tempMove));
-			// add all tiles back to the player's hand again
-			player.addTiles(tempMove->tileVector());
 
 			// try to find a longer word
 			if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
@@ -164,8 +158,12 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 			}
 			// it's a valid prefix and word
 			if (check != nullptr && check->inSet) {
+				unusedTiles.erase(i, 1);
 				// create a PlaceMove to check if valid
-				PlaceMove* tempMove = new PlaceMove(col, row, horizontal, tempMoveString, &player);
+				PlaceMove* tempMove = nullptr;
+				if (horizontal) tempMove = new PlaceMove(col - currWord.size() + 1, row, horizontal, tempMoveString, &player);
+				else tempMove = new PlaceMove(col, row - currWord.size() + 1, horizontal, tempMoveString, &player);
+
 				try {
 					tempResult = board.getPlaceMoveResults(*tempMove);
 				}
@@ -174,113 +172,56 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 				// we need to put tiles back if it doesn't work
 				catch (MoveException & m) {
 					std::cout << m.what() << std::endl;
-					// add tiles back to the hand
 					player.addTiles(tempMove->tileVector());
-					// reset unused tiles, we are completely starting over
-					unusedTiles = "";
-					std::set<Tile*>::iterator it;
-					for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-						unusedTiles += (*it)->getLetter();
-					}
-					// go to next round to iterate
-					if (horizontal) helper(results, col + 1, row, board, dictionary, "", unusedTiles, "", player, horizontal);
-					else helper(results, col, row + 1, board, dictionary, "", unusedTiles, "", player, horizontal);			
+					delete tempMove;
+					//return;
+					// add tiles back to the hand
+					// // reset unused tiles, we are completely starting over
+					// // unusedTiles = "";
+					// // std::set<Tile*>::iterator it;
+					// // std::cout << "RECONSTRUCTING, HERE ARE TILES: ";
+					// // for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
+					// // 	std::cout << " " << (*it)->getLetter();
+					// // 	unusedTiles += (*it)->getLetter();
+					// // }
+					// // std::cout << std::endl;
+					// // go to next round to iterate
+					// if (horizontal) helper(results, col + 1, row, board, dictionary, "", unusedTiles, "", player, horizontal);
+					// else helper(results, col, row + 1, board, dictionary, "", unusedTiles, "", player, horizontal);			
 				}
 
 				// congratulations, we have found a real word! now, are all of them real?
 				std::vector<std::pair<std::string, unsigned int>>::iterator it;
+				bool allLegalWords = true;
 				for (it = tempResult.begin(); it != tempResult.end(); ++it) {
 					// we have found an invalid word, backtrack
 					if (!dictionary.isLegalWord((*it).first)) {
-						if (horizontal) {
-							helper(results, col - 1, row, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
-							break;
-						}
-						else {
-							helper(results, col, row - 1, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
-							break;
-						}
+						allLegalWords = false;
 					}
+					// 	if (horizontal) {
+					// 		// we didn't use this tile afterall
+					// 		//unusedTiles += tempMoveString[tempMoveString.size() - 1];
+					// 		helper(results, col - 1, row, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
+					// 		break;
+					// 	}
+					// 	else {
+					// 		unusedTiles.push_back(tempMoveString[tempMoveString.size() - 1]);
+					// 		helper(results, col, row - 1, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
+					// 		break;
+					// 	}
+					// }
 				}
-
+				std::cout << "HI" << std::endl;
 				// we got through all the iterations, way to go. We can add this move to our priority queue now
-				results.emplace(std::make_pair(tempMoveString.size(), tempMove));
-				// add all tiles back to the player's hand again
-				player.addTiles(tempMove->tileVector());
+				if (allLegalWords) results.emplace(std::make_pair(tempMoveString.size(), tempMove));
 				// if you end up using the tile, erase if from unused
-				unusedTiles.erase(i, 1);
+				//unusedTiles.erase(i, 1);
 				// see if there's a longer word we can make now
 				if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);
-				else helper(results, col, row + 1, board, dictionary, "", unusedTiles, tempMoveString, player, horizontal);			
+				else helper(results, col, row + 1, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);			
 			}
-		}
 		// if we have run through every tile, return
 		return;
+		}
 	}
-	// else {
-		
-	// }
-
-	// std::string temp = currWord + currLetter;
-	// PlaceMove* tempMove = nullptr;
-	// try {
-	// 	PlaceMove* tempMove = new PlaceMove(col, row, horizontal, tiles, &player);
-	// 	board.getPlaceMoveResults(*tempMove);
-	// }
-	// catch (MoveException & m) {
-	// 	// should only be throwing NONEIGHBORS
-	// 	std::cout << m.what() << std::endl;
-	// 	// the move execution failed, but the tiles in _tiles have still been removed from
-	// 	// the player's hand.  So, we need to put them back.
-	// 	// note to self: add unit tests for this mistake
-
-	// 	player.addTiles(tempMove->tileVector());
-
-	// 	// now, you can get on with your exception
-	// 	//throw moveException;
-
-	// 	if (horizontal) helper(results, col, row + 1, board, dictionary, "", "", unusedTiles, player, horizontal);
-	// 	else helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
-	// }
-
-	// // no out of bounds errors, but we have to check if the words are valid
-	// TrieNode* check = dictionary.words.prefix(temp);
-
-	// // not a valid prefix, so we need to backtrack and move onto the next letter
-	// if (check == nullptr) {
-	// 	std::cout << "FOUND ONE" << std::endl;
-	// 	//std::string temp;
-	// 	// take out the last letter that we added
-	// 	// for (size_t i = 0; i < (size_t)tiles.size() - 1; i++) temp += tiles[i];
-	// 	//unusedTiles.insert(unusedTiles.begin(), temp[temp.size() - 1]);
-	// 	if (horizontal) helper(results, col, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
-	// 	else helper(results, col, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
-	// }
-
-	// // valid prefix, check it it's a valid word
-	// if (check != nullptr && check->inSet) {
-	// 	std::cout << "FOUND ONEa" << std::endl;
-	// 	// this word was good to use
-	// 	currWord = temp;
-	// 	// check that all words were valid, if so add to set, otherwise backtrack
-	// 	if (checkAllWords(board, dictionary, player, *tempMove)) {
-	// 		unusedTiles.pop_back();
-	// 		std::cout << "FOUND ONEb" << std::endl;
-	// 		// add to list
-	// 		size_t size = tiles.size();
-	// 		results.emplace(std::make_pair(size, tempMove));
-	// 		// backtrack to see if I can make a longer word
-	// 		if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
-	// 		else helper(results, col, row + 1, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
-	// 	}
-	// }
-
-	// if (check != nullptr && !check->inSet) {
-	// 	unusedTiles.pop_back();
-	// 	std::cout << "FOUND ONEd" << std::endl;
-	// 	// this prefix was good to use
-	// 	currWord = temp;
-	// 	if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
-	// 	else helper(results, col, row + 1, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
-	// }
 }
