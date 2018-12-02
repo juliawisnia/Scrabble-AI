@@ -76,8 +76,8 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 	}
 	else {
 		currLetter = unusedTiles.back();
-		unusedTiles.pop_back();
-		tiles += currLetter;
+		// unusedTiles.pop_back();
+		// tiles += currLetter;
 	}
 
 	std::string temp = currWord + currLetter;
@@ -87,24 +87,19 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		board.getPlaceMoveResults(*tempMove);
 	}
 	catch (MoveException & m) {
-		// std::cout << "CAUGHT BISH" << std::endl;
-		// std::cout << m.what() << std::endl;
-		//player.addTiles(tempMove->_tiles);
-		// std::cout << "SET OF TILES: ";
-		// std::set<Tile*>::iterator it;
-		// for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-		// 	std::cout << " " << (*it)->getLetter();
-		// }
-		// std::cout << std::endl;
-		// player.addTiles(tempMove->_tiles);
-		// backtrack in this case, beacuse we have gone out of bounds, start over placing letters
-		std::set<Tile *>::iterator it;
-		unusedTiles.clear();
-		for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-			unusedTiles.push_back((*it)->getLetter());
-		}
+		// should only be throwing NONEIGHBORS
+		std::cout << m.what() << std::endl;
+		// the move execution failed, but the tiles in _tiles have still been removed from
+		// the player's hand.  So, we need to put them back.
+		// note to self: add unit tests for this mistake
+
+		player.addTiles(tempMove->tileVector());
+
+		// now, you can get on with your exception
+		//throw moveException;
+
 		if (horizontal) helper(results, col, row + 1, board, dictionary, "", "", unusedTiles, player, horizontal);
-			else helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
+		else helper(results, col + 1, row, board, dictionary, "", "", unusedTiles, player, horizontal);
 	}
 
 	// no out of bounds errors, but we have to check if the words are valid
@@ -117,8 +112,8 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		// take out the last letter that we added
 		// for (size_t i = 0; i < (size_t)tiles.size() - 1; i++) temp += tiles[i];
 		//unusedTiles.insert(unusedTiles.begin(), temp[temp.size() - 1]);
-		if (horizontal) helper(results, col - 1, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
-		else helper(results, col, row - 1, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
+		if (horizontal) helper(results, col, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
+		else helper(results, col, row, board, dictionary, currWord, currWord, unusedTiles, player, horizontal);
 	}
 
 	// valid prefix, check it it's a valid word
@@ -128,9 +123,10 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 		currWord = temp;
 		// check that all words were valid, if so add to set, otherwise backtrack
 		if (checkAllWords(board, dictionary, player, *tempMove)) {
+			unusedTiles.pop_back();
 			std::cout << "FOUND ONEb" << std::endl;
 			// add to list
-			size_t size = currWord.size();
+			size_t size = tiles.size();
 			results.emplace(std::make_pair(size, tempMove));
 			// backtrack to see if I can make a longer word
 			if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, tiles, unusedTiles, player, horizontal);
@@ -139,6 +135,7 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 	}
 
 	if (check != nullptr && !check->inSet) {
+		unusedTiles.pop_back();
 		std::cout << "FOUND ONEd" << std::endl;
 		// this prefix was good to use
 		currWord = temp;
