@@ -21,7 +21,7 @@
 
 struct scoreCompare {
 	bool operator()(std::pair<size_t, std::string> a, std::pair<size_t, std::string> b) {
-		return (a.first > b.first);
+		return (a.first < b.first);
 	}
 };
 
