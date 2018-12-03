@@ -18,15 +18,56 @@ std::string CPULStrategy(Board & board, Dictionary & dictionary, Player & player
 		}
 	}
 
-	if (vertical.empty() && horizontal.empty()) {
+	std::cout << std::endl;
+	int vMax = -1;
+	std::string vMove;
+	while (!vertical.empty()) {
+		int comp = (int)vertical.top().first;
+		if (comp > vMax) {
+			vMax = comp;
+			vMove = vertical.top().second;
+		}
+		vertical.pop();
+	}
+
+	int hMax = -1;
+	std::string hMove;
+	while (!horizontal.empty()) {
+		int comp = (int)horizontal.top().first;
+		if (comp > hMax) {
+			hMax = comp;
+			hMove = horizontal.top().second;
+		}
+		vertical.pop();
+	}
+
+	if (vMax == -1 && hMax == -1) {
 		return "PASS";
 	}
 
-	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
-	if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
+	if (vMax > hMax) return vMove;
+	return hMove;
 
-	if (vertical.top().first > horizontal.top().first) return vertical.top().second;
-	return horizontal.top().second;
+
+	// std::cout << "LAST : ";
+	// while (!vertical.empty()) {
+	// 	size_t comp = vertical.top().first;
+	// 	if (comp > max) {
+	// 		max = comp;
+	// 		move = vertical.top().second;
+	// 	}
+	// 	vertical.pop();
+	// }
+
+	// if (vertical.empty() && horizontal.empty()) {
+	// 	return "PASS";
+	// }
+
+	// if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
+	// if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
+
+	// if (vertical.top().first > horizontal.top().first) return vertical.top().second;
+	// return horizontal.top().second;
 
 }
 
