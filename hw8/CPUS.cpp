@@ -93,14 +93,17 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 			if (horizontal) val += "- ";
 			else val += "| ";
 
-			val += startRow;
+			val += std::to_string(startRow);
 			val += " ";
-			val += startCol;
+			val += std::to_string(startCol);
 			val += " ";
 			val += move;
 
 			size_t points = getTotalScore(result);
-			if (allLegalWords) pq.emplace(std::make_pair(points, val));
+			if (allLegalWords) {
+				std::cout << "going in: " <<  points << " " << val << std::endl;
+				pq.emplace(std::make_pair(points, val));
+			}
 			player.addTiles(tempMove->tileVector());
 		}
 	}

@@ -20,3 +20,12 @@ until all memory has been deleted.
 Trie.h:
 I implemented several helper functions, all of which are
 private and they are described in this file.
+
+Scrabble AI:
+
+Both my AIs work in the same way, the only difference is 
+CPUS will sort the priority queue by largest score whereas
+CPUL does it by longest length.  I use backtracking to find
+the valid words, cutting it when it's an invalid prefix. 
+The priority queue is being annoying, but if you print
+out the words it actually works.. here's to hoping.
