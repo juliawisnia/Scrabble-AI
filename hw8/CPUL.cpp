@@ -175,45 +175,45 @@ void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair
 					player.addTiles(tempMove->tileVector());
 					delete tempMove;
 					// reset unused tiles, we are completely starting over
-					unusedTiles = "";
-					std::set<Tile*>::iterator it;
-					for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-						unusedTiles += (*it)->getLetter();
-					}
-					// go to next round to iterate
-					if (horizontal) helper(results, col + 1, row, board, dictionary, "", unusedTiles, "", player, horizontal);
-					else helper(results, col, row + 1, board, dictionary, "", unusedTiles, "", player, horizontal);			
+					// unusedTiles = "";
+					// std::set<Tile*>::iterator it;
+					// for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
+					// 	unusedTiles += (*it)->getLetter();
+					// }
+					// // go to next round to iterate
+					// if (horizontal) helper(results, col + 1, row, board, dictionary, "", unusedTiles, "", player, horizontal);
+					// else helper(results, col, row + 1, board, dictionary, "", unusedTiles, "", player, horizontal);			
 				}
 
 				// congratulations, we have found a real word! now, are all of them real?
 				std::vector<std::pair<std::string, unsigned int>>::iterator it;
+				bool allLegalWords = true;
 				for (it = tempResult.begin(); it != tempResult.end(); ++it) {
 					// we have found an invalid word, backtrack
 					if (!dictionary.isLegalWord((*it).first)) {
-						if (horizontal) {
-							// we didn't use this tile afterall
-							unusedTiles += tempMoveString[tempMoveString.size() - 1];
-							helper(results, col - 1, row, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
-							break;
-						}
-						else {
-							unusedTiles.push_back(tempMoveString[tempMoveString.size() - 1]);
-							helper(results, col, row - 1, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
-							break;
-						}
+						allLegalWords = false;
+						// if (horizontal) {
+						// 	// we didn't use this tile afterall
+						// 	unusedTiles += tempMoveString[tempMoveString.size() - 1];
+						// 	helper(results, col - 1, row, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
+						// 	break;
+						// }
+						// else {
+						// 	unusedTiles.push_back(tempMoveString[tempMoveString.size() - 1]);
+						// 	helper(results, col, row - 1, board, dictionary, currWord, unusedTiles, moveString, player, horizontal);
+						// 	break;
+						// }
 					}
 				}
 
 				// we got through all the iterations, way to go. We can add this move to our priority queue now
-				results.emplace(std::make_pair(tempMoveString.size(), tempMove));
+				if (allLegalWords) results.emplace(std::make_pair(tempMoveString.size(), tempMove));
 				// if you end up using the tile, erase if from unused
-				unusedTiles.erase(i, 1);
-				// see if there's a longer word we can make now
-				if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);
-				else helper(results, col, row + 1, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);			
+				unusedTiles.erase(i, 1);			
 			}
 		}
-		// if we have run through every tile, return
-		return;
+		// see if there's a longer word we can make now
+		// if (horizontal) helper(results, col + 1, row, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);
+		// else helper(results, col, row + 1, board, dictionary, currWord, unusedTiles, tempMoveString, player, horizontal);
 	// }
 }
