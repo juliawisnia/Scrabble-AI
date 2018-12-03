@@ -19,23 +19,19 @@
 #include "Trie.h"
 #include "Util.h"
 
+// comparator sorting by length/tiles PLAYED for priority_queue
 struct lengthCompare {
 	bool operator()(std::pair<size_t, std::string> a, std::pair<size_t, std::string> b) {
 		return (a.first < b.first);
 	}
 };
 
+// priority queue used to store all VALID move strings
 typedef std::priority_queue <std::pair<size_t,std::string>, std::vector<std::pair<size_t, std::string>>, lengthCompare> CPULQueue;
 
-bool checkAllWords(Board & board, Dictionary & dictionary, Player & player, PlaceMove & move);
-
+// a wrapper for CPULStrategy, runs helper and then chooses top element from priority queue to play
 std::string CPULStrategy(Board & board, Dictionary & dictionary, Player & player);
 
-// void helper(PlaceMoveQueue& results, size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string unusedTiles, std::string moveString,
-// 	 Player & player, bool horizontal);
+// a helper that determines all valid moves and pushes them to the priority queue
 void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::string unused);
-
-bool allUsed(std::vector<std::pair<char, bool>> vect);
-
-void resetToUnused(std::vector<std::pair<char, bool>>& vect);

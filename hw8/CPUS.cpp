@@ -11,6 +11,7 @@ std::string CPUSStrategy(Board & board, Dictionary & dictionary, Player & player
 		unused += (*it)->getLetter();
 	}
 
+	// iterates over every square on board calling the helper in both directions
 	for (size_t i = 1; i <= board.getColumns(); i++) {
 		for (size_t j = 1; j <= board.getRows(); j++) {
 			CPUSHelper(vertical, board, player, dictionary, i, j, false, "", "", unused);
@@ -18,13 +19,17 @@ std::string CPUSStrategy(Board & board, Dictionary & dictionary, Player & player
 		}
 	}
 
+	// no valid moves, so PASS
 	if (vertical.empty() && horizontal.empty()) {
 		return "PASS";
 	}
 
+	// no vertical moves
 	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
+	// no horizontal moves
 	if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
 
+	// moves in both direction, choose higher scoring one
 	if (vertical.top().first > horizontal.top().first) return vertical.top().second;
 	return horizontal.top().second;
 
@@ -33,6 +38,7 @@ std::string CPUSStrategy(Board & board, Dictionary & dictionary, Player & player
 void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::string unused) {
 
+	// return if we are out of bounds
 	if (row > board.getRows() || col > board.getColumns()) return;
 
 	TrieNode* check = dictionary.words.prefix(word);
@@ -97,6 +103,7 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 			size_t points = getTotalScore(result);
 			if (allLegalWords) pq.emplace(std::make_pair(points, val));
 			player.addTiles(tempMove->tileVector());
+			delete tempMove;
 		}
 	}
 	if (unused.empty()) return;
@@ -106,7 +113,6 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 		word += c;
 		if (horizontal) CPUSHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
 		else CPUSHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
-		//word.erase(word.length() - 1);
 	}
 
 	else {
@@ -115,6 +121,7 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 			char c = unused[i];
 
 			if (c == '?') {
+				// iterate over every possible letter that it could be to determine best move
 				for (size_t j = 'a'; j <= 'z'; j++) {
 					c = static_cast<char>(j);
 					word += c;

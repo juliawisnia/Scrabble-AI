@@ -4,8 +4,7 @@
 - **USC ID**: 2096592657
 - **Email**: wisnia@usc.edu
 
-I WILL BE USING THE GIVEN STARTER CODE WITH THE 10
-POINT DEDUCTION.
+I USED THE CODE BUY WITH THE 10 POINT DEDUCTION.
 
 Trie.cpp:
 My Trie is implemented by creating a root node with
@@ -27,5 +26,7 @@ Both my AIs work in the same way, the only difference is
 CPUS will sort the priority queue by largest score whereas
 CPUL does it by longest length.  I use backtracking to find
 the valid words, cutting it when it's an invalid prefix. 
-The priority queue is being annoying, but if you print
-out the words it actually works.. here's to hoping.
+My AIs each have a strategy function.  All functions related
+to the AIs can be found in CPUL.cpp/CPUL.h, and CPUS.cpp/CPUS.h.
+Each function takes in the parameter of horizontal, so it can
+run in each direction with this fed in.
