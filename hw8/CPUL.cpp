@@ -4,11 +4,11 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	PlaceMoveQueue vertical;
 	PlaceMoveQueue horizontal;
 
-	std::vector<std::pair<char, bool>> unused;
+	std::string unused;
 	std::set<Tile*>::iterator it;
 	// say that every tile hasn't been used at first
 	for (it = player.getHandTiles().begin(); it != player.getHandTiles().end(); ++it) {
-		unused.push_back(std::make_pair((*it)->getLetter(), false));
+		unused += (*it)->getLetter();
 	}
 
 	for (size_t i = 1; i <= board.getColumns(); i++) {
@@ -28,30 +28,35 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 
 }
 
-bool allUsed(std::vector<std::pair<char, bool>> vect) {
-	std::vector<std::pair<char, bool>>::iterator it;
-	for (it = vect.begin(); it != vect.end(); ++it) {
-		// if there's one that hasn't been used, then not "empty"
-		if ((*it).second == false) return false;
-	}
-	return true;
-}
+// bool allUsed(std::vector<std::pair<char, bool>> vect) {
+// 	std::vector<std::pair<char, bool>>::iterator it;
+// 	for (it = vect.begin(); it != vect.end(); ++it) {
+// 		// if there's one that hasn't been used, then not "empty"
+// 		if ((*it).second == false) return false;
+// 	}
+// 	return true;
+// }
 
-void resetToUnused(std::vector<std::pair<char, bool>>& vect) {
-	std::vector<std::pair<char, bool>>::iterator it;
-	for (it = vect.begin(); it != vect.end(); ++it) {
-		// reset all bool values
-		(*it).second = false;
-	}	
-	return;
-}
+// void resetToUnused(std::vector<std::pair<char, bool>>& vect) {
+// 	std::vector<std::pair<char, bool>>::iterator it;
+// 	for (it = vect.begin(); it != vect.end(); ++it) {
+// 		// reset all bool values
+// 		(*it).second = false;
+// 	}	
+// 	return;
+// }
 
 void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
-	std::string word, std::string move, std::vector<std::pair<char, bool>>& unused) {
-	std::cout << "WORD: " << word << std::endl;
+	std::string word, std::string move, std::string unused) {
+	//std::cout << "WORD: " << word << std::endl;
+
+	if (row > board.getRows() || col > board.getColumns()) return;
+
 	TrieNode* check = dictionary.words.prefix(word);
 	// not even a prefix, and string is not empty
-	if (check == nullptr && word.size() > 0) return;
+	if (check == nullptr) {
+		if (word.size() > 0) return;
+	}
 
 	// it's a prefix
 	else {
@@ -65,48 +70,98 @@ void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & di
 			catch (MoveException & m) {
 				std::cout << m.what() << std::endl;
 				player.addTiles(tempMove->tileVector());
-				delete tempMove;
+				//delete tempMove;
 			}
 
 			try {
 				board.getPlaceMoveResults(*tempMove);
 			}
 			catch (MoveException & m) {
-				std::cout << m.what();
+				std::cout << m.what() << std::endl;
 				player.addTiles(tempMove->tileVector());
-				delete tempMove;
+				//delete tempMove;
 			}
 
 			// no exceptions thrown, it's a word
 			pq.emplace(std::make_pair(move.size(), tempMove));
-			delete tempMove;
+			//delete tempMove;
 			// resetToUnused(unused);
 			// if (horizontal) helper(pq, board, player, col + 1, row, horizontal, "", "", unused);
 			// else helper(pq, board, player, col, row + 1, horizontal, "", "", unused);
 		}
 	}
-
-	if (row > board.getRows() || col > board.getColumns() || allUsed(unused)) return;
-
-	std::vector<std::pair<char, bool>>::iterator it;
-	for (it = unused.begin(); it != unused.end(); ++it) {
+	if (unused.empty()) return;
+	for (size_t i = 0; i < unused.size(); i++) {
 		// this letter is already in use
-		if ((*it).second == true) continue;
+		char c = unused[i];
 
-		word += (*it).first;
+		word += c;
+		unused.erase(i, 1);
 		// only add it to the move if it's a letter from our hand
-		if (!board.getSquare(col, row)->isOccupied()) move += (*it).first;
-
-		// let's say that this letter has been used
-		(*it).second = true;
+		if (!board.getSquare(col, row)->isOccupied()) move += c;
 
 		if (horizontal) helper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
 		else helper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
 
 		// backtrack, look for new solution
-		(*it).second = false;
+		unused.insert(i, 1, c);
+		if (!board.getSquare(col, row)->isOccupied()) move.erase(move.length() - 1, 1);
+		word.erase(word.length() - 1, 1);
+
 	}
 }
+
+// void helper(std::string word, std::string unused) {
+// 	TrieNode* check = dictionary.words.prefix(word);
+// 	// not even a prefix, and string is not empty
+// 	if (check == nullptr) {
+// 		if (word.size() > 0) return;
+// 	}
+
+// 	// it's a prefix and a word
+// 	if (check != nullptr && check->inSet) {
+// 		PlaceMove* tempMove = nullptr;
+// 		try {
+// 			if (horizontal) tempMove = new PlaceMove(col - word.size(), row, horizontal, move, &player);
+// 			else tempMove = new PlaceMove(col, row - word.size(), horizontal, move, &player);
+// 		}
+// 		catch (MoveException & m) {
+// 			std::cout << m.what() << std::endl;
+// 			player.addTiles(tempMove->tileVector());
+// 			delete tempMove;
+// 		}
+
+// 		try {
+// 			board.getPlaceMoveResults(*tempMove);
+// 		}
+// 		catch (MoveException & m) {
+// 			std::cout << m.what();
+// 			player.addTiles(tempMove->tileVector());
+// 			delete tempMove;
+// 		}
+
+// 		// no exceptions thrown, it's a word
+// 		pq.emplace(std::make_pair(move.size(), tempMove));
+// 		delete tempMove;
+// 		// resetToUnused(unused);
+// 		// if (horizontal) helper(pq, board, player, col + 1, row, horizontal, "", "", unused);
+// 		// else helper(pq, board, player, col, row + 1, horizontal, "", "", unused);
+// 	}
+
+// 	else {
+// 		for (size_t i = 0; i < word.length(); i++) {
+// 			char c = word[i];
+// 			unused += c;
+// 			word.erase(i, 1)
+
+// 			helper(word, unused);
+
+// 			word.insert(i, 1, c);
+// 			unused.erase(chosen, length() - 1, 1);
+// 		}
+// 	}
+// }
+
 
 // #include "CPUL.h"
 
