@@ -13,8 +13,8 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 
 	for (size_t i = 1; i <= board.getColumns(); i++) {
 		for (size_t j = 1; j <= board.getRows(); j++) {
-			helper(vertical, board, player, dictionary, i, j, false, "", "", unused);
-			helper(horizontal, board, player, dictionary, i, j, true, "", "", unused);
+			CPULHelper(vertical, board, player, dictionary, i, j, false, "", "", unused);
+			CPULHelper(horizontal, board, player, dictionary, i, j, true, "", "", unused);
 		}
 	}
 
@@ -31,7 +31,7 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 
 }
 
-void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
+void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::string unused) {
 	//std::cout << "WORD: " << word << std::endl;
 
@@ -54,7 +54,7 @@ void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & diction
 				else tempMove = new PlaceMove(col, row - word.size(), horizontal, move, &player);
 			}
 			catch (MoveException & m) {
-				std::cout << m.what() << std::endl;
+				//std::cout << m.what() << std::endl;
 				if (tempMove != nullptr) player.addTiles(tempMove->tileVector());
 				delete tempMove;
 				return;
@@ -76,10 +76,9 @@ void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & diction
 			}
 			// no exceptions thrown, it's a word
 			pq.emplace(std::make_pair(move.size(), tempMove));
-			//delete tempMove;
 			// resetToUnused(unused);
-			// if (horizontal) helper(pq, board, player, col + 1, row, horizontal, "", "", unused);
-			// else helper(pq, board, player, col, row + 1, horizontal, "", "", unused);
+			// if (horizontal) CPULHelper(pq, board, player, col + 1, row, horizontal, "", "", unused);
+			// else CPULHelper(pq, board, player, col, row + 1, horizontal, "", "", unused);
 		}
 	}
 	if (unused.empty()) return;
@@ -87,8 +86,8 @@ void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & diction
 	if (board.getSquare(col, row)->isOccupied()) {
 		char c = board.getSquare(col, row)->getLetter();
 		word += c;
-		if (horizontal) helper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
-		else helper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
+		if (horizontal) CPULHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
+		else CPULHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
 		//word.erase(word.length() - 1);
 	}
 
@@ -106,8 +105,8 @@ void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & diction
 					move += '?';
 					move += c;
 
-					if (horizontal) helper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
-					else helper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
+					if (horizontal) CPULHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
+					else CPULHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
 
 					// backtrack, look for new solution
 					unused.insert(i, 1, c);
@@ -121,8 +120,8 @@ void helper(CPULQueue & pq, Board & board, Player & player, Dictionary & diction
 				unused.erase(i, 1);
 				move += c;
 
-				if (horizontal) helper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
-				else helper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
+				if (horizontal) CPULHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
+				else CPULHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
 
 				// backtrack, look for new solution
 				unused.insert(i, 1, c);

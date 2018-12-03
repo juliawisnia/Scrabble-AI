@@ -235,16 +235,12 @@ int main(int argc, char** argv)
 			if (temp == "CPUL" || temp == "CPUS") {
 				if (temp == "CPUL") {
 					playerMove = CPULStrategy(*board, *dictionary, *players[playerNum]);
-					// std::set<Tile*>::iterator it;
-					// for (it = playerMove->_tiles.begin(); it != playerMove->tiles.begin().end; ++it) {
-					// 	std::cout << " " << (*it)->getLetter();
-					// }
-					// std::cout << std::endl;
 				}
 				else {
 					playerMove = CPUSStrategy(*board, *dictionary, *players[playerNum]);
 				}
 
+				if (playerMove->isPass()) ++sequentialPasses;
 				playerMove->execute(*board, *bag, *dictionary);
 			}
 
