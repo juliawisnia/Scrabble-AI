@@ -23,7 +23,10 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 		return pass;
 	}
 
-	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
+	if (vertical.empty() && !horizontal.empty()) {
+		std::cout << "NUMBER OF LETTERS " << horizontal.top().first;
+		return horizontal.top().second;
+	}
 	if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
 
 	if (vertical.top().first > horizontal.top().first) return vertical.top().second;
@@ -33,7 +36,6 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 
 void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::string unused) {
-	//std::cout << "WORD: " << word << std::endl;
 
 	if (row > board.getRows() || col > board.getColumns()) return;
 
@@ -88,7 +90,7 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 		word += c;
 		if (horizontal) CPULHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
 		else CPULHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
-		//word.erase(word.length() - 1);
+		word.erase(word.length() - 1);
 	}
 
 	else {

@@ -73,9 +73,11 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 			std::vector<std::pair<std::string, unsigned int>>::iterator it;
 			for (it = result.begin(); it != result.end(); it++) {
 				if (!dictionary.isLegalWord((*it).first)) return;
+
 			}
+			size_t points = getTotalScore(result);
 			// no exceptions thrown, it's a word
-			pq.emplace(std::make_pair(move.size(), tempMove));
+			pq.emplace(std::make_pair(points, tempMove));
 			// resetToUnused(unused);
 			// if (horizontal) CPUSHelper(pq, board, player, col + 1, row, horizontal, "", "", unused);
 			// else CPUSHelper(pq, board, player, col, row + 1, horizontal, "", "", unused);
@@ -131,4 +133,13 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 
 		}
 	}
+}
+
+size_t getTotalScore(std::vector<std::pair<std::string, unsigned int>> vect) {
+	size_t score = 0;
+	std::vector<std::pair<std::string, unsigned int>>::iterator it;
+	for (it = vect.begin(); it != vect.end(); ++it) {
+		score += (*it).second;
+	}
+	return score;
 }
