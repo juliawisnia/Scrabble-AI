@@ -25,10 +25,17 @@ struct compare {
 	}
 };
 
+typedef std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare> PlaceMoveQueue;
+
 bool checkAllWords(Board & board, Dictionary & dictionary, Player & player, PlaceMove & move);
 
 Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player);
 
-void helper(std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, compare>& results, 
-	size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string unusedTiles, std::string moveString,
-	 Player & player, bool horizontal);
+// void helper(PlaceMoveQueue& results, size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string unusedTiles, std::string moveString,
+// 	 Player & player, bool horizontal);
+void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
+	std::string word, std::string move, std::vector<std::pair<char, bool>>& unused);
+
+bool allUsed(std::vector<std::pair<char, bool>> vect);
+
+void resetToUnused(std::vector<std::pair<char, bool>>& vect);
