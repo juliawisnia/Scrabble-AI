@@ -240,18 +240,15 @@ int main(int argc, char** argv)
 				else {
 					move = CPUSStrategy(*board, *dictionary, *players[playerNum]);
 				}
-				std::cout << "MOVE: " << move << std::endl;
 				playerMove = Move::parseMove(move, *players[playerNum]);
-				
-				// else {
-				// 	std::string move = playerMove->getString();
-				// 	bool blanks = false;
-				// 	for (size_t i = 0; i < move.size(); i++) {
-				// 		if (move[i] == '?') blanks = true;
-				// 	}
-				// 	players[playerNum]->takeTiles(move, blanks);
-				// }
+	
 				playerMove->execute(*board, *bag, *dictionary);
+
+				if (playerMove->isPass()) ++sequentialPasses;
+				
+				else {
+					sequentialPasses = 0;
+				}
 			}
 
 			else {
