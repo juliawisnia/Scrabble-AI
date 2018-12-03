@@ -72,12 +72,16 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 
 			std::vector<std::pair<std::string, unsigned int>>::iterator it;
 			for (it = result.begin(); it != result.end(); it++) {
-				if (!dictionary.isLegalWord((*it).first)) return;
+				if (!dictionary.isLegalWord((*it).first)) {
+					player.addTiles(tempMove->tileVector());
+					return;
+				}
 
 			}
 			size_t points = getTotalScore(result);
 			// no exceptions thrown, it's a word
 			pq.emplace(std::make_pair(points, tempMove));
+			player.addTiles(tempMove->tileVector());
 			// resetToUnused(unused);
 			// if (horizontal) CPUSHelper(pq, board, player, col + 1, row, horizontal, "", "", unused);
 			// else CPUSHelper(pq, board, player, col, row + 1, horizontal, "", "", unused);

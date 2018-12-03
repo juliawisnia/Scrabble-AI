@@ -45,6 +45,9 @@ public:
 	*/
 	static Move * parseMove(std::string moveString, Player &p);
 
+	virtual std::string getString() const {
+		return "";
+	}
 
 	/* Returns true iff the move is a PASS move */
 	virtual bool isPass () const
@@ -138,6 +141,7 @@ class PlaceMove : public Move
 
 	size_t _x, _y;
 	bool _horizontal;
+	std::string _tileString;
 
 public:
 	/* Creates a PLACE move, starting at row y, column x, placing the tiles
@@ -170,6 +174,9 @@ public:
 	/* Returns the direction (true for horizontal) for a PLACE move. */
 	bool isHorizontal () const;
 
+	std::string getString() const {
+		return _tileString;
+	}
 	/* Returns the vector of tiles associated with a PLACE/EXCHANGE move.
 	   Return value could be arbitrary for PASS moves. */
 	std::vector<Tile*> const & tileVector () const;

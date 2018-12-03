@@ -74,13 +74,14 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 
 			std::vector<std::pair<std::string, unsigned int>>::iterator it;
 			for (it = result.begin(); it != result.end(); it++) {
-				if (!dictionary.isLegalWord((*it).first)) return;
+				if (!dictionary.isLegalWord((*it).first)) {
+					player.addTiles(tempMove->tileVector());
+					return;
+				}
 			}
 			// no exceptions thrown, it's a word
 			pq.emplace(std::make_pair(move.size(), tempMove));
-			// resetToUnused(unused);
-			// if (horizontal) CPULHelper(pq, board, player, col + 1, row, horizontal, "", "", unused);
-			// else CPULHelper(pq, board, player, col, row + 1, horizontal, "", "", unused);
+			player.addTiles(tempMove->tileVector());
 		}
 	}
 	if (unused.empty()) return;

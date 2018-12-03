@@ -119,6 +119,7 @@ _y(y),
 _horizontal(horizontal),
 _tiles(p->takeTiles(tileString, true))
 {
+	_tileString = tileString;
 	if(_tiles.empty())
 	{
 		throw MoveException("EMPTY");
