@@ -80,6 +80,7 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 				}
 			}
 			// no exceptions thrown, it's a word
+			// create a string that ParseMove can read
 			std::string val;
 			size_t startCol, startRow;
 			if (horizontal) {

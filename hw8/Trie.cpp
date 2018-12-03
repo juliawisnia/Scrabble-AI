@@ -16,6 +16,7 @@ TrieSet::~TrieSet() {
 }
 
 void TrieSet::clearHelper(TrieNode* traverse) {
+	// post-order clear, similar to my BST clear
 	if (traverse != nullptr) {
 		for (size_t i = 0; i < childrenSize; i++) {
 			if (traverse->children[i] != nullptr) clearHelper(traverse->children[i]);
@@ -48,6 +49,7 @@ void TrieSet::insert(std::string input) {
 		
 		// new path
 		if (traverse->children[index] == nullptr) {
+			// create a new child of the node, updat data members
 			TrieNode* insertChild = new TrieNode;
 			insertChild->parent = traverse;
 			insertChild->letter = input[i];
