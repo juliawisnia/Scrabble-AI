@@ -249,6 +249,9 @@ int main(int argc, char** argv)
 				else {
 					sequentialPasses = 0;
 				}
+				
+				std::cout << players[playerNum]->getName() << " played this move: " << move << std::endl;
+
 			}
 
 			else {
