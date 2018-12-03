@@ -286,11 +286,9 @@ int main(int argc, char** argv)
 
 				}
 			}
-
 			// draw more tiles from the bag to bring the player up to a full hand
 			std::vector<Tile *> newTiles = bag->drawTiles(players[playerNum]->getMaxTiles() - players[playerNum]->getNumTiles());
 			players[playerNum]->addTiles(newTiles);
-
 			// tell the user about what new tiles they got
 			if(!newTiles.empty())
 			{
