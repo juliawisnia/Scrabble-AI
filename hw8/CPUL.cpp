@@ -48,7 +48,7 @@ void resetToUnused(std::vector<std::pair<char, bool>>& vect) {
 
 void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::vector<std::pair<char, bool>>& unused) {
-
+	std::cout << "WORD: " << word << std::endl;
 	TrieNode* check = dictionary.words.prefix(word);
 	// not even a prefix, and string is not empty
 	if (check == nullptr && word.size() > 0) return;
@@ -87,22 +87,6 @@ void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & di
 	}
 
 	if (row > board.getRows() || col > board.getColumns() || allUsed(unused)) return;
-
-	// we won't be able to place a word here
-	bool neighbor = false;
-	if (horizontal) {
-		for (size_t i = col; i < col + player.getNumTiles(); i++) {
-			if (i > board.getColumns()) break;
-			if (board.getSquare(i, row)->isOccupied()) neighbor = true;
-		}
-	}
-	else {
-		for (size_t i = row; i < row + player.getNumTiles(); i++) {
-			if (i > board.getRows()) break;
-			if (board.getSquare(col, i)->isOccupied()) neighbor = true;
-		}
-	}
-	if (!neighbor) return;
 
 	std::vector<std::pair<char, bool>>::iterator it;
 	for (it = unused.begin(); it != unused.end(); ++it) {
