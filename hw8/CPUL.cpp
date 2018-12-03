@@ -23,6 +23,9 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 		return pass;
 	}
 
+	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
+	if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
+	
 	if (vertical.top().first > horizontal.top().first) return vertical.top().second;
 	return horizontal.top().second;
 
@@ -55,7 +58,7 @@ void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & di
 	TrieNode* check = dictionary.words.prefix(word);
 	// not even a prefix, and string is not empty
 	if (check == nullptr) {
-		if (word.size() > 0) return;
+		if (!word.empty()) return;
 	}
 
 	// it's a prefix
@@ -69,17 +72,19 @@ void helper(PlaceMoveQueue & pq, Board & board, Player & player, Dictionary & di
 			}
 			catch (MoveException & m) {
 				std::cout << m.what() << std::endl;
-				player.addTiles(tempMove->tileVector());
-				//delete tempMove;
+				if (tempMove != nullptr) player.addTiles(tempMove->tileVector());
+				delete tempMove;
+				return;
 			}
 
 			try {
-				board.getPlaceMoveResults(*tempMove);
+				if (tempMove != nullptr) board.getPlaceMoveResults(*tempMove);
 			}
 			catch (MoveException & m) {
 				std::cout << m.what() << std::endl;
-				player.addTiles(tempMove->tileVector());
-				//delete tempMove;
+				if (tempMove != nullptr) player.addTiles(tempMove->tileVector());
+				delete tempMove;
+				return;
 			}
 
 			// no exceptions thrown, it's a word
