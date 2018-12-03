@@ -19,7 +19,7 @@ $(BINDIR)/.dirstamp:
 $(BINDIR)/%.o : %.cpp $(BINDIR)/.dirstamp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-scrabble: $(BINDIR)/Bag.o $(BINDIR)/Board.o $(BINDIR)/ConsolePrinter.o $(BINDIR)/Dictionary.o $(BINDIR)/main.o $(BINDIR)/Move.o $(BINDIR)/Player.o $(BINDIR)/Trie.o $(BINDIR)/CPUL.o
+scrabble: $(BINDIR)/Bag.o $(BINDIR)/Board.o $(BINDIR)/ConsolePrinter.o $(BINDIR)/Dictionary.o $(BINDIR)/main.o $(BINDIR)/Move.o $(BINDIR)/Player.o $(BINDIR)/Trie.o $(BINDIR)/CPUL.o $(BINDIR)/CPUS.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 # clean

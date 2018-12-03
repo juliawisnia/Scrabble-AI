@@ -17,6 +17,7 @@
 #include "Exceptions.h"
 #include "rang.h"
 #include "Util.h"
+#include "CPUS.h"
 #include "CPUL.h"
 
 // Get a friendly string to print to the user in response to a move exception
@@ -241,7 +242,7 @@ int main(int argc, char** argv)
 					// std::cout << std::endl;
 				}
 				else {
-					//playerMove = CPUSStrategy(*board, *dictionary, *players[playerNum]);
+					playerMove = CPUSStrategy(*board, *dictionary, *players[playerNum]);
 				}
 
 				playerMove->execute(*board, *bag, *dictionary);
