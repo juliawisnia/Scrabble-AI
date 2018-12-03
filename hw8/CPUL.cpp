@@ -1,6 +1,6 @@
 #include "CPUL.h"
 
-Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
+std::string CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	CPULQueue vertical;
 	CPULQueue horizontal;
 
@@ -19,14 +19,10 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	}
 
 	if (vertical.empty() && horizontal.empty()) {
-		PassMove* pass = new PassMove(&player);
-		return pass;
+		return "PASS";
 	}
 
-	if (vertical.empty() && !horizontal.empty()) {
-		std::cout << "NUMBER OF LETTERS " << horizontal.top().first;
-		return horizontal.top().second;
-	}
+	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
 	if (!vertical.empty() && horizontal.empty()) return vertical.top().second;
 
 	if (vertical.top().first > horizontal.top().first) return vertical.top().second;
@@ -36,6 +32,7 @@ Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player) {
 
 void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dictionary, size_t col, size_t row, bool horizontal, 
 	std::string word, std::string move, std::string unused) {
+	//std::cout << "WORD: " << word << std::endl;
 
 	if (row > board.getRows() || col > board.getColumns()) return;
 
@@ -56,7 +53,7 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 				else tempMove = new PlaceMove(col, row - word.size(), horizontal, move, &player);
 			}
 			catch (MoveException & m) {
-				//std::cout << m.what() << std::endl;
+				std::cout << m.what() << std::endl;
 				if (tempMove != nullptr) player.addTiles(tempMove->tileVector());
 				delete tempMove;
 				return;
@@ -72,15 +69,37 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 				return;
 			}
 
+			bool allLegalWords = true;
 			std::vector<std::pair<std::string, unsigned int>>::iterator it;
 			for (it = result.begin(); it != result.end(); it++) {
+				//std::cout << "WORDS: " << (*it).first << std::endl;
 				if (!dictionary.isLegalWord((*it).first)) {
-					player.addTiles(tempMove->tileVector());
-					return;
+					std::cout << "ILLEGAL: " << (*it).first << std::endl;
+					allLegalWords = false;
 				}
 			}
 			// no exceptions thrown, it's a word
-			pq.emplace(std::make_pair(move.size(), tempMove));
+			std::string val;
+			size_t startCol, startRow;
+			if (horizontal) {
+				startCol = col - word.size();
+				startRow = row;
+			}
+			else {
+				startCol = col;
+				startRow = row - word.size();
+			}
+			val += "PLACE ";
+			if (horizontal) val += "- ";
+			else val += "| ";
+
+			val += std::to_string(startRow);
+			val += " ";
+			val += std::to_string(startCol);
+			val += " ";
+			val += move;
+
+			if (allLegalWords) pq.emplace(std::make_pair(move.size(), val));
 			player.addTiles(tempMove->tileVector());
 		}
 	}
@@ -91,7 +110,7 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 		word += c;
 		if (horizontal) CPULHelper(pq, board, player, dictionary, col + 1, row, horizontal, word, move, unused);
 		else CPULHelper(pq, board, player, dictionary, col, row + 1, horizontal, word, move, unused);
-		word.erase(word.length() - 1);
+		//word.erase(word.length() - 1);
 	}
 
 	else {
@@ -135,3 +154,4 @@ void CPULHelper(CPULQueue & pq, Board & board, Player & player, Dictionary & dic
 		}
 	}
 }
+

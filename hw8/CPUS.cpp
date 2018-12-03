@@ -1,6 +1,6 @@
 #include "CPUS.h"
 
-Move* CPUSStrategy(Board & board, Dictionary & dictionary, Player & player) {
+std::string CPUSStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	CPUSQueue vertical;
 	CPUSQueue horizontal;
 
@@ -19,8 +19,7 @@ Move* CPUSStrategy(Board & board, Dictionary & dictionary, Player & player) {
 	}
 
 	if (vertical.empty() && horizontal.empty()) {
-		PassMove* pass = new PassMove(&player);
-		return pass;
+		return "PASS";
 	}
 
 	if (vertical.empty() && !horizontal.empty()) return horizontal.top().second;
@@ -54,7 +53,7 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 				else tempMove = new PlaceMove(col, row - word.size(), horizontal, move, &player);
 			}
 			catch (MoveException & m) {
-				//std::cout << m.what() << std::endl;
+				std::cout << m.what() << std::endl;
 				if (tempMove != nullptr) player.addTiles(tempMove->tileVector());
 				delete tempMove;
 				return;
@@ -70,21 +69,39 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 				return;
 			}
 
+			bool allLegalWords = true;
 			std::vector<std::pair<std::string, unsigned int>>::iterator it;
 			for (it = result.begin(); it != result.end(); it++) {
+				//std::cout << "WORDS: " << (*it).first << std::endl;
 				if (!dictionary.isLegalWord((*it).first)) {
-					player.addTiles(tempMove->tileVector());
-					return;
+					std::cout << "ILLEGAL: " << (*it).first << std::endl;
+					allLegalWords = false;
 				}
-
 			}
-			size_t points = getTotalScore(result);
 			// no exceptions thrown, it's a word
-			pq.emplace(std::make_pair(points, tempMove));
+			std::string val;
+			size_t startCol, startRow;
+			if (horizontal) {
+				startCol = col - word.size();
+				startRow = row;
+			}
+			else {
+				startCol = col;
+				startRow = row - word.size();
+			}
+			val += "PLACE ";
+			if (horizontal) val += "- ";
+			else val += "| ";
+
+			val += startRow;
+			val += " ";
+			val += startCol;
+			val += " ";
+			val += move;
+
+			size_t points = getTotalScore(result);
+			if (allLegalWords) pq.emplace(std::make_pair(points, val));
 			player.addTiles(tempMove->tileVector());
-			// resetToUnused(unused);
-			// if (horizontal) CPUSHelper(pq, board, player, col + 1, row, horizontal, "", "", unused);
-			// else CPUSHelper(pq, board, player, col, row + 1, horizontal, "", "", unused);
 		}
 	}
 	if (unused.empty()) return;

@@ -233,22 +233,24 @@ int main(int argc, char** argv)
 			std::string temp = players[playerNum]->getName();
 			makeUppercase(temp);
 			if (temp == "CPUL" || temp == "CPUS") {
+				std::string move = "";
 				if (temp == "CPUL") {
-					playerMove = CPULStrategy(*board, *dictionary, *players[playerNum]);
+					move = CPULStrategy(*board, *dictionary, *players[playerNum]);
 				}
 				else {
-					playerMove = CPUSStrategy(*board, *dictionary, *players[playerNum]);
+					move = CPUSStrategy(*board, *dictionary, *players[playerNum]);
 				}
-
-				if (playerMove->isPass()) ++sequentialPasses;
-				else {
-					std::string move = playerMove->getString();
-					bool blanks = false;
-					for (size_t i = 0; i < move.size(); i++) {
-						if (move[i] == '?') blanks = true;
-					}
-					players[playerNum]->takeTiles(move, blanks);
-				}
+				std::cout << "MOVE: " << move << std::endl;
+				playerMove = Move::parseMove(move, *players[playerNum]);
+				
+				// else {
+				// 	std::string move = playerMove->getString();
+				// 	bool blanks = false;
+				// 	for (size_t i = 0; i < move.size(); i++) {
+				// 		if (move[i] == '?') blanks = true;
+				// 	}
+				// 	players[playerNum]->takeTiles(move, blanks);
+				// }
 				playerMove->execute(*board, *bag, *dictionary);
 			}
 

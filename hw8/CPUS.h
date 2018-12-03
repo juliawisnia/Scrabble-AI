@@ -20,14 +20,14 @@
 #include "Trie.h"
 
 struct scoreCompare {
-	bool operator()(std::pair<size_t, Move*> a, std::pair<size_t, Move*> b) {
+	bool operator()(std::pair<size_t, std::string> a, std::pair<size_t, std::string> b) {
 		return (a.first > b.first);
 	}
 };
 
-typedef std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, scoreCompare> CPUSQueue;
+typedef std::priority_queue <std::pair<size_t, std::string>, std::vector<std::pair<size_t, std::string>>, scoreCompare> CPUSQueue;
 
-Move* CPUSStrategy(Board & board, Dictionary & dictionary, Player & player);
+std::string CPUSStrategy(Board & board, Dictionary & dictionary, Player & player);
 
 // void helper(PlaceMoveQueue& results, size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string unusedTiles, std::string moveString,
 // 	 Player & player, bool horizontal);

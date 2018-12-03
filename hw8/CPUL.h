@@ -20,16 +20,16 @@
 #include "Util.h"
 
 struct lengthCompare {
-	bool operator()(std::pair<size_t, Move*> a, std::pair<size_t, Move*> b) {
+	bool operator()(std::pair<size_t, std::string> a, std::pair<size_t, std::string> b) {
 		return (a.first > b.first);
 	}
 };
 
-typedef std::priority_queue <std::pair<size_t, Move*>, std::vector<std::pair<size_t, Move*>>, lengthCompare> CPULQueue;
+typedef std::priority_queue <std::pair<size_t,std::string>, std::vector<std::pair<size_t, std::string>>, lengthCompare> CPULQueue;
 
 bool checkAllWords(Board & board, Dictionary & dictionary, Player & player, PlaceMove & move);
 
-Move* CPULStrategy(Board & board, Dictionary & dictionary, Player & player);
+std::string CPULStrategy(Board & board, Dictionary & dictionary, Player & player);
 
 // void helper(PlaceMoveQueue& results, size_t col, size_t row, Board & board, Dictionary & dictionary, std::string currWord, std::string unusedTiles, std::string moveString,
 // 	 Player & player, bool horizontal);
