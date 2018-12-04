@@ -196,13 +196,6 @@ int main(int argc, char *argv[]) {
     }
     // fill each country struct with the neighbors
     findAllNeighbors(countries, graph, cols, rows);
-    // std::set<country*>::iterator it2;
-    // std::vector<country>::iterator it;
-    // for (it = countries.begin(); it != countries.end(); ++it) {
-    //     std::cout << (*it).name << ":";
-    //     for (it2 = (*it).neighbors.begin(); it2 != (*it).neighbors.end(); ++it2) std::cout << " " << (*it2)->name;
-    //     std::cout << std::endl;
-    // }
     // check all valid colorings
     backtrack(&countries[0], countries);
     
