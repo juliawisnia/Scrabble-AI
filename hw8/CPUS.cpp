@@ -102,8 +102,10 @@ void CPUSHelper(CPUSQueue & pq, Board & board, Player & player, Dictionary & dic
 			val += move;
 
 			size_t points = getTotalScore(result);
+			size_t numLetters = 0;
+			for (size_t i = 0; i < move.size(); i++) if (move[i] != '?') numLetters++;
 			// 50 point bonus if they use maximum number of tiles
-			if (player.getHandTiles().size() == 0) points += 50;
+			if (player.getHandTiles().size() == 0 && numLetters == player.getMaxTiles()) points += 50;
 			if (allLegalWords) pq.emplace(std::make_pair(points, val));
 			player.addTiles(tempMove->tileVector());
 			delete tempMove;
